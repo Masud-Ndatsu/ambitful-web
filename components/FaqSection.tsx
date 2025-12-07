@@ -32,7 +32,7 @@ export default function FaqSection() {
   ];
 
   return (
-    <section className="w-full py-20">
+    <section className="w-full py-[120px]">
       <div className="flex flex-col items-center gap-4 mb-10">
         <span className="px-6 py-1 rounded-full bg-[#0CFF8F]/10 text-foreground text-sm font-medium">
           FAQ
