@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans, Inter } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
@@ -7,6 +7,12 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-dm-sans",
 });
 
 const degular = localFont({
@@ -78,7 +84,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${degular.variable} ${inter.className} antialiased`}>
+      <body
+        className={`${degular.variable} ${inter.className} ${dmSans.variable} antialiased`}
+      >
         <>{children}</>
       </body>
     </html>

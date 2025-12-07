@@ -23,10 +23,20 @@ export const HeroSection = () => {
 
         <div className="flex justify-center gap-5 py-[92px]">
           <Button size="xl" className="flex items-center gap-2.5">
-            <Search className="" />
+            <Image
+              src={"/search.svg"}
+              alt="Btn Search"
+              width={20.31}
+              height={20.31}
+            />
             Browse Opportunities
           </Button>
-          <Button size="xl" variant={"secondary"}>
+          <Button
+            size="xl"
+            className="bg-background text-foreground border border-primary"
+            variant={"secondary"}
+          >
+            <Image src={"/btn-ai.svg"} alt="Btn Ai" width={20} height={20} />
             Talk to AI Agent
           </Button>
         </div>

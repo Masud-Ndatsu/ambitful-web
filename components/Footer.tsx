@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#131418] text-gray-300">
+    <footer className="bg-[#131418] text-gray-300 font-dm-sans">
       <div className="max-w-[1520px] mx-auto">
         <div className="flex gap-10">
           <div className="max-w-[714px] w-full p-10 border-r border-gray-800">
@@ -12,7 +12,7 @@ export default function Footer() {
               <h2 className="text-[50px] font-degular font-bold text-white mb-4">
                 Ambitful.ai
               </h2>
-              <p className="text-[20px] leading-relaxed max-w-[361.33px] mb-6">
+              <p className="text-[20px]  tracking-[-0.27px] max-w-[361.33px] mb-6">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt.
               </p>
@@ -23,38 +23,34 @@ export default function Footer() {
           <div className="max-w-[714px] w-full grid grid-cols-3 p-10">
             {/* Services */}
             <div>
-              <h3 className="text-white font-medium mb-4 text-[22.67px]">
-                Services
-              </h3>
-              <ul className="space-y-3 text-[20px]">
+              <h3 className="font-medium mb-4 text-[22.67px]">Services</h3>
+              <ul className="space-y-3 text-[20px] text-foreground leading-[100%] tracking-[-0.27px]">
                 <li>
-                  <a href="#" className="hover:text-white transition">
+                  <Link href="#" className="hover:text-white transition">
                     AmbitfulAI
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition">
+                  <Link href="#" className="hover:text-white transition">
                     AmbitfulAI
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
 
             {/* About */}
             <div>
-              <h3 className="text-white font-medium mb-4 text-[22.67px]">
-                About
-              </h3>
-              <ul className="space-y-3 text-[20px]">
+              <h3 className="font-medium mb-4 text-[22.67px]">About</h3>
+              <ul className="space-y-3 text-[20px] text-foreground leading-[100%] tracking-[-0.27px]">
                 <li>
-                  <a href="#" className="hover:text-white transition">
+                  <Link href="#" className="hover:text-white transition">
                     Our Story
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition">
+                  <Link href="#" className="hover:text-white transition">
                     Benefits
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -62,7 +58,7 @@ export default function Footer() {
             {/* Socials */}
             <div>
               <h3 className="font-medium mb-4 text-[22.67px]">Follow Us</h3>
-              <div className="flex items-center gap-5">
+              <div className="flex items-center gap-5 text-foreground leading-[100%] tracking-[-0.27px]">
                 <Link href="#" className="hover:text-white transition">
                   <Facebook />
                 </Link>
