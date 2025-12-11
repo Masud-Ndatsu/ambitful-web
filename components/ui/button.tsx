@@ -9,8 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-gradient-to-r from-[#00df82] to-[#007947] text-primary-foreground hover:bg-primary/90",
+        default: "text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
@@ -20,6 +19,7 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        xl: "bg-linear-to-r from-[#03624C] to-[#00DF82]",
       },
       size: {
         default: "py-[1rem] px-[3rem] has-[>svg]:px-[3rem]",

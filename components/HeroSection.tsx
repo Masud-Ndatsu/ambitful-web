@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
 import Image from "next/image";
 
 export const HeroSection = () => {
@@ -22,7 +21,11 @@ export const HeroSection = () => {
         </p>
 
         <div className="flex justify-center gap-5 py-[9.2rem]">
-          <Button size="xl" className="flex items-center gap-2.5">
+          <Button
+            size="xl"
+            variant={"xl"}
+            className="flex items-center gap-2.5"
+          >
             <Image
               src={"/search.svg"}
               alt="Btn Search"

@@ -8,17 +8,10 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main>
-      <header className="max-w-[158.6rem] mx-auto">
-        <Navbar />
-      </header>
-
+    <main className="">
+      <Navbar />
       <HeroSection />
-
-      <section className="max-w-[158.6rem] w-full m-auto p-10">
-        <FeaturedOpportunities />
-      </section>
-
+      <FeaturedOpportunities />
       <HowItWorksSection />
       <TestimonialsSection />
       <FaqSection />

@@ -32,19 +32,19 @@ export default function FaqSection() {
   ];
 
   return (
-    <section className="w-full py-48">
+    <section className=" max-w-[158.6rem] mx-auto w-full py-48">
       <div className="flex flex-col items-center gap-4 mb-10">
-        <span className="px-6 py-1 rounded-full bg-[#0CFF8F]/10 text-foreground text-sm font-medium">
+        <span className="w-[11.7rem] h-[3.6rem] grid place-items-center rounded-2xl border border-primary text-foreground text-sm font-medium">
           FAQ
         </span>
 
-        <h2 className="text-3xl md:text-[6.516rem] font-semibold text-center text-white">
+        <h2 className="text-[5.9rem] mb-12 font-semibold text-center text-white">
           Have a Question? Look Here
         </h2>
       </div>
 
       <div className="max-w-606 w-full mx-auto space-y-4 px-4">
-        <Accordion type="single" collapsible className="space-y-8">
+        <Accordion type="single" collapsible className="space-y-8 mb-10">
           {faqs.map((item, idx) => (
             <AccordionItem
               key={idx}
@@ -55,7 +55,7 @@ export default function FaqSection() {
                 {item.question}
               </AccordionTrigger>
 
-              <AccordionContent className="max-w-[111.11rem] text-gray-300 text-[2rem] pb-4 leading-relaxed">
+              <AccordionContent className="max-w-[111.11rem] text-white/60 text-[2rem] pb-4 leading-relaxed">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>
