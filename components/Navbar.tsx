@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { ChevronDown, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
+  const router = useRouter();
   return (
     <div className="px-8">
       <nav className="max-w-[158.6rem] mx-auto bg-secondary rounded-2xl w-full h-40 flex items-center py-[0.7rem] px-8 justify-between">
@@ -39,6 +43,9 @@ export const Navbar = () => {
           <Button
             className="border border-primary cursor-pointer font-medium text-[2rem] leading-8"
             variant={"secondary"}
+            onClick={() => {
+              router.push("/auth/login");
+            }}
           >
             Sign In
           </Button>

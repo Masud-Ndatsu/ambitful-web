@@ -1,0 +1,76 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
+
+export default function RegisterPage() {
+  const pathname = usePathname();
+
+  console.log({ pathname });
+  return (
+    <form action="" className="h-[78.33rem] px-[8.533rem]">
+      <h1 className="text-[4rem] leading-[5.067rem] text-[#101828]">
+        Create Account
+      </h1>
+      <p className="text-[2rem] leading-[3.2rem] my-[4.267rem] text-[#667085]">
+        Join thousands of professionals finding their dream opportunities
+      </p>
+      <div className="text-[2.133rem] mb-8">
+        <label className="block text-[#344054]" htmlFor="name">
+          Name*
+        </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8]"
+          placeholder="Enter your name"
+        />
+      </div>
+      <div className="text-[2.133rem] mb-8">
+        <label className="block text-[#344054]" htmlFor="email">
+          Email*
+        </label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8]"
+          placeholder="Enter your email"
+        />
+      </div>
+      <div className="text-[2.133rem] mb-8">
+        <label className="block text-[#344054]" htmlFor="password">
+          Password*
+        </label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] block mt-[0.8]"
+          placeholder="Create a password"
+        />
+        <small className="text-[1.867rem] leading-[2.667rem] text-[#667085]">
+          Must be at least 8 characters.
+        </small>
+      </div>
+
+      <div>
+        <Button className="block w-full bg-[#03624C]! text-[2.133rem] mb-[2.133rem] border-[0.133rem] rounded-[1.067rem]">
+          Create account
+        </Button>
+        <Button className="block w-full text-[2.133rem] bg-foreground! text-[#344054]!  border-[0.133rem] rounded-[1.067rem]">
+          Sign up with Google
+        </Button>
+      </div>
+
+      <div className="mt-[4.267rem] text-center flex justify-center gap-4">
+        <p className="text-[1.867rem]">Already have an account?</p>
+        <Link className="text-[1.867rem] text-[#03624C]" href={"/auth/login"}>
+          Sign In
+        </Link>
+      </div>
+    </form>
+  );
+}
