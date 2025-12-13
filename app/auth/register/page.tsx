@@ -1,8 +1,8 @@
 "use client";
+import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 
 export default function RegisterPage() {
   const pathname = usePathname();
@@ -60,9 +60,7 @@ export default function RegisterPage() {
         <Button className="block w-full bg-[#03624C]! text-[2.133rem] mb-[2.133rem] border-[0.133rem] rounded-[1.067rem]">
           Create account
         </Button>
-        <Button className="block w-full text-[2.133rem] bg-foreground! text-[#344054]!  border-[0.133rem] rounded-[1.067rem]">
-          Sign up with Google
-        </Button>
+        <GoogleAuthButton />
       </div>
 
       <div className="mt-[4.267rem] text-center flex justify-center gap-4">
