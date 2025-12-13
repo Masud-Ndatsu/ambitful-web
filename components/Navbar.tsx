@@ -17,10 +17,9 @@ export const Navbar = () => {
           <li>
             <Link href="">Opportunities</Link>
           </li>
-          <li className="flex items-center">
-            <Link href="" className="flex items-center gap-1">
-              Categories
-              <ChevronDown className="h-4 w-4" />
+          <li>
+            <Link href="/blogs" className="">
+              Blogs
             </Link>
           </li>
 
