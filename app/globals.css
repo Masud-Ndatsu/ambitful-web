@@ -123,15 +123,7 @@
 }
 
 html {
-  font-size: 62.5%;
-}
-
-body {
-  font-size: 1.6rem;
-}
-
-input {
-  width: 100%;
+  font-size: 50%;
 }
 
 .shadow-glow-tile {

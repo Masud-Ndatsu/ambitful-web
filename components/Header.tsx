@@ -7,7 +7,7 @@ interface HeaderProps {
 
 export const Header = ({ title, description }: HeaderProps) => {
   return (
-    <header className="bg-linear-to-r from-[#03624C66] to-[#030F0F] border rounded-4xl border-black/20 py-12">
+    <header className="bg-linear-to-r from-[#03624C66] to-[#03624C66] border rounded-4xl border-black/20 py-12">
       <Navbar />
 
       <div className="text-center max-w-[123.7rem] m-auto my-40">
