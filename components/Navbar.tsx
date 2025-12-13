@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, MessageCircle } from "lucide-react";
 
 export const Navbar = () => {
   return (
@@ -33,23 +33,12 @@ export const Navbar = () => {
         </ul>
 
         <div className="flex items-center gap-6">
-          <Button className="cursor-pointer bg-linear-to-r from-[#00df82] to-[#007947]">
-            <svg
-              width="18"
-              height="17"
-              viewBox="0 0 18 17"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.1625 14.8375L4.7025 13.99L5.16 14.2125C6.21875 14.7262 7.42875 15 8.75 15C13.12 15 16.25 11.8775 16.25 8.125C16.25 4.35875 13.1425 1.25 8.75 1.25C4.3575 1.25 1.25 4.35875 1.25 8.125C1.25739 9.56628 1.73196 10.9663 2.6025 12.115L3.025 12.6775L2.1625 14.8363V14.8375ZM1.27875 16.45C1.16563 16.4879 1.04403 16.4926 0.928312 16.4636C0.812592 16.4347 0.707585 16.3731 0.625696 16.2864C0.543808 16.1996 0.488458 16.0913 0.466184 15.9741C0.443911 15.8569 0.455645 15.7357 0.5 15.625L1.60375 12.8663C0.570226 11.501 0.00747727 9.83732 0 8.125C0 3.9825 3.3525 0 8.75 0C14.1475 0 17.5 3.9825 17.5 8.125C17.5 12.2675 14.1125 16.25 8.75 16.25C7.19375 16.25 5.80375 15.915 4.615 15.3375L1.2775 16.45H1.27875Z"
-                fill="white"
-              />
-            </svg>
+          <Button className="cursor-pointer bg-linear-to-r from-[#00df82] to-[#007947] font-medium text-[2rem] leading-8">
+            <MessageCircle className="h-[1.99rem]! w-[1.99rem]!" />
             Get Career Advice
           </Button>
           <Button
-            className="border border-primary cursor-pointer"
+            className="border border-primary cursor-pointer font-medium text-[2rem] leading-8"
             variant={"secondary"}
           >
             Sign In

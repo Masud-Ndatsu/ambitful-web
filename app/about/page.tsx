@@ -4,6 +4,8 @@ import AboutSection from "./components/AboutSection";
 import MissionVisionSection from "./components/MissionVisionSection";
 import FixingJobSpaceSection from "./components/FeaturedJobSection";
 import CoreValues from "./components/CoreValue";
+import ReadyToConnect from "./components/ReadyToConnect";
+import TryAmbitfulAI from "./components/TryAmbitfulAI";
 
 export default function AboutPage() {
   return (
@@ -13,6 +15,8 @@ export default function AboutPage() {
       <MissionVisionSection />
       <FixingJobSpaceSection />
       <CoreValues />
+      <TryAmbitfulAI />
+      <ReadyToConnect />
       <Footer />
     </main>
   );
