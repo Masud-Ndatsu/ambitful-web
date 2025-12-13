@@ -5,12 +5,12 @@ import { ChevronDown } from "lucide-react";
 export const Navbar = () => {
   return (
     <div className="px-8">
-      <nav className="max-w-[158.6rem] mx-auto bg-secondary rounded-2xl w-full h-40 mt-40 flex items-center py-[0.7rem] px-8 justify-between">
+      <nav className="max-w-[158.6rem] mx-auto bg-secondary rounded-2xl w-full h-40 flex items-center py-[0.7rem] px-8 justify-between">
         <h2 className="font-bold text-[#03624C] text-[4.8rem]">Ambitful.ai</h2>
 
         <ul className="flex justify-between item-center gap-8 text-background text-[1.6rem]">
           <li>
-            <Link className="" href="#">
+            <Link className="" href="/">
               Home
             </Link>
           </li>
@@ -25,10 +25,10 @@ export const Navbar = () => {
           </li>
 
           <li>
-            <Link href="">About</Link>
+            <Link href="/about">About</Link>
           </li>
           <li>
-            <Link href="">Contact</Link>
+            <Link href="/contact">Contact</Link>
           </li>
         </ul>
 
