@@ -7,10 +7,10 @@ export const HeroSection = () => {
     <>
       <section className="text-center leading-36 bg-linear-to-r from-[#00DF821A]/15 from-10% via-[#000000] to-[#00DF821A]/15 to-90%">
         <div className="py-[9.2rem]">
-          <h1 className="font-degular text-[10rem] font-bold">
+          <h1 className="font-degular text-[8rem] lg:text-[10rem] font-bold">
             Discover Opportunity
           </h1>
-          <h1 className="font-degular text-[8rem] font-bold">
+          <h1 className="font-degular text-[6rem] lg:text-[8rem] font-bold">
             Empower Your Future
           </h1>
         </div>
@@ -21,7 +21,7 @@ export const HeroSection = () => {
           careers with AMBITFUL.AI.
         </p>
 
-        <div className="flex justify-center gap-5 py-[9.2rem]">
+        <div className="flex items-center justify-center gap-5 py-[9.2rem] px-[2rem]">
           <Button
             size="xl"
             variant={"xl"}
@@ -46,7 +46,7 @@ export const HeroSection = () => {
         </div>
       </section>
 
-      <section className="bg-radial from-[#00DF82] to-[#00DF8200] min-h-120 max-w-[129.7rem] w-full m-auto rounded-2xl p-20 pb-0 flex items-end justify-center">
+      <section className="bg-radial from-[#00DF82] to-[#00DF8200] min-h-120 max-w-[129.7rem] w-full m-auto rounded-2xl lg:p-20 pb-0 flex items-end justify-center">
         <div className=" w-full h-full lg:h-280">
           <ReactPlayer
             src="/videos/hero_player.mp4"

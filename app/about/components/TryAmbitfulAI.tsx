@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function TryAmbitfulAI() {
   return (
-    <section className="py-[11.788rem] px-[29.986rem]">
+    <section className="py-[11.788rem] lg:px-[29.986rem]">
       <div className="text-center max-w-[163.7rem] m-auto">
         <h3 className="leading-[4.421rem] tracking-[-0.066rem] font-medium text-[5rem]">
           Try Ambitful AI

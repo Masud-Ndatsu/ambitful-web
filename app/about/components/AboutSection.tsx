@@ -3,7 +3,7 @@ export default function AboutSection() {
   return (
     <section className="w-full py-20 text-white mx-auto px-6">
       <div className="max-w-[160.3rem] m-auto grid md:grid-cols-2 gap-12 items-center">
-        <div>
+        <div className="text-center md:text-left">
           <h2 className="text-green-400 font-meduim text-[3rem] leading-[5.305rem] mb-8">
             About Ambitiful AI
           </h2>

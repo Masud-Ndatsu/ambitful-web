@@ -25,7 +25,7 @@ const CoreValues = () => {
   ];
 
   return (
-    <section className="w-full flex flex-col items-center justify-center py-[11.788rem] mx-auto px-[14.146rem]">
+    <section className="w-full flex flex-col items-center justify-center py-[11.788rem] mx-auto lg:px-[14.146rem]">
       <div className="max-w-[163.7rem] mx-auto w-full">
         {/* Main Title */}
         <div className="text-center mb-16">

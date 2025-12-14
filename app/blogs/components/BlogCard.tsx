@@ -26,7 +26,7 @@ export default function BlogCard({ blog }: { blog: BlogType }) {
         />
       </div>
 
-      <div className="flex gap-[2.297rem] text-[2.01rem] leading-[2.872rem] tracking-[-0.022rem] px-[1.8rem] mt-[1.8rem]">
+      <div className="flex gap-[2.297rem] text-[2.01rem] leading-[2.872rem] tracking-[-0.022rem] px-[1.8rem] mt-[1.2rem]">
         <Badge className="text-[1.6rem] leading-[2.872rem] tracking-[-0.022rem] border-0 bg-[#00DF8233] text-[#00DF82] px-4!">
           {blog.category}
         </Badge>

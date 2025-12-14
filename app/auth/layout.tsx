@@ -10,13 +10,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex">
-      <section
-        style={{
-          backgroundImage: "url('/bg_auth.jpg')",
-        }}
-        className="overlay min-h-screen flex-2 bg-repeat-none bg-cover bg-center grid place-items-center"
-      >
+    <main className="lg:flex">
+      <section className="overlay hidden bg-[url(/bg_auth.jpg)] min-h-screen flex-2 bg-repeat-none bg-cover bg-center lg:grid place-items-center ">
         <div className="max-w-[89.6rem] grid gap-[6.4rem]">
           <Link href={"/"}>
             <img src="/auth_star.svg" alt="Ambitful Logo" />
@@ -112,7 +107,7 @@ export default function AuthLayout({
           </div>
         </div>
       </section>
-      <section className="flex-1 min-w-[70.4rem] bg-secondary text-background grid place-items-center">
+      <section className="lg:flex-1 px-12 lg:px-[8.533rem] lg:min-w-[70.4rem] min-h-screen text-[1.6rem]! bg-foreground text-background grid place-items-center">
         {children}
       </section>
     </main>

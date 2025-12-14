@@ -127,6 +127,10 @@ html {
   /* font-size: 62.5%; */
 }
 
+button {
+  cursor: pointer;
+}
+
 .overlay {
   border-image: fill 1
     linear-gradient(rgba(3, 98, 76, 0.5), rgba(3, 98, 76, 0.5));

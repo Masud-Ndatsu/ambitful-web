@@ -1,7 +1,7 @@
 // components/FixingJobSpaceSection.tsx
 export default function FixingJobSpaceSection() {
   return (
-    <section className="w-full py-[11.788rem] mx-auto px-[14.146rem]">
+    <section className="w-full py-[11.788rem] mx-auto lg:px-[14.146rem]">
       <h2 className="text-center text-[5.9rem] leading-[4.421rem] tracking-[-0.066rem] font-medium mb-4">
         Fixing The Job Space
       </h2>

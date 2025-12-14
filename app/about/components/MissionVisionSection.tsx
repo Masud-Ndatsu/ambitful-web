@@ -1,7 +1,7 @@
 // components/MissionVisionSection.tsx
 export default function MissionVisionSection() {
   return (
-    <section className="w-full py-[11.788rem] mx-auto px-[14.146rem]">
+    <section className="w-full py-[11.788rem] mx-auto lg:px-[14.146rem]">
       <div className="max-w-[163.7rem] m-auto grid md:grid-cols-2 gap-[7.073rem]">
         {/* Mission */}
         <div
