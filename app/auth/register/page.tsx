@@ -16,42 +16,42 @@ export default function RegisterPage() {
       <p className="text-[2rem] leading-[3.2rem] my-[4.267rem] text-[#667085]">
         Join thousands of professionals finding their dream opportunities
       </p>
-      <div className="text-[2.133rem] mb-8">
+      <div className="text-[1.8rem] mb-8">
         <label className="block text-[#344054]" htmlFor="name">
-          Name*
+          Name
         </label>
         <input
           type="text"
           name="name"
           id="name"
-          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8]"
+          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8] w-full"
           placeholder="Enter your name"
         />
       </div>
-      <div className="text-[2.133rem] mb-8">
+      <div className="text-[1.8rem] mb-8">
         <label className="block text-[#344054]" htmlFor="email">
-          Email*
+          Email
         </label>
         <input
           type="email"
           name="email"
           id="email"
-          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8]"
+          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8]  w-full"
           placeholder="Enter your email"
         />
       </div>
-      <div className="text-[2.133rem] mb-8">
+      <div className="text-[1.8rem] mb-8">
         <label className="block text-[#344054]" htmlFor="password">
-          Password*
+          Password
         </label>
         <input
           type="password"
           name="password"
           id="password"
-          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] block mt-[0.8]"
+          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] block mt-[0.8]  w-full"
           placeholder="Create a password"
         />
-        <small className="text-[1.867rem] leading-[2.667rem] text-[#667085]">
+        <small className="hidden text-[1.867rem] leading-[2.667rem] text-[#667085]">
           Must be at least 8 characters.
         </small>
       </div>

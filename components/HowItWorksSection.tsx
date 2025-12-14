@@ -48,10 +48,10 @@ export const HowItWorksSection = () => {
                   height={49.84375}
                 />
               </div>
-              <h4 className="text-[2.991rem] py-[2.2rem] font-bold font-degular">
+              <h4 className="text-[2.3rem] py-[2.2rem] font-bold font-degular">
                 {step.title}
               </h4>
-              <p className="text-[1.994rem]">{step.description}</p>
+              <p className="text-[1.8rem]">{step.description}</p>
             </div>
           ))}
         </div>

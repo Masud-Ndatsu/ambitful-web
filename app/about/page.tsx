@@ -9,7 +9,7 @@ import TryAmbitfulAI from "./components/TryAmbitfulAI";
 
 export default function AboutPage() {
   return (
-    <main className="p-8 text-[2.358rem]">
+    <main className="p-8 text-[2rem] leading-[3.536rem]">
       <Header
         title="Revolutionizing the Future of Job Discovery"
         description=" Discover how Ambitful AI is revolutionizing the way people connect

@@ -6,7 +6,7 @@ export default function FixingJobSpaceSection() {
         Fixing The Job Space
       </h2>
 
-      <p className="text-center text-gray-300 max-w-396 text-[2.358rem] leading-[3.536rem] tracking-[-0.046rem] mx-auto mt-16 mb-[9.431rem]">
+      <p className="text-center text-gray-300 max-w-396 tracking-[-0.046rem] mx-auto mt-16 mb-[9.431rem]">
         We’re addressing the biggest challenges in recruitment with innovative,
         AI-driven solutions.
       </p>

@@ -4,7 +4,7 @@ import BlogList from "./components/BlogList";
 
 export default function BlogsPage() {
   return (
-    <main>
+    <main className="p-8">
       <Header
         title="Insights & Stories"
         description="Stay updated with the latest trends in AI, career development, and the future of work."

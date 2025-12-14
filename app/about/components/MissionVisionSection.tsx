@@ -2,7 +2,7 @@
 export default function MissionVisionSection() {
   return (
     <section className="w-full py-[11.788rem] mx-auto px-[14.146rem]">
-      <div className="w-w-[163.7rem] grid md:grid-cols-2 gap-[7.073rem]">
+      <div className="max-w-[163.7rem] m-auto grid md:grid-cols-2 gap-[7.073rem]">
         {/* Mission */}
         <div
           className="p-12 rounded-[2.358rem]
@@ -22,9 +22,9 @@ export default function MissionVisionSection() {
               <circle cx="24" cy="24" r="4" stroke="#00DF82" strokeWidth="4" />
             </svg>
           </div>
-          <h3 className="font-bold my-8 text-[2.358rem]">Our Mission</h3>
+          <h3 className="font-bold my-8 text-[2rem]">Our Mission</h3>
 
-          <p className="text-gray-300 text-[2.358rem] leading-relaxed">
+          <p className="text-gray-300 text-[2rem]">
             To democratize access to career opportunities by using artificial
             intelligence to eliminate bias, reduce friction, and create
             meaningful connections between talented individuals and
@@ -57,9 +57,9 @@ export default function MissionVisionSection() {
               <circle cx="24" cy="24" r="6" stroke="#00DF82" strokeWidth="4" />
             </svg>
           </div>
-          <h3 className="font-bold text-[2.358rem] my-8">Our Vision</h3>
+          <h3 className="font-bold text-[2rem] my-8">Our Vision</h3>
 
-          <p className="text-gray-300 text-[2.358rem] leading-relaxed">
+          <p className="text-gray-300 text-[2rem]">
             To become the world’s most trusted AI-powered career platform, where
             every person can discover opportunities that unlock their full
             potential, and every organization can find the talent that propels

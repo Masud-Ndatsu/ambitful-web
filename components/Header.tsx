@@ -11,10 +11,10 @@ export const Header = ({ title, description }: HeaderProps) => {
       <Navbar />
 
       <div className="text-center max-w-[123.7rem] m-auto my-40">
-        <h1 className="text-[10rem] font-degular mb-12 font-bold leading-40 tracking-[-0.046rem]">
+        <h1 className="text-[8rem] font-degular mb-12 font-bold leading-40 tracking-[-0.046rem]">
           {title}
         </h1>
-        <p className="text-[2.358rem] leading-[3.536rem]">{description}</p>
+        <p className="text-[2.1rem] leading-[3.536rem]">{description}</p>
       </div>
     </header>
   );

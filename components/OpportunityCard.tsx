@@ -16,17 +16,17 @@ export const OpportunityCard = ({
   opportunity: { title, category, description, deadline, locations },
 }: OpportunityCardProp) => {
   return (
-    <Card className="w-full max-w-md bg-background border border-primary lg:min-w-[48.6rem] max-h-[37.617rem] py-[3.1rem] px-[2.1rem]">
+    <Card className="w-full bg-background border border-primary py-[3.1rem] px-[2.1rem]!">
       <CardHeader className="p-0!">
         <Badge className="border-0 py-[0.4rem] px-[1.6rem] text-[1.495rem] font-semibold leading-[1.994rem] mb-8">
           {category}
         </Badge>
-        <CardTitle className="text-left! text-[2.492rem] leading-[3.489rem]">
+        <CardTitle className="text-left! text-[2.3rem] leading-[3.489rem]">
           {title}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0! text-left! py-12">
-        <CardDescription className="text-[1.745rem] text-foreground leading-[2.492rem]">
+        <CardDescription className="text-[1.8rem] text-foreground leading-[2.492rem]">
           {description}
         </CardDescription>
       </CardContent>

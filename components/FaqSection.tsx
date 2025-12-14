@@ -43,7 +43,7 @@ export default function FaqSection() {
         </h2>
       </div>
 
-      <div className="max-w-606 w-full mx-auto space-y-4 px-4">
+      <div className="max-w-606 w-full mx-auto space-y-4 px-8">
         <Accordion type="single" collapsible className="space-y-8 mb-10">
           {faqs.map((item, idx) => (
             <AccordionItem

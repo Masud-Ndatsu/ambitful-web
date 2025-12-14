@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-[#131418] text-gray-300 font-dm-sans">
       {/*  */}
       <div className="">
-        <div className="max-w-[158.6rem] mx-auto grid grid-cols-2">
+        <div className="max-w-[158.6rem] mx-auto grid grid-cols-1 lg:grid-cols-2">
           <div className="p-16 border-r border-gray-800">
             <div className="flex justify-between gap-10">
               <h2 className="text-[5rem] font-degular font-bold text-white mb-4">

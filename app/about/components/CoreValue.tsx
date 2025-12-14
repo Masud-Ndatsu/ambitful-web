@@ -26,10 +26,10 @@ const CoreValues = () => {
 
   return (
     <section className="w-full flex flex-col items-center justify-center py-[11.788rem] mx-auto px-[14.146rem]">
-      <div className="max-w-[163.7rem] text-[2.358rem] mx-auto w-full">
+      <div className="max-w-[163.7rem] mx-auto w-full">
         {/* Main Title */}
         <div className="text-center mb-16">
-          <h1 className="font-bold text-[5.9rem] leading-[4.421rem] mb-4 tracking-[-0.066rem]">
+          <h1 className="font-medium text-[5.9rem] leading-[4.421rem] mb-4 tracking-[-0.066rem]">
             Our Core Values
           </h1>
           <p className="text-[#FFFFFFB2] font-medium mt-8 mb-[11.7rem]">
@@ -52,9 +52,7 @@ const CoreValues = () => {
                     {value.title}
                   </h3>
 
-                  <p className="text-[#FFFFFFB2] leading-relaxed">
-                    {value.description}
-                  </p>
+                  <p className="text-[#FFFFFFB2]">{value.description}</p>
                 </div>
               </CardContent>
             </Card>

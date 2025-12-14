@@ -124,6 +124,12 @@
 
 html {
   font-size: 50%;
+  /* font-size: 62.5%; */
+}
+
+.overlay {
+  border-image: fill 1
+    linear-gradient(rgba(3, 98, 76, 0.5), rgba(3, 98, 76, 0.5));
 }
 
 .shadow-glow-tile {

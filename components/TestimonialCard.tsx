@@ -31,7 +31,7 @@ export const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
           className="object-cover inline"
         />
       </CardHeader>
-      <CardDescription className="text-[22.43px] italic py-5 text-foreground">
+      <CardDescription className="text-[2rem] italic py-5 text-foreground">
         "{testimonial.quote.slice(0, 130) + "..."}"
       </CardDescription>
       <CardFooter className="p-0 gap-5">
@@ -45,9 +45,9 @@ export const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
           </AvatarFallback>
         </Avatar>
         <div>
-          <h2 className="font-semibold text-[19.94px]">{testimonial.name}</h2>
-          <h4 className="text-[17.45px] font-normal">{testimonial.title}</h4>
-          <h5 className="text-[14.95px] font-normal">{testimonial.location}</h5>
+          <h2 className="font-semibold text-[1.9rem]">{testimonial.name}</h2>
+          <h4 className="text-[1.6rem] font-normal">{testimonial.title}</h4>
+          <h5 className="text-[1.4rem] font-normal">{testimonial.location}</h5>
         </div>
       </CardFooter>
     </Card>

@@ -14,9 +14,8 @@ export default function AuthLayout({
       <section
         style={{
           backgroundImage: "url('/bg_auth.jpg')",
-          opacity: "0.8",
         }}
-        className="min-h-screen flex-2 bg-repeat-none bg-cover bg-center grid place-items-center"
+        className="overlay min-h-screen flex-2 bg-repeat-none bg-cover bg-center grid place-items-center"
       >
         <div className="max-w-[89.6rem] grid gap-[6.4rem]">
           <Link href={"/"}>
