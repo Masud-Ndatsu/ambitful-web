@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, Suspense } from "react";
 import Image from "next/image";
 
 interface FormData {
@@ -15,7 +15,7 @@ interface FormData {
   resume?: FileList;
 }
 
-export default function OnboardingPage() {
+function OnboardingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const step = parseInt(searchParams.get("step") || "1", 10);
@@ -316,5 +316,24 @@ export default function OnboardingPage() {
         </section>
       </form>
     </main>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="mt-[8.1rem] w-[65.7rem] text-[2rem] bg-[#FFFFFF] p-16">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#03624C] mx-auto mb-4"></div>
+              <p className="text-[#676F7E]">Loading onboarding...</p>
+            </div>
+          </div>
+        </main>
+      }
+    >
+      <OnboardingForm />
+    </Suspense>
   );
 }
