@@ -21,7 +21,7 @@ export const HeroSection = () => {
           careers with AMBITFUL.AI.
         </p>
 
-        <div className="flex items-center justify-center gap-5 py-[9.2rem] px-[2rem]">
+        <div className="flex items-center justify-center gap-5 py-[9.2rem] px-8">
           <Button
             size="xl"
             variant={"xl"}

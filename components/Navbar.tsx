@@ -146,6 +146,7 @@ export const Navbar = () => {
             {/* Mobile Buttons */}
             <div className="pt-4 space-y-4 border-t border-gray-200/20">
               <Button
+                size={"sm"}
                 className="w-full cursor-pointer bg-linear-to-r from-[#00df82] to-[#007947] font-medium text-[1.8rem] py-6! h-20"
                 onClick={closeMobileMenu}
               >
