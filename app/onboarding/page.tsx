@@ -301,7 +301,7 @@ function OnboardingForm() {
                 </p>
               </div>
               <div
-                className={`h-[24rem] sm:h-[30rem] lg:h-[36.9rem] mt-8 border border-dashed rounded-2xl grid place-items-center text-center transition-colors ${
+                className={`h-96 sm:h-120 lg:h-[36.9rem] mt-8 border border-dashed rounded-2xl grid place-items-center text-center transition-colors ${
                   isDragOver
                     ? "border-[#03624C] bg-[#03624C1A]"
                     : "border-gray-300"

@@ -50,7 +50,7 @@ export const HeroSection = () => {
           src="/videos/hero_player.mp4"
           width="100%"
           height="100%"
-          className="rounded-2xl min-h-160 w-full "
+          className="rounded-2xl min-h-160 w-full aspect-video"
           loop
           muted
           controls
