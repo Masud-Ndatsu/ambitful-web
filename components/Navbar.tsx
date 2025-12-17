@@ -19,49 +19,60 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="w-full">
       {/* Desktop Navbar */}
-      <nav className="max-w-[158.6rem] mx-auto bg-secondary rounded-2xl w-full hidden lg:flex items-center p-8 justify-between">
-        <Link href={"/"} className="font-bold text-[#03624C] text-[3.8rem]">
+      <nav className="bg-secondary rounded-2xl w-full hidden lg:flex items-center py-8 px-16 justify-between">
+        <Link
+          href={"/"}
+          className="font-bold text-[#03624C] text-[3.8rem] font-degular"
+        >
           Ambitful.ai
         </Link>
 
-        <ul className="flex justify-between item-center gap-8 text-background text-[1.6rem]">
+        <ul className="flex items-center justify-center gap-12 text-background">
           <li>
-            <Link href="/" className="text-[1.8rem]">
+            <Link
+              href="/"
+              className="text-[1.8rem] hover:text-primary transition-colors"
+            >
               Home
             </Link>
           </li>
-
           <li>
-            <Link href="/" className="text-[1.8rem]">
+            <Link
+              href="/"
+              className="text-[1.8rem] hover:text-primary transition-colors"
+            >
               Opportunities
             </Link>
           </li>
-
           <li>
-            <Link href="/about" className="text-[1.8rem]">
+            <Link
+              href="/about"
+              className="text-[1.8rem] hover:text-primary transition-colors"
+            >
               About Us
             </Link>
           </li>
           <li>
-            <Link href="/blogs" className="text-[1.8rem]">
+            <Link
+              href="/blogs"
+              className="text-[1.8rem] hover:text-primary transition-colors"
+            >
               Blog
             </Link>
           </li>
         </ul>
 
         <div className="flex items-center gap-6">
-          <Button className="cursor-pointer bg-linear-to-r from-[#00df82] to-[#007947] font-medium text-[1.8rem] leading-8">
-            <MessageCircle className="h-[1.723rem]! w-[1.723rem]!" />
+          <Button className="font-medium bg-linear-to-r from-[#00df82] to-[#007947] text-[1.8rem] px-6 py-3 flex items-center gap-2">
+            <MessageCircle className="h-6 w-6" />
             Get Career Advice
           </Button>
           <Button
-            className="border border-primary cursor-pointer font-medium text-[1.8rem] leading-8"
+            className="border border-primary font-medium text-[1.8rem] px-6 py-3"
             variant={"secondary"}
-            onClick={() => {
-              router.push("/auth/login");
-            }}
+            onClick={() => router.push("/auth/login")}
           >
             Sign In
           </Button>
@@ -69,7 +80,7 @@ export const Navbar = () => {
       </nav>
 
       {/* Mobile Navbar */}
-      <nav className="lg:hidden bg-secondary rounded-2xl w-full py-4 px-4 sm:px-6">
+      <nav className="lg:hidden bg-secondary rounded-2xl w-full py-6 px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link

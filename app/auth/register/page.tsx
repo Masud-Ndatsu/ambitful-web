@@ -2,7 +2,6 @@
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 interface RegisterFormData {
@@ -12,8 +11,6 @@ interface RegisterFormData {
 }
 
 export default function RegisterPage() {
-  const pathname = usePathname();
-
   const {
     register,
     handleSubmit,
@@ -25,79 +22,114 @@ export default function RegisterPage() {
     // TODO: Implement registration logic
   };
 
-  console.log({ pathname });
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="h-[78.33rem]">
-      <h1 className="text-[4rem] text-center lg:text-left leading-[5.067rem] text-[#101828]">
-        Create Account
-      </h1>
-      <p className="text-[2rem] text-center lg:text-left leading-[3.2rem] my-[4.267rem] text-[#667085]">
-        Join thousands of professionals finding their dream opportunities
-      </p>
-      <div className="text-[1.8rem] mb-8">
-        <label className="block text-[#344054]" htmlFor="name">
-          Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8] w-full"
-          placeholder="Enter your name"
-          {...register("name", { required: "Name is required" })}
-        />
-        {errors.name && (
-          <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-        )}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="text-center space-y-4">
+        <h1 className="text-[2.5rem] md:text-[3.5rem] font-degular font-bold">
+          Create Account
+        </h1>
+        <p className="text-[1.6rem] md:text-[1.8rem] text-muted-foreground">
+          Join thousands of professionals finding their dream opportunities
+        </p>
       </div>
-      <div className="text-[1.8rem] mb-8">
-        <label className="block text-[#344054]" htmlFor="email">
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] mt-[0.8]  w-full"
-          placeholder="Enter your email"
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address",
-            },
-          })}
-        />
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-        )}
-      </div>
-      <div className="text-[1.8rem] mb-8">
-        <label className="block text-[#344054]" htmlFor="password">
-          Password
-        </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          className="py-[1.333rem] px-[1.867rem] border-[0.133rem] rounded-[1.067rem] block mt-[0.8]  w-full"
-          placeholder="Create a password"
-        />
-        <small className="hidden text-[1.867rem] leading-[2.667rem] text-[#667085]">
-          Must be at least 8 characters.
-        </small>
+      <div className="space-y-4">
+        <div>
+          <label
+            className="block text-[1.6rem] font-medium mb-2"
+            htmlFor="name"
+          >
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            className="w-full px-4 py-3 border border-border rounded-lg text-[1.6rem] focus:outline-none"
+            placeholder="Enter your name"
+            {...register("name", { required: "Name is required" })}
+          />
+          {errors.name && (
+            <p className="text-destructive text-[1.4rem] mt-1">
+              {errors.name.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <label
+            className="block text-[1.6rem] font-medium mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            className="w-full px-4 py-3 border border-border rounded-lg text-[1.6rem] focus:outline-none"
+            placeholder="Enter your email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
+          />
+          {errors.email && (
+            <p className="text-destructive text-[1.4rem] mt-1">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <label
+            className="block text-[1.6rem] font-medium mb-2"
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            className="w-full px-4 py-3 border border-border rounded-lg text-[1.6rem] focus:outline-none"
+            placeholder="Create a password"
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
+          />
+          {errors.password && (
+            <p className="text-destructive text-[1.4rem] mt-1">
+              {errors.password.message}
+            </p>
+          )}
+          <p className="text-muted-foreground text-[1.4rem] mt-1">
+            Must be at least 8 characters.
+          </p>
+        </div>
       </div>
 
-      <div>
-        <Button className="block w-full bg-[#03624C]! text-[2.133rem] mb-[2.133rem] border-[0.133rem] rounded-[1.067rem]">
+      <div className="space-y-4">
+        <Button
+          type="submit"
+          className="w-full text-[1.6rem] bg-[#03624C] font-medium px-4 py-8! h-12!"
+        >
           Create account
         </Button>
         <GoogleAuthButton />
       </div>
 
-      <div className="mt-[4.267rem] text-center flex justify-center gap-4">
-        <p className="text-[1.867rem]">Already have an account?</p>
-        <Link className="text-[1.867rem] text-[#03624C]" href={"/auth/login"}>
-          Sign In
-        </Link>
+      <div className="text-center">
+        <p className="text-[1.6rem] text-muted-foreground">
+          Already have an account?{" "}
+          <Link
+            className="text-primary font-medium hover:underline"
+            href={"/auth/login"}
+          >
+            Sign In
+          </Link>
+        </p>
       </div>
     </form>
   );

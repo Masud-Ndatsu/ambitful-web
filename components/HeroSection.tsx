@@ -5,31 +5,30 @@ import ReactPlayer from "react-player";
 export const HeroSection = () => {
   return (
     <>
-      <section className="text-center leading-36 bg-linear-to-r from-[#00DF821A]/15 from-10% via-[#000000] to-[#00DF821A]/15 to-90%">
-        <div className="py-[9.2rem]">
-          <h1 className="font-degular text-[8rem] lg:text-[10rem] font-bold">
+      <section className="text-center leading-36 py-8 md:py-16 px-4">
+        <div className="py-16 md:py-[9.2rem]">
+          <h1 className="font-degular text-[6rem] md:text-[10rem] lg:text-[12rem] font-bold leading-tight">
             Discover Opportunity
           </h1>
-          <h1 className="font-degular text-[6rem] lg:text-[8rem] font-bold">
+          <h1 className="font-degular text-[5rem] md:text-[8rem] lg:text-[10rem] font-bold leading-tight">
             Empower Your Future
           </h1>
         </div>
 
-        <p className="text-[2.3rem] max-w-358 mx-auto leading-14">
+        <p className="text-[1.8rem] md:text-[2.2rem] lg:text-[2.5rem] max-w-[90%] md:max-w-358 mx-auto leading-[2.6rem] md:leading-14 mb-16 md:mb-0">
           Connect with AI-powered career opportunities, get personalized
           guidance, and join thousands of professionals who've transformed their
           careers with AMBITFUL.AI.
         </p>
 
-        <div className="flex items-center justify-center gap-5 py-[9.2rem] px-8">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 py-16 md:py-[9.2rem] px-4">
           <Button
             size="xl"
-            variant={"xl"}
-            className="flex items-center gap-2.5"
+            className="bg-linear-to-r from-[#00df82] to-[#007947] flex items-center justify-center gap-4 w-full sm:w-auto"
           >
             <Image
               src={"/search.svg"}
-              alt="Btn Search"
+              alt="Browse Opportunities"
               width={20}
               height={20}
             />
@@ -37,27 +36,25 @@ export const HeroSection = () => {
           </Button>
           <Button
             size="xl"
-            className="bg-background text-foreground border border-primary"
             variant={"secondary"}
+            className="w-full bg-secondary sm:w-auto"
           >
-            <Image src={"/btn-ai.svg"} alt="Btn Ai" width={20} height={20} />
+            <Image src={"/btn-ai.svg"} alt="AI Agent" width={20} height={20} />
             Talk to AI Agent
           </Button>
         </div>
       </section>
 
-      <section className="bg-radial from-[#00DF82] to-[#00DF8200] min-h-120 max-w-[129.7rem] w-full m-auto rounded-2xl lg:p-20 pb-0 flex items-end justify-center">
-        <div className=" w-full h-full lg:h-280">
-          <ReactPlayer
-            src="/videos/hero_player.mp4"
-            width="100%"
-            height="100%"
-            className="rounded-t-2xl object-cover"
-            loop
-            muted
-            controls
-          />
-        </div>
+      <section className="bg-radial from-[#00DF82] to-[#00DF8200] min-h-160 md:min-h-240 lg:min-h-280 max-w-[129.7rem] w-full mx-auto rounded-2xl overflow-hidden">
+        <ReactPlayer
+          src="/videos/hero_player.mp4"
+          width="100%"
+          height="100%"
+          className="rounded-2xl min-h-160 w-full "
+          loop
+          muted
+          controls
+        />
       </section>
     </>
   );

@@ -25,34 +25,33 @@ const CoreValues = () => {
   ];
 
   return (
-    <section className="w-full flex flex-col items-center justify-center py-[11.788rem] mx-auto lg:px-[14.146rem]">
-      <div className="max-w-[163.7rem] mx-auto w-full">
+    <section className="w-full py-16 md:py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[159.7rem] mx-auto w-full">
         {/* Main Title */}
-        <div className="text-center mb-16">
-          <h1 className="font-medium text-[5.9rem] leading-[4.421rem] mb-4 tracking-[-0.066rem]">
+        <div className="text-center mb-16 md:mb-20">
+          <h1 className="font-medium font-degular text-[4rem] md:text-[5.9rem] leading-tight mb-6 text-foreground">
             Our Core Values
           </h1>
-          <p className="text-[#FFFFFFB2] font-medium mt-8 mb-[11.7rem]">
+          <p className="text-muted-foreground font-medium text-[1.8rem] md:text-[2rem]">
             The principles that guide everything we do
           </p>
         </div>
 
         {/* Values Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[4.715rem]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
           {values.map((value, index) => (
-            <Card key={index} className="border-primary">
-              <CardContent className="p-8 flex items-start gap-[3.536rem]">
-                <div className="grid place-items-center min-w-[8.251rem] h-[8.251rem] bg-[#03624C4D]/30 text-primary mb-6">
-                  <span className=" font-semibold tracking-wider">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+            <Card key={index} className="border-primary/30 bg-card">
+              <CardContent className="p-6 md:p-8 flex items-start gap-6">
+                <div className="grid place-items-center min-w-[6rem] h-[6rem] md:min-w-[8rem] md:h-[8rem] bg-primary/10 rounded-xl text-primary text-[2rem] md:text-[2.5rem] font-bold">
+                  {String(index + 1).padStart(2, "0")}
                 </div>
-                <div>
-                  <h3 className="font-bold text-[2.652rem] mb-4 tracking-tight">
+                <div className="flex-1">
+                  <h3 className="font-bold font-degular text-[2rem] md:text-[2.5rem] mb-4 text-foreground">
                     {value.title}
                   </h3>
-
-                  <p className="text-[#FFFFFFB2]">{value.description}</p>
+                  <p className="text-muted-foreground text-[1.6rem] md:text-[1.8rem] leading-relaxed">
+                    {value.description}
+                  </p>
                 </div>
               </CardContent>
             </Card>

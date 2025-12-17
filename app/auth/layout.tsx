@@ -10,105 +10,69 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="lg:flex">
-      <section className="overlay hidden bg-[url(/bg_auth.jpg)] min-h-screen flex-2 bg-repeat-none bg-cover bg-center lg:grid place-items-center ">
-        <div className="max-w-[89.6rem] grid gap-[6.4rem]">
-          <Link href={"/"}>
-            <img src="/auth_star.svg" alt="Ambitful Logo" />
+    <main className="lg:flex min-h-screen">
+      <section className="overlay hidden lg:flex bg-[url(/bg_auth.jpg)] flex-2 bg-cover bg-center items-center justify-center p-8">
+        <div className="max-w-4xl space-y-16 text-white">
+          <Link href={"/"} className="inline-block">
+            <Image
+              src="/auth_star.svg"
+              alt="Ambitful Logo"
+              width={80}
+              height={80}
+            />
           </Link>
-          <h1 className="text-[6rem] leading-24 font-degular font-semibold">
+          <h1 className="text-[3.5rem] md:text-[4.5rem] lg:text-[6rem] leading-tight font-degular font-semibold">
             Connect to Your Future with AI-Powered Opportunities
           </h1>
-          <p className="text-[2rem] leading-12">
+          <p className="text-[1.8rem] md:text-[2rem] leading-relaxed">
             Discover personalized job matches, exclusive fellowships, and career
             opportunities tailored by advanced AI technology.
           </p>
-          <div className="flex gap-8">
-            <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
-              <Avatar className="w-[5.333rem] h-[5.333rem]">
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-                <AvatarFallback>CN</AvatarFallback>
+          <div className="flex items-center gap-6">
+            <div className="flex -space-x-3">
+              <Avatar className="w-16 h-16 ring-2 ring-white">
+                <AvatarImage src="https://github.com/shadcn.png" alt="User 1" />
+                <AvatarFallback>U1</AvatarFallback>
               </Avatar>
-              <Avatar className="w-[5.333rem] h-[5.333rem]">
+              <Avatar className="w-16 h-16 ring-2 ring-white">
                 <AvatarImage
                   src="https://github.com/maxleiter.png"
-                  alt="@maxleiter"
+                  alt="User 2"
                 />
-                <AvatarFallback>LR</AvatarFallback>
+                <AvatarFallback>U2</AvatarFallback>
               </Avatar>
-              <Avatar className="w-[5.333rem] h-[5.333rem]">
+              <Avatar className="w-16 h-16 ring-2 ring-white">
                 <AvatarImage
                   src="https://github.com/evilrabbit.png"
-                  alt="@evilrabbit"
+                  alt="User 3"
                 />
-                <AvatarFallback>ER</AvatarFallback>
+                <AvatarFallback>U3</AvatarFallback>
               </Avatar>
-              <Avatar className="w-[5.333rem] h-[5.333rem]">
-                <AvatarImage
-                  src="https://github.com/evilrabbit.png"
-                  alt="@evilrabbit"
-                />
-                <AvatarFallback>ER</AvatarFallback>
-              </Avatar>
-              <Avatar className="w-[5.333rem] h-[5.333rem]">
-                <AvatarImage
-                  src="https://github.com/evilrabbit.png"
-                  alt="@evilrabbit"
-                />
-                <AvatarFallback>ER</AvatarFallback>
+              <Avatar className="w-16 h-16 ring-2 ring-white">
+                <AvatarFallback className="bg-primary text-white">
+                  +2
+                </AvatarFallback>
               </Avatar>
             </div>
-            <div>
-              <div className="flex gap-[1.067rem] mb-[0.533rem]">
-                <Image
-                  src={"/auth_yellow_star.svg"}
-                  alt="Review star"
-                  width={26.666}
-                  height={26.666}
-                  className="text-[#FEC84B]!"
-                />
-                <Image
-                  src={"/auth_yellow_star.svg"}
-                  alt="Review star"
-                  width={26.666}
-                  height={26.666}
-                  className="text-[#FEC84B]!"
-                />{" "}
-                <Image
-                  src={"/auth_yellow_star.svg"}
-                  alt="Review star"
-                  width={26.666}
-                  height={26.666}
-                  className="text-[#FEC84B]!"
-                />{" "}
-                <Image
-                  src={"/auth_yellow_star.svg"}
-                  alt="Review star"
-                  width={26.666}
-                  height={26.666}
-                  className="text-[#FEC84B]!"
-                />{" "}
-                <Image
-                  src={"/auth_yellow_star.svg"}
-                  alt="Review star"
-                  width={26.666}
-                  height={26.666}
-                  className="text-[#FEC84B]!"
-                />
-                <p className="text-[2.133rem]">5.0</p>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-6 h-6 fill-yellow-400 text-yellow-400"
+                  />
+                ))}
+                <span className="text-[2rem] font-medium ml-2">5.0</span>
               </div>
-              <p className="text-[#40B36D] text-[2.133rem]">
+              <p className="text-primary text-[1.8rem] font-medium">
                 from 200+ reviews
               </p>
             </div>
           </div>
         </div>
       </section>
-      <section className="lg:flex-1 px-12 lg:px-[8.533rem] lg:min-w-[70.4rem] min-h-screen text-[1.6rem]! bg-foreground text-background grid place-items-center">
-        {children}
+      <section className="flex-1 px-6 sm:px-12 lg:px-20 min-h-screen bg-white text-background flex items-center justify-center">
+        <div className="w-full max-w-lg">{children}</div>
       </section>
     </main>
   );

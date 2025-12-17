@@ -4,17 +4,17 @@ import Image from "next/image";
 
 export const GoogleAuthButton = () => {
   return (
-    <div>
-      <Button className="flex items-center gap-8 w-full text-[2.133rem] bg-foreground! text-[#344054]!  border-[0.133rem] rounded-[1.067rem] ">
-        <Image
-          src={"/google_icon.svg"}
-          alt="Google Icon"
-          width={32}
-          height={32}
-          className="inline"
-        />{" "}
-        Sign up with Google
-      </Button>
-    </div>
+    <Button
+      variant="outline"
+      className="flex items-center justify-center gap-3 w-full text-[1.6rem] font-medium bg-foreground border px-4 py-8 h-12!"
+    >
+      <Image
+        src={"/google_icon.svg"}
+        alt="Google Icon"
+        width={20}
+        height={20}
+      />
+      Sign in with Google
+    </Button>
   );
 };

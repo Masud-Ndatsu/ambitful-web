@@ -32,30 +32,30 @@ export default function FaqSection() {
   ];
 
   return (
-    <section className=" max-w-[158.6rem] mx-auto w-full py-48">
-      <div className="flex flex-col items-center gap-4 mb-10">
-        <span className="w-[11.7rem] h-[3.6rem] grid place-items-center rounded-2xl border border-primary text-foreground text-sm font-medium">
+    <section className="max-w-[159.7rem] mx-auto w-full py-16 md:py-20 px-4 md:px-8">
+      <div className="flex flex-col items-center gap-6 mb-12 md:mb-16">
+        <span className="w-[11.7rem] h-[3.6rem] grid place-items-center rounded-2xl border border-primary text-foreground text-[1.4rem] font-medium">
           FAQ
         </span>
 
-        <h2 className="text-[5.9rem] mb-12 font-semibold text-center text-white">
+        <h2 className="text-[4rem] md:text-[5.9rem] mb-4 font-semibold text-center text-foreground font-degular">
           Have a Question? Look Here
         </h2>
       </div>
 
-      <div className="max-w-606 w-full mx-auto space-y-4 px-8">
-        <Accordion type="single" collapsible className="space-y-8 mb-10">
+      <div className="max-w-7xl w-full mx-auto">
+        <Accordion type="single" collapsible className="space-y-6">
           {faqs.map((item, idx) => (
             <AccordionItem
               key={idx}
               value={`faq-${idx}`}
-              className="border border-[#0CFF8F]/30 rounded-xl bg-black p-8!"
+              className="border border-primary/30 rounded-xl bg-card p-6 md:p-8"
             >
-              <AccordionTrigger className="text-left text-[2.8rem] font-medium text-white hover:no-underline py-5">
+              <AccordionTrigger className="text-left text-[2rem] md:text-[2.8rem] font-medium text-foreground hover:no-underline py-4">
                 {item.question}
               </AccordionTrigger>
 
-              <AccordionContent className="max-w-[111.11rem] text-white/60 text-[2rem] pb-4 leading-relaxed">
+              <AccordionContent className="text-muted-foreground text-[1.6rem] md:text-[2rem] pb-4 leading-relaxed">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>
