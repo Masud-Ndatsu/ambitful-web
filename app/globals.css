@@ -46,6 +46,7 @@
 
 :root {
   --radius: 0.625rem;
+  --btn-bg: linear-gradient(#00df82, #007947);
 
   --background: oklch(0.18 0 0);
   --foreground: oklch(1 0 0);
@@ -87,7 +88,7 @@
 .dark {
   --background: oklch(0.16 0 0);
   --foreground: oklch(0.98 0 0);
-  --btn-light: linear-gradient(#00df82, #007947);
+  --btn-bg: linear-gradient(#00df82, #007947);
   --card: oklch(0.23 0 0);
   --card-foreground: var(--foreground);
 

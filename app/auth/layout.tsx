@@ -12,7 +12,7 @@ export default function AuthLayout({
   return (
     <main className="lg:flex min-h-screen">
       <section className="overlay hidden lg:flex bg-[url(/bg_auth.jpg)] flex-2 bg-cover bg-center items-center justify-center p-8">
-        <div className="max-w-4xl space-y-16 text-white">
+        <div className="max-w-[121.6rem] space-y-16 lg:max-w-7xl text-white">
           <Link href={"/"} className="inline-block">
             <Image
               src="/auth_star.svg"

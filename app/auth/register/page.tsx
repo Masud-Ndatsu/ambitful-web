@@ -104,9 +104,6 @@ export default function RegisterPage() {
               {errors.password.message}
             </p>
           )}
-          <p className="text-muted-foreground text-[1.4rem] mt-1">
-            Must be at least 8 characters.
-          </p>
         </div>
       </div>
 
@@ -124,7 +121,7 @@ export default function RegisterPage() {
         <p className="text-[1.6rem] text-muted-foreground">
           Already have an account?{" "}
           <Link
-            className="text-primary font-medium hover:underline"
+            className="text-[#03624C] font-medium hover:underline"
             href={"/auth/login"}
           >
             Sign In
