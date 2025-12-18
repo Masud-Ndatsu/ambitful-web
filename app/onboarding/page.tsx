@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useEffect, useCallback, useState, Suspense } from "react";
 import Image from "next/image";
 
@@ -27,6 +27,8 @@ function OnboardingForm() {
   const searchParams = useSearchParams();
   const step = parseInt(searchParams.get("step") || "1", 10);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const jobFunctions = [
     "Software Engineering",
@@ -43,12 +45,14 @@ function OnboardingForm() {
     "Other",
   ];
 
-  const { register, handleSubmit, setValue, watch } = useForm<FormData>({
+  const { register, handleSubmit, setValue, control } = useForm<FormData>({
     defaultValues: {
       jobTypes: [],
       remoteWork: false,
     },
   });
+
+  const remoteWork = useWatch({ control, name: "remoteWork" });
 
   const updateStep = useCallback(
     (newStep: number) => {
@@ -65,11 +69,13 @@ function OnboardingForm() {
     }
   }, [step, updateStep]);
 
-  const jobTypes = watch("jobTypes");
-  const resumeFile = watch("resume");
-
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    // Include state values in submission
+    const submitData = {
+      ...data,
+      jobTypes: selectedJobTypes,
+    };
+    console.log(submitData);
     if (step === 1) {
       updateStep(2);
     } else {
@@ -79,14 +85,10 @@ function OnboardingForm() {
   };
 
   const handleJobTypeChange = (type: string, checked: boolean) => {
-    const current = jobTypes || [];
     if (checked) {
-      setValue("jobTypes", [...current, type]);
+      setSelectedJobTypes((prev) => [...prev, type]);
     } else {
-      setValue(
-        "jobTypes",
-        current.filter((t) => t !== type)
-      );
+      setSelectedJobTypes((prev) => prev.filter((t) => t !== type));
     }
   };
 
@@ -107,22 +109,16 @@ function OnboardingForm() {
     setIsDragOver(false);
   }, []);
 
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragOver(false);
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
 
-      const files = e.dataTransfer.files;
-      if (files && files.length > 0) {
-        // Create a new DataTransfer to set as FileList
-        const dt = new DataTransfer();
-        dt.items.add(files[0]);
-        setValue("resume", dt.files);
-      }
-    },
-    [setValue]
-  );
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      setUploadedFile(files[0]);
+    }
+  }, []);
 
   return (
     <main className="w-full max-w-[65.7rem] mx-auto text-[2rem] bg-[#FFFFFF] p-4 sm:p-8 lg:p-16">
@@ -137,10 +133,10 @@ function OnboardingForm() {
           {step === 1 ? (
             <>
               <h1 className="font-degular font-semibold text-[3rem] sm:text-[3.5rem] lg:text-[4.106rem] leading-[4.563rem]">
-                Let's personalize your experience
+                Let&apos;s personalize your experience
               </h1>
               <p className="text-[1.6rem] sm:text-[1.825rem] leading-[2.738rem] mt-8 mb-12">
-                Tell us what you're looking for
+                Tell us what you&apos;re looking for
               </p>
               <div className="text-[1.597rem] mb-8">
                 <label
@@ -185,7 +181,7 @@ function OnboardingForm() {
                         <Checkbox
                           id={`job-type-${type}`}
                           className="h-6 w-6"
-                          checked={jobTypes?.includes(type) || false}
+                          checked={selectedJobTypes.includes(type)}
                           onCheckedChange={(checked) =>
                             handleJobTypeChange(type, checked as boolean)
                           }
@@ -204,7 +200,7 @@ function OnboardingForm() {
                   <Checkbox
                     id="job-type-other"
                     className="h-6 w-6"
-                    checked={jobTypes?.includes("Other") || false}
+                    checked={selectedJobTypes.includes("Other")}
                     onCheckedChange={(checked) =>
                       handleJobTypeChange("Other", checked as boolean)
                     }
@@ -239,7 +235,7 @@ function OnboardingForm() {
                   <Checkbox
                     id="remote-work"
                     className="h-6 w-6"
-                    checked={watch("remoteWork")}
+                    checked={remoteWork}
                     onCheckedChange={(checked) =>
                       setValue("remoteWork", checked as boolean)
                     }
@@ -320,8 +316,8 @@ function OnboardingForm() {
                     alt="Upload icon"
                   />
                   <h2 className="font-semibold leading-[2.281rem] mt-4 text-[1.6rem] sm:text-[1.8rem] lg:text-[2rem]">
-                    {resumeFile && resumeFile.length > 0
-                      ? `Selected: ${resumeFile[0].name}`
+                    {uploadedFile
+                      ? `Selected: ${uploadedFile.name}`
                       : "Drop your resume here"}
                   </h2>
                   <p className="my-4">or</p>
@@ -330,7 +326,12 @@ function OnboardingForm() {
                     id="resume"
                     accept=".pdf,.doc,.docx"
                     className="hidden"
-                    {...register("resume")}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setUploadedFile(file);
+                      }
+                    }}
                   />
                   <label
                     htmlFor="resume"

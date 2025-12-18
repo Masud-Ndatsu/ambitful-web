@@ -17,8 +17,8 @@ export const HeroSection = () => {
 
         <p className="text-[1.8rem] md:text-[2.2rem] lg:text-[2.5rem] max-w-[90%] md:max-w-358 mx-auto leading-[2.6rem] md:leading-14 mb-16 md:mb-0">
           Connect with AI-powered career opportunities, get personalized
-          guidance, and join thousands of professionals who've transformed their
-          careers with AMBITFUL.AI.
+          guidance, and join thousands of professionals who&apos;ve transformed
+          their careers with AMBITFUL.AI.
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 py-16 md:py-[9.2rem] px-4">

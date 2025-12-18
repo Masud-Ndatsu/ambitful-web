@@ -4,24 +4,28 @@ export default function FixingJobSpaceSection() {
   const features = [
     {
       title: "AI-Powered Matching",
-      description: "Our algorithm analyzes your expertise, skills, personality, and cultural fit to recommend opportunities with unmatched accuracy.",
-      icon: Target
+      description:
+        "Our algorithm analyzes your expertise, skills, personality, and cultural fit to recommend opportunities with unmatched accuracy.",
+      icon: Target,
     },
     {
-      title: "Personalized Experience", 
-      description: "Every user receives a customized experience with insights, tailored job recommendations, career guidance, and contextual matches.",
-      icon: Users
+      title: "Personalized Experience",
+      description:
+        "Every user receives a customized experience with insights, tailored job recommendations, career guidance, and contextual matches.",
+      icon: Users,
     },
     {
       title: "Instant Connections",
-      description: "We eliminate the waiting game. Our system connects talent and employers in real-time, reducing hiring friction.",
-      icon: Zap
+      description:
+        "We eliminate the waiting game. Our system connects talent and employers in real-time, reducing hiring friction.",
+      icon: Zap,
     },
     {
       title: "Bias-Free Recruitment",
-      description: "Our AI is trained to focus on what truly matters—skills, experience, and potential—helping create fairer outcomes for everyone.",
-      icon: Shield
-    }
+      description:
+        "Our AI is trained to focus on what truly matters—skills, experience, and potential—helping create fairer outcomes for everyone.",
+      icon: Shield,
+    },
   ];
 
   return (
@@ -32,8 +36,8 @@ export default function FixingJobSpaceSection() {
             Fixing The Job Space
           </h2>
           <p className="text-muted-foreground text-[1.8rem] md:text-[2rem] max-w-3xl mx-auto">
-            We're addressing the biggest challenges in recruitment with innovative,
-            AI-driven solutions.
+            We&apos;re addressing the biggest challenges in recruitment with
+            innovative, AI-driven solutions.
           </p>
         </div>
 
@@ -59,7 +63,7 @@ function Feature({
 }: {
   title: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ size: number }>;
 }) {
   return (
     <div className="p-6 md:p-8 rounded-xl border border-primary/30 bg-card shadow-[0_0_20px_rgba(0,223,130,0.15)] h-full flex flex-col">

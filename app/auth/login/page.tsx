@@ -2,7 +2,6 @@
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 interface LoginFormData {
@@ -11,8 +10,6 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
-  const pathname = usePathname();
-
   const {
     register,
     handleSubmit,
@@ -95,7 +92,7 @@ export default function LoginPage() {
 
       <div className="text-center">
         <p className="text-[1.6rem] text-muted-foreground">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             className="text-[#03624C] font-medium hover:underline"
             href={"/auth/register"}

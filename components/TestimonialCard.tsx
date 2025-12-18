@@ -33,11 +33,11 @@ export const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
           />
         </div>
       </CardHeader>
-      
+
       <CardDescription className="text-[1.8rem] md:text-[2rem] italic py-4 md:py-5 text-foreground leading-relaxed grow">
-        "{testimonial.quote}"
+        &quot;{testimonial.quote}&quot;
       </CardDescription>
-      
+
       <CardFooter className="p-0 gap-4 md:gap-5 mt-auto">
         <Avatar className="w-16 h-16 md:w-24 md:h-24 shrink-0">
           <AvatarImage src={testimonial.avatar} alt={testimonial.name} />

@@ -31,8 +31,8 @@ export default function MissionVisionSection() {
             Our Vision
           </h3>
           <p className="text-muted-foreground text-[1.8rem] md:text-[2rem] leading-relaxed">
-            To become the world's most trusted AI-powered career platform, where
-            every person can discover opportunities that unlock their full
+            To become the world&apos;s most trusted AI-powered career platform,
+            where every person can discover opportunities that unlock their full
             potential, and every organization can find the talent that propels
             it forward. We envision a future where career growth is accessible,
             equitable, and driven by intelligence that serves humanity.
