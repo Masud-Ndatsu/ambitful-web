@@ -5,20 +5,16 @@ import ReactPlayer from "react-player";
 export const HeroSection = () => {
   return (
     <>
-      <section className="text-center leading-36 py-8 md:py-16 px-4">
-        <div className="py-16 md:py-[9.2rem]">
-          <h1 className="font-degular text-[6rem] md:text-[10rem] lg:text-[12rem] font-bold leading-tight">
-            Discover Opportunity
-          </h1>
+      <section className="text-center leading-36 py-8 md:py-8 px-4">
+        <div className="py-8 md:py-16">
           <h1 className="font-degular text-[5rem] md:text-[8rem] lg:text-[10rem] font-bold leading-tight">
-            Empower Your Future
+            Make Your Dream Reality
           </h1>
         </div>
 
-        <p className="text-[1.8rem] md:text-[2.2rem] lg:text-[2.5rem] max-w-[90%] md:max-w-358 mx-auto leading-[2.6rem] md:leading-14 mb-16 md:mb-0">
+        <p className="text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] max-w-[90%] md:max-w-358 mx-auto leading-[2.6rem] md:leading-14 mb-16 md:mb-0">
           Connect with AI-powered career opportunities, get personalized
-          guidance, and join thousands of professionals who&apos;ve transformed
-          their careers with AMBITFUL.AI.
+          guidance, and recommended insider connections in less than 1 min!
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 py-16 md:py-[9.2rem] px-4">

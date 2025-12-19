@@ -1,7 +1,7 @@
 import React from "react";
-import { TopBar } from "./TopBar";
 import OpportunityListing from "./OpportunityListing";
 import AgentComponent from "./AgentComponent";
+import { TopBar } from "./TopBar";
 
 export default async function UserDashboard() {
   return (

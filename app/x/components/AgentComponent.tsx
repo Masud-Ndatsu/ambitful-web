@@ -5,7 +5,7 @@ import React from "react";
 
 export default function AgentComponent() {
   return (
-    <article className="flex-1 bg-[#FFFFFF] text-background/70 border border-[#E2E2E2] relative">
+    <article className="flex-1 bg-[#FFFFFF] text-background/70 border-[#E2E2E2] relative hidden lg:block">
       <header className="border-b h-28 px-8 flex items-center gap-8">
         <div className="h-[3.2rem] w-[3.2rem] rounded-full bg-[#0B455033] grid place-items-center">
           <svg
@@ -24,9 +24,9 @@ export default function AgentComponent() {
 
         <div>
           <h2 className="text-[1.412rem] leading-[2.903rem] font-medium text-[#000000]">
-            AI Career Agent
+            Ambit
           </h2>
-          <p className="text-[0.8rem] text-[#78A73B]">Online now</p>
+          <p className="text-[0.8rem] text-[#78A73B]">Your Assistant</p>
         </div>
       </header>
 

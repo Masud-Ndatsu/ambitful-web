@@ -3,7 +3,7 @@ import OpportunityItem from "./OpportunityItem";
 
 export default function OpportunityListing() {
   return (
-    <article className="flex-2 p-8 max-h-screen overflow-y-scroll overflow-x-hidden scroll-smooth">
+    <article className="flex-2 p-8 max-h-screen overflow-y-scroll scroll-smooth">
       <ul className="flex flex-col gap-8">
         <OpportunityItem
           title="UX Designer - Design Systems"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { MessageCircle, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Logo } from "./Logo";
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,13 +22,8 @@ export const Navbar = () => {
   return (
     <div className="w-full sticky top-0">
       {/* Desktop Navbar */}
-      <nav className="bg-secondary rounded-[5rem] w-full hidden lg:flex items-center py-8 px-16 justify-between">
-        <Link
-          href={"/"}
-          className="font-bold text-[#03624C] text-[3.8rem] font-degular"
-        >
-          Ambitful.ai
-        </Link>
+      <nav className="bg-secondary w-full hidden lg:flex items-center py-4 px-10 justify-between">
+        <Logo />
 
         <ul className="flex items-center justify-center gap-12 text-background">
           <li>
@@ -40,7 +36,7 @@ export const Navbar = () => {
           </li>
           <li>
             <Link
-              href="/opportunities"
+              href="/x/opportunities"
               className="text-[1.8rem] hover:text-primary transition-colors"
             >
               Opportunities
@@ -70,7 +66,7 @@ export const Navbar = () => {
             Get Career Advice
           </Button>
           <Button
-            className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl"
+            className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl uppercase"
             variant={"secondary"}
             onClick={() => router.push("/auth/login")}
           >
@@ -83,12 +79,7 @@ export const Navbar = () => {
       <nav className="lg:hidden bg-secondary rounded-2xl w-full py-6 px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link
-            href={"/"}
-            className="font-bold text-[#03624C] text-[3.4rem] sm:text-[3.8rem]"
-          >
-            Ambitful.ai
-          </Link>
+          <Logo isMobile />
 
           {/* Mobile Menu Button */}
           <button
@@ -125,7 +116,7 @@ export const Navbar = () => {
 
               <li>
                 <Link
-                  href="/opportunities"
+                  href="/x/opportunities"
                   className="block py-2 text-[1.6rem] hover:text-primary transition-colors"
                   onClick={closeMobileMenu}
                 >
@@ -166,7 +157,7 @@ export const Navbar = () => {
               </Button>
 
               <Button
-                className="w-full border border-primary cursor-pointer font-medium text-[1.6rem] py-6! h-20 rounded-4xl"
+                className="w-full border border-primary cursor-pointer font-medium text-[1.6rem] py-6! h-20 rounded-4xl uppercase"
                 variant={"secondary"}
                 onClick={() => {
                   closeMobileMenu();
