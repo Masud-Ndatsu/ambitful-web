@@ -19,9 +19,9 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full sticky top-0">
       {/* Desktop Navbar */}
-      <nav className="bg-secondary rounded-2xl w-full hidden lg:flex items-center py-8 px-16 justify-between">
+      <nav className="bg-secondary rounded-[5rem] w-full hidden lg:flex items-center py-8 px-16 justify-between">
         <Link
           href={"/"}
           className="font-bold text-[#03624C] text-[3.8rem] font-degular"
@@ -40,7 +40,7 @@ export const Navbar = () => {
           </li>
           <li>
             <Link
-              href="/"
+              href="/opportunities"
               className="text-[1.8rem] hover:text-primary transition-colors"
             >
               Opportunities
@@ -56,7 +56,7 @@ export const Navbar = () => {
           </li>
           <li>
             <Link
-              href="/blogs"
+              href="/blog"
               className="text-[1.8rem] hover:text-primary transition-colors"
             >
               Blog
@@ -65,12 +65,12 @@ export const Navbar = () => {
         </ul>
 
         <div className="flex items-center gap-6">
-          <Button className="font-medium bg-linear-to-r from-[#00df82] to-[#007947] text-[1.8rem] px-6 py-3 flex items-center gap-2">
+          <Button className="font-medium bg-linear-to-r from-[#00df82] to-[#007947] text-[1.8rem] px-6 py-3 flex items-center gap-2 rounded-4xl">
             <MessageCircle className="h-6 w-6" />
             Get Career Advice
           </Button>
           <Button
-            className="border border-primary font-medium text-[1.8rem] px-6 py-3"
+            className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl"
             variant={"secondary"}
             onClick={() => router.push("/auth/login")}
           >
@@ -125,7 +125,7 @@ export const Navbar = () => {
 
               <li>
                 <Link
-                  href="/"
+                  href="/opportunities"
                   className="block py-2 text-[1.6rem] hover:text-primary transition-colors"
                   onClick={closeMobileMenu}
                 >
@@ -145,7 +145,7 @@ export const Navbar = () => {
 
               <li>
                 <Link
-                  href="/blogs"
+                  href="/blog"
                   className="block py-2 text-[1.6rem] hover:text-primary transition-colors"
                   onClick={closeMobileMenu}
                 >
@@ -158,7 +158,7 @@ export const Navbar = () => {
             <div className="pt-4 space-y-4 border-t border-gray-200/20">
               <Button
                 size={"sm"}
-                className="w-full cursor-pointer bg-linear-to-r from-[#00df82] to-[#007947] font-medium text-[1.8rem] py-6! h-20"
+                className="w-full cursor-pointer bg-linear-to-r from-[#00df82] to-[#007947] font-medium text-[1.8rem] py-6! h-20 rounded-4xl"
                 onClick={closeMobileMenu}
               >
                 <MessageCircle className="h-6! w-6! mr-2" />
@@ -166,7 +166,7 @@ export const Navbar = () => {
               </Button>
 
               <Button
-                className="w-full border border-primary cursor-pointer font-medium text-[1.6rem] py-6! h-20"
+                className="w-full border border-primary cursor-pointer font-medium text-[1.6rem] py-6! h-20 rounded-4xl"
                 variant={"secondary"}
                 onClick={() => {
                   closeMobileMenu();

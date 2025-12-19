@@ -1,0 +1,131 @@
+import React from "react";
+import OpportunityItem from "./OpportunityItem";
+
+export default function OpportunityListing() {
+  return (
+    <article className="flex-2 p-8 max-h-screen overflow-y-scroll overflow-x-hidden scroll-smooth">
+      <ul className="flex flex-col gap-8">
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+        <OpportunityItem
+          title="UX Designer - Design Systems"
+          time="1 hour"
+          description="Twitch / Gaming · Media and Entertainment · Late Stage"
+          details={[
+            "San Francisco, CA",
+            "Onsite",
+            "Full-time",
+            "$108k/yr - $164k/yr",
+          ]}
+          salary="$108k/yr - $164k/yr"
+        />
+      </ul>
+    </article>
+  );
+}
