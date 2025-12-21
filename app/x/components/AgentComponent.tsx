@@ -2,8 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import React from "react";
+import { User } from "@/actions/auth";
 
-export default function AgentComponent() {
+interface AgentComponentProps {
+  user: User | null;
+}
+
+export default function AgentComponent({ user }: AgentComponentProps) {
   return (
     <article className="flex-1 bg-[#FFFFFF] text-background/70 border-[#E2E2E2] relative hidden lg:block">
       <header className="border-b h-28 px-8 flex items-center gap-8">
@@ -26,7 +31,9 @@ export default function AgentComponent() {
           <h2 className="text-[1.412rem] leading-[2.903rem] font-medium text-[#000000]">
             Ambit
           </h2>
-          <p className="text-[0.8rem] text-[#78A73B]">Your Assistant</p>
+          <p className="text-[0.8rem] text-[#78A73B]">
+            {user ? `Hi ${user.name?.split(' ')[0]}, Your Assistant` : "Your Assistant"}
+          </p>
         </div>
       </header>
 

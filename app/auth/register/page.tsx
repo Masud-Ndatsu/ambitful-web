@@ -1,14 +1,12 @@
+// @typescript-eslint/no-explicit-any
 "use client";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-
-interface RegisterFormData {
-  name: string;
-  email: string;
-  password: string;
-}
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { register as registerUser, RegisterFormData } from "@/actions/auth";
 
 export default function RegisterPage() {
   const {
@@ -17,9 +15,27 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterFormData>();
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log("Register form data:", data);
-    // TODO: Implement registration logic
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+  const router = useRouter();
+
+  const onSubmit = async (data: RegisterFormData) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await registerUser(data);
+
+      if (response.success) {
+        router.push("/x/opportunities");
+      } else {
+        setError(response.message);
+      }
+    } catch (error: any) {
+      setError(error.message || "Registration failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -107,12 +123,19 @@ export default function RegisterPage() {
         </div>
       </div>
 
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-600 text-[1.4rem]">{error}</p>
+        </div>
+      )}
+
       <div className="space-y-4">
         <Button
           type="submit"
-          className="w-full text-[1.6rem] bg-[#03624C] font-medium px-4 py-8! h-12!"
+          disabled={isLoading}
+          className="w-full text-[1.6rem] bg-[#03624C] font-medium px-4 py-8 h-12 disabled:opacity-50"
         >
-          Create account
+          {isLoading ? "Creating Account..." : "Create Account"}
         </Button>
         <GoogleAuthButton />
       </div>

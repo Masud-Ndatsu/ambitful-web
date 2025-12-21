@@ -7,7 +7,7 @@ export interface Opportunity {
   locations: string[];
   company?: string;
   salary?: string;
-  type?: 'full-time' | 'part-time' | 'contract' | 'internship';
+  type?: "full-time" | "part-time" | "contract" | "internship";
   remote?: boolean;
 }
 
@@ -44,3 +44,15 @@ export interface Testimonial {
   location: string;
   avatar?: string;
 }
+
+export type OpportunityStatus = "draft" | "published" | "archived";
+
+export type AdminOpportunity = {
+  id: string;
+  title: string;
+  category: string;
+  author: string;
+  clicks: number;
+  dateAdded: string; // ISO date string for easy formatting
+  status: OpportunityStatus;
+};

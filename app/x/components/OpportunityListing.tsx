@@ -1,7 +1,12 @@
 import React from "react";
 import OpportunityItem from "./OpportunityItem";
+import { User } from "@/actions/auth";
 
-export default function OpportunityListing() {
+interface OpportunityListingProps {
+  user: User | null;
+}
+
+export default function OpportunityListing({}: OpportunityListingProps) {
   return (
     <article className="flex-2 p-8 max-h-screen overflow-y-scroll scroll-smooth">
       <ul className="flex flex-col gap-8">

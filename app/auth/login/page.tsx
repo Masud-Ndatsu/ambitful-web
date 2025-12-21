@@ -1,13 +1,13 @@
+// @typescript-eslint/no-explicit-any
+
 "use client";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-
-interface LoginFormData {
-  email: string;
-  password: string;
-}
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { login, LoginFormData } from "@/actions/auth";
 
 export default function LoginPage() {
   const {
@@ -16,9 +16,27 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormData>();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login form data:", data);
-    // TODO: Implement login logic
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+  const router = useRouter();
+
+  const onSubmit = async (data: LoginFormData) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await login(data);
+
+      if (response.success) {
+        router.push("/x/opportunities");
+      } else {
+        setError(response.message);
+      }
+    } catch (error: any) {
+      setError(error.message || "Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -80,12 +98,19 @@ export default function LoginPage() {
         </div>
       </div>
 
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-600 text-[1.4rem]">{error}</p>
+        </div>
+      )}
+
       <div className="space-y-4">
         <Button
           type="submit"
-          className="w-full text-[1.6rem] bg-[#03624C] font-medium px-4 py-8 h-12"
+          disabled={isLoading}
+          className="w-full text-[1.6rem] bg-[#03624C] font-medium px-4 py-8 h-12 disabled:opacity-50"
         >
-          Sign In
+          {isLoading ? "Signing In..." : "Sign In"}
         </Button>
         <GoogleAuthButton />
       </div>

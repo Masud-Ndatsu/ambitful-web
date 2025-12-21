@@ -14,7 +14,7 @@ export interface RequestConfig {
   baseURL?: string;
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   public status: number;
   public code?: string;
   public requestId?: string;
@@ -32,7 +32,6 @@ class ApiError extends Error {
     this.requestId = requestId;
   }
 }
-
 export async function makeRequest<T = any>(
   endpoint: string,
   config: RequestConfig = {}
@@ -41,10 +40,10 @@ export async function makeRequest<T = any>(
     method = "GET",
     headers = {},
     body,
-    baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
+    baseURL = process.env.API_URL || "http://localhost:3001",
   } = config;
 
-  const url = `${baseURL}${endpoint}`;
+  const url = `${baseURL}/api${endpoint}`;
 
   const requestHeaders: HeadersInit = {
     "Content-Type": "application/json",

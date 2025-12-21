@@ -8,6 +8,93 @@ const inter = Inter({
   display: "swap",
 });
 
+const walsheim = localFont({
+  src: [
+    {
+      path: "../public/fonts/GT-Walsheim-Thin-Trial-BF651b7fc728c4c.otf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Thin-Oblique-Trial-BF651b7fc66311a.otf",
+      weight: "100",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Ultra-Light-Trial-BF651b7fc72b236.otf",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Ultra-Light-Oblique-Trial-BF651b7fc635c6e.otf",
+      weight: "200",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Light-Trial-BF651b7fc714941.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Light-Oblique-Trial-BF651b7fc6b04a3.otf",
+      weight: "300",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Regular-Trial-BF651b7fc71a47d.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Regular-Oblique-Trial-BF651b7fc67342f.otf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Medium-Trial-BF651b7fc728fb3.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Medium-Oblique-Trial-BF651b7fc69eff5.otf",
+      weight: "500",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Bold-Trial-BF651b7fc737c57.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Bold-Oblique-Trial-BF651b7fc5f06a0.otf",
+      weight: "700",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Ultra-Bold-Trial-BF651b7fc6c21e5.otf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Ultra-Bold-Oblique-Trial-BF651b7fc60ad12.otf",
+      weight: "800",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Black-Trial-BF651b7fc736a5b.otf",
+      weight: "900",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/GT-Walsheim-Black-Oblique-Trial-BF651b7fc5608e6.otf",
+      weight: "900",
+      style: "italic",
+    },
+  ],
+  variable: "--font-walsheim",
+  display: "swap",
+});
+
 const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
@@ -88,11 +175,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" translate="no">
       <body
-        className={`${degular.variable} ${inter.className} ${dmSans.variable} ${manrope.variable} antialiased`}
+        className={`${degular.variable} ${walsheim.variable} ${inter.className} ${dmSans.variable} ${manrope.variable} antialiased`}
       >
         <>{children}</>
+        <div id="modal"></div>
       </body>
     </html>
   );

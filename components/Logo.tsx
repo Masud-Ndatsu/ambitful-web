@@ -15,7 +15,7 @@ export const Logo = ({
 
   const getSizeClasses = () => {
     if (size === "sidebar") {
-      return "text-[2.4rem] leading-tight";
+      return "text-[3.2rem] leading-tight";
     }
     if (size === "compact") {
       return "text-[1.2rem] leading-tight";

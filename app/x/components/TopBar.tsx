@@ -1,12 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Logo } from "@/components/Logo";
+import { User } from "@/actions/auth";
 
-export const TopBar = () => {
+interface Props {
+  isAuth: boolean;
+  user: User | null;
+}
+
+export const TopBar = ({ isAuth, user }: Props) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [activeFilter, setActiveFilter] = useState("Recommended");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -18,12 +25,30 @@ export const TopBar = () => {
     { id: 5, label: "Draft", count: 2 },
   ];
 
+  const activeNavItem = React.useMemo(() => {
+    if (pathname.includes("/opportunities")) {
+      return "Opportunities";
+    }
+    if (pathname.includes("/resume")) {
+      return "Resume";
+    }
+    if (pathname.includes("/profile")) {
+      return "Profile";
+    }
+    if (pathname.includes("/settings")) {
+      return "Settings";
+    }
+    return "Opportunities";
+  }, [pathname]);
+
+  console.log({ user, isAuth });
+
   return (
     <>
-      <nav className="hidden lg:flex h-[7.9rem] w-full text-background bg-white items-center justify-between gap-12 py-[3.2rem] px-10">
+      <nav className="hidden lg:flex h-[7.9rem] w-full text-background bg-white items-center justify-between gap-12 py-8 px-10">
         <div className="flex items-center gap-12">
-          <h2 className="font-bold text-[2rem] leading-[41.12px] font-manrope">
-            Opportunities
+          <h2 className="font-bold text-[2rem] leading-[41.12px] font-manrope uppercase">
+            {activeNavItem}
           </h2>
           <ul className="text-[1.3rem] flex gap-12 overflow-x-auto">
             <li className="py-[0.8rem] px-[1.4rem] border rounded-4xl bg-background text-foreground">
@@ -47,15 +72,17 @@ export const TopBar = () => {
             </li>
           </ul>
         </div>
-        <div>
-          <Button
-            className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl uppercase justify-self-end"
-            variant={"secondary"}
-            onClick={() => router.push("/auth/login")}
-          >
-            Sign In
-          </Button>
-        </div>
+        {isAuth && user ? null : (
+          <div>
+            <Button
+              className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl uppercase justify-self-end"
+              variant={"secondary"}
+              onClick={() => router.push("/auth/login")}
+            >
+              Sign In
+            </Button>
+          </div>
+        )}
       </nav>
 
       {/* Mobile */}
