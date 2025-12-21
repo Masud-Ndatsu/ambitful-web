@@ -8,83 +8,7 @@ import CreateOpportunityForm from "./components/CreateOpportunityForm";
 import { useMemo, useState } from "react";
 import ExportContent from "./components/ExportOpportunity";
 import FilterOpportunity from "./components/FilterOpportunity";
-import { AdminOpportunity } from "@/app/types";
-import { ColumnDef } from "@tanstack/react-table";
-import { EllipsisVertical } from "lucide-react";
-
-const opportunityColumns: ColumnDef<AdminOpportunity>[] = [
-  {
-    accessorKey: "title",
-    header: "Title",
-  },
-  {
-    accessorKey: "category",
-    header: "Category",
-  },
-  {
-    accessorKey: "author",
-    header: "Author",
-  },
-  {
-    accessorKey: "clicks",
-    header: "Clicks",
-  },
-  {
-    accessorKey: "dateAdded",
-    header: "Date Added",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "action",
-    header: "Action",
-    cell: () => (
-      <div className="bg-[#E3E3E333] h-12 w-12 rounded-full grid place-items-center">
-        <EllipsisVertical />
-      </div>
-    ),
-  },
-];
-const opportunities: AdminOpportunity[] = [
-  {
-    id: "opp_001",
-    title: "Google Software Engineering Internship",
-    category: "Internship",
-    author: "Admin Team",
-    clicks: 342,
-    dateAdded: "2025-01-12",
-    status: "published",
-  },
-  {
-    id: "opp_002",
-    title: "Meta Product Design Fellowship",
-    category: "Fellowship",
-    author: "Jane Doe",
-    clicks: 198,
-    dateAdded: "2025-01-08",
-    status: "published",
-  },
-  {
-    id: "opp_003",
-    title: "AI Research Grant for African Startups",
-    category: "Grant",
-    author: "Opportunities Desk",
-    clicks: 87,
-    dateAdded: "2024-12-28",
-    status: "draft",
-  },
-  {
-    id: "opp_004",
-    title: "Remote Frontend Engineer Role",
-    category: "Job",
-    author: "Admin Team",
-    clicks: 421,
-    dateAdded: "2024-12-20",
-    status: "archived",
-  },
-];
+import { opportunities, opportunityColumns } from "./column";
 
 export default function AdminOpportunitiesPage() {
   const [isOpportunityModal, setIsOpportunityModal] = useState<boolean>(false);
@@ -95,7 +19,7 @@ export default function AdminOpportunitiesPage() {
 
   return (
     <AdminLayout>
-      <header className="flex items-center justify-between">
+      <header className="flex items-center justify-between pr-12">
         <div>
           <h1 className="text-[2.134rem] leading-[2.561rem] font-semibold">
             Opportunity Performance
@@ -108,7 +32,7 @@ export default function AdminOpportunitiesPage() {
           {" "}
           <Button
             className="
-          bg-[#FFFFFF] border border-[#E3E3E3] 
+          bg-[#FFFFFF]! border border-[#E3E3E3] 
           text-[1.6rem] font-semibold tracking-[-3%] 
           text-[#65758B] rounded-2xl gap-4"
             onClick={() => setIsFilterModal(!isFilterModal)}
@@ -118,7 +42,7 @@ export default function AdminOpportunitiesPage() {
           </Button>
           <Button
             className="
-          bg-[#FFFFFF] border border-[#E3E3E3] 
+          bg-[#FFFFFF]! border border-[#E3E3E3] 
           text-[1.6rem] font-semibold tracking-[-3%] 
           text-[#65758B] rounded-2xl gap-4"
             onClick={() => setIsExportModal(!isExportModal)}
@@ -128,7 +52,7 @@ export default function AdminOpportunitiesPage() {
           </Button>
           <Button
             className="
-            bg-[#03624C] border border-[#E3E3E3] 
+            bg-[#03624C]! border border-[#E3E3E3] 
           text-[1.6rem] font-semibold tracking-[-3%] 
           text-[#ffffff] rounded-2xl gap-4"
             onClick={() => setIsOpportunityModal(!isOpportunityModal)}
@@ -138,7 +62,7 @@ export default function AdminOpportunitiesPage() {
           </Button>
         </div>
       </header>
-      <section className="text-[#000000] py-12">
+      <section className="text-[#000000] py-12 pr-12">
         <DataTable columns={columns} data={data} />
       </section>
       <Modal

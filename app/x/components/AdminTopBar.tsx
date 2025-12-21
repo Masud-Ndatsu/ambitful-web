@@ -37,11 +37,19 @@ export const AdminTopBar = () => {
         <span>
           <Bell />
         </span>
-        <div>
+        <div className="flex gap-6">
           <Avatar className="w-[3.2rem] h-[3.2rem]">
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
+          <div>
+            <h3 className="text-[#0F1729] text-[1.4rem] font-medium leading-8">
+              Admin Tolu
+            </h3>
+            <p className="text-[#65758B] text-[1.2rem] font-medium leading-[1.6rem]">
+              Administrator
+            </p>
+          </div>
         </div>
       </div>
     </header>

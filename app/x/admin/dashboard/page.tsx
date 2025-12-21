@@ -1,6 +1,6 @@
 import { Briefcase, CircleCheck } from "lucide-react";
 import MetricTile from "./components/MetricTile";
-import { AIDraftCard } from "./components/AIDreaftCard";
+import { AIDraftCard } from "../../components/AIDreaftCard";
 import RecentActivityCard from "./components/RecentActivityCard";
 import SiteVisitChart from "./components/SiteVisitChart";
 import RegionProgress from "./components/RegionProgress";

@@ -2,13 +2,16 @@
 import { useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AIDraftCard } from "../dashboard/components/AIDreaftCard";
+import { AIDraftCard } from "../../components/AIDreaftCard";
 
 export default function AdminAIDraftPage() {
   const [tab, setTab] = useState<"New" | "Reviewed">("New");
   return (
     <AdminLayout>
-      <section className="">
+      <section
+        className="pr-12
+      "
+      >
         <Tabs defaultValue={tab} className="">
           <TabsList className="w-[25.9rem] h-18 text-[1.8rem]! rounded-xl! p-4 bg-[#E8EAED]! text-black/50 border border-[#E3E3E3]">
             <TabsTrigger
@@ -43,40 +46,55 @@ export default function AdminAIDraftPage() {
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
               </div>
             </section>
@@ -90,40 +108,55 @@ export default function AdminAIDraftPage() {
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
                 <AIDraftCard
                   title="Software Engineering Internship at TechCorp"
                   source="Indeed"
                   date="2025-10-14"
                   status="Pending"
+                  isAIDraft
                   onApprove={() => {}}
                   onReject={() => {}}
+                  onView={() => {}}
+                  onEdit={() => {}}
                 />
               </div>
             </section>
