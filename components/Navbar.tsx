@@ -76,7 +76,7 @@ export const Navbar = () => {
       </nav>
 
       {/* Mobile Navbar */}
-      <nav className="lg:hidden bg-secondary rounded-2xl w-full py-6 px-6">
+      <nav className="lg:hidden bg-secondary w-full py-6 px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Logo isMobile />

@@ -11,9 +11,9 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   // Check if user is authenticated and redirect to dashboard
   const userResponse = await getCurrentUser();
-  if (userResponse?.success) {
-    redirect("/x/opportunities");
-  }
+  // if (userResponse?.success) {
+  //   redirect("/x/opportunities");
+  // }
 
   return (
     <main>

@@ -43,7 +43,7 @@ export default function FaqSection() {
         </h2>
       </div>
 
-      <div className="max-w-7xl w-full mx-auto">
+      <div className="max-w-8xl w-full mx-auto">
         <Accordion type="single" collapsible className="space-y-6">
           {faqs.map((item, idx) => (
             <AccordionItem
@@ -51,11 +51,11 @@ export default function FaqSection() {
               value={`faq-${idx}`}
               className="border border-primary/30 rounded-xl bg-card p-6 md:p-8"
             >
-              <AccordionTrigger className="text-left text-[2rem] md:text-[2.8rem] font-medium text-foreground hover:no-underline py-4">
+              <AccordionTrigger className="text-left text-[1.8rem] md:text-[2rem] font-medium text-foreground hover:no-underline py-4">
                 {item.question}
               </AccordionTrigger>
 
-              <AccordionContent className="text-muted-foreground text-[1.6rem] md:text-[2rem] pb-4 leading-relaxed">
+              <AccordionContent className="text-muted-foreground text-[1.6rem] md:text-[1.8rem] pb-4 leading-relaxed">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>
