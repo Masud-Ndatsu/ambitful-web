@@ -5,12 +5,12 @@ import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
-import { getCurrentUser } from "@/actions/auth";
-import { redirect } from "next/navigation";
+// import { getCurrentUser } from "@/actions/auth";
+// import { redirect } from "next/navigation";
 
 export default async function Home() {
   // Check if user is authenticated and redirect to dashboard
-  const userResponse = await getCurrentUser();
+  // const userResponse = await getCurrentUser();
   // if (userResponse?.success) {
   //   redirect("/x/opportunities");
   // }
