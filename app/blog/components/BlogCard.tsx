@@ -30,17 +30,19 @@ export default function BlogCard({ blog }: { blog: BlogType }) {
           <Badge className="text-[1.4rem] bg-primary/20 text-primary border-0">
             {blog.category}
           </Badge>
-          <span className="text-[1.4rem] text-muted-foreground">{blog.readTime}</span>
+          <span className="text-[1.4rem] text-muted-foreground">
+            {blog.readTime}
+          </span>
         </div>
-        
+
         <CardTitle className="text-[2rem] md:text-[2.2rem] leading-tight mb-4 text-foreground font-degular">
           {blog.title}
         </CardTitle>
-        
+
         <CardDescription className="text-[1.6rem] md:text-[1.8rem] leading-relaxed mb-6 text-muted-foreground flex-1">
           {blog.description}
         </CardDescription>
-        
+
         <CardFooter className="p-0 flex justify-between items-center border-t border-primary/20 pt-6">
           <div className="flex flex-col gap-2">
             <h3 className="text-[1.6rem] md:text-[1.8rem] font-medium text-foreground">
@@ -51,7 +53,11 @@ export default function BlogCard({ blog }: { blog: BlogType }) {
               {blog.publishedAt}
             </p>
           </div>
-          <Button variant="outline" size="sm" className="flex items-center gap-2 text-primary">
+          <Button
+            variant="link"
+            size="sm"
+            className="flex items-center gap-2 text-primary"
+          >
             Read More
             <ArrowRight size={16} />
           </Button>
