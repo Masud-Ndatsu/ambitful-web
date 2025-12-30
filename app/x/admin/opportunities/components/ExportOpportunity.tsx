@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 /**
  * Allowed export formats
@@ -36,6 +37,7 @@ const ExportContent = <T,>({ onClose, data = [] }: ExportContentProps<T>) => {
     "Author",
     "Clicks",
   ]);
+  const { toast } = useToast();
 
   const formatOptions: ExportFormat[] = ["CSV", "PDF", "Excel"];
 
@@ -67,9 +69,10 @@ const ExportContent = <T,>({ onClose, data = [] }: ExportContentProps<T>) => {
       data,
     });
 
-    alert(
-      `Exported as ${exportFormat} with ${selectedFields.length} fields selected.`
-    );
+    toast({
+      title: "Export Completed",
+      description: `Exported as ${exportFormat} with ${selectedFields.length} fields selected.`
+    });
 
     onClose();
   };

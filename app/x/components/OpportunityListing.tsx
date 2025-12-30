@@ -1,135 +1,66 @@
 import React from "react";
 import OpportunityItem from "./OpportunityItem";
-import { User } from "@/actions/auth";
+import { useOpportunities } from "@/hooks/useOpportunities";
 
-interface OpportunityListingProps {
-  user: User | null;
-}
+export default function OpportunityListing() {
+  const { data: opportunitiesData, isLoading, error } = useOpportunities();
+  const opportunities = opportunitiesData?.opportunities || [];
 
-export default function OpportunityListing({}: OpportunityListingProps) {
+  if (isLoading) {
+    return (
+      <article className="flex-2 p-8 max-h-screen overflow-y-scroll scroll-smooth">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-[1.4rem] text-[#505662]">
+            Loading opportunities...
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  if (error) {
+    return (
+      <article className="flex-2 p-8 max-h-screen overflow-y-scroll scroll-smooth">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-[1.4rem] text-red-500">
+            Failed to load opportunities
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="flex-2 p-8 max-h-screen overflow-y-scroll scroll-smooth">
-      <ul className="flex flex-col gap-8">
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
-        <OpportunityItem
-          title="UX Designer - Design Systems"
-          time="1 hour"
-          description="Twitch / Gaming · Media and Entertainment · Late Stage"
-          details={[
-            "San Francisco, CA",
-            "Onsite",
-            "Full-time",
-            "$108k/yr - $164k/yr",
-          ]}
-          salary="$108k/yr - $164k/yr"
-        />
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {opportunities.length > 0 ? (
+          opportunities.map((opportunity) => {
+            return (
+              <OpportunityItem
+                key={opportunity.id}
+                id={opportunity.id}
+                title={opportunity.title}
+                company={opportunity.organization}
+                location={opportunity.locations.join(", ") || "Remote"}
+                time={new Date(opportunity.createdAt).toLocaleDateString()}
+                description={opportunity.description}
+                categories={opportunity.opportunityCategories}
+                details={[
+                  opportunity.locations.join(", ") || "Remote",
+                  opportunity.isRemote ? "Remote" : "Onsite",
+                  opportunity.compensation || "Competitive",
+                ]}
+                salary={opportunity.compensation}
+              />
+            );
+          })
+        ) : (
+          <div className="col-span-full flex items-center justify-center h-64">
+            <div className="text-[1.4rem] text-[#505662]">
+              No opportunities found
+            </div>
+          </div>
+        )}
       </ul>
     </article>
   );

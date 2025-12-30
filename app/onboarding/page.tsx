@@ -12,6 +12,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { useEffect, useCallback, useState, Suspense } from "react";
 import Image from "next/image";
+import { useSubmitOnboarding } from "@/hooks/useOnboarding";
+import { useAuth } from "@/hooks/useAuthentication";
+import { useToast } from "@/hooks/use-toast";
 
 interface FormData {
   jobFunction: string;
@@ -29,6 +32,9 @@ function OnboardingForm() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const { user } = useAuth();
+  const submitOnboardingMutation = useSubmitOnboarding();
+  const { toast } = useToast();
 
   const jobFunctions = [
     "Software Engineering",
@@ -69,18 +75,45 @@ function OnboardingForm() {
     }
   }, [step, updateStep]);
 
-  const onSubmit = (data: FormData) => {
-    // Include state values in submission
-    const submitData = {
-      ...data,
-      jobTypes: selectedJobTypes,
-    };
-    console.log(submitData);
+  const onSubmit = async (data: FormData) => {
     if (step === 1) {
       updateStep(2);
     } else {
       // Handle final submission
-      alert("Onboarding completed!");
+      const submitData = {
+        jobFunction: data.jobFunction,
+        jobTypes: selectedJobTypes,
+        preferredLocations: [data.location],
+        remoteWork: data.remoteWork,
+        workAuthorization: data.workAuthorization,
+        resumeUrl: uploadedFile ? URL.createObjectURL(uploadedFile) : undefined,
+      };
+
+      try {
+        const response = await submitOnboardingMutation.mutateAsync(submitData);
+        
+        if (response.success) {
+          // Redirect based on user role
+          if (user?.role === "ADMIN" || user?.role === "MODERATOR") {
+            router.push("/x/admin/dashboard");
+          } else {
+            router.push("/x/opportunities");
+          }
+        } else {
+          toast({
+            title: "Onboarding Failed",
+            description: response.message || "Failed to complete onboarding",
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        console.error("Onboarding submission error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to complete onboarding. Please try again.",
+          variant: "destructive"
+        });
+      }
     }
   };
 
@@ -345,6 +378,7 @@ function OnboardingForm() {
           )}
           <Button
             type="submit"
+            loading={submitOnboardingMutation.isPending && step === 2}
             className="block bg-[#03624C] max-w-[22.9rem] text-[1.6rem] sm:text-[1.8rem] w-full my-12 mx-auto"
           >
             {step === 1 ? "Next" : "Complete"}

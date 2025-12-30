@@ -1,1 +1,1 @@
-export * from "./auth-context";
+// Auth context removed - use useAuth() from @/hooks/useAuthentication instead

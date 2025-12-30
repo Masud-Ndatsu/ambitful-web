@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { User } from "@/types";
 import { Send } from "lucide-react";
 import React from "react";
-import { User } from "@/actions/auth";
 
 interface AgentComponentProps {
   user: User | null;
@@ -32,7 +32,9 @@ export default function AgentComponent({ user }: AgentComponentProps) {
             Ambit
           </h2>
           <p className="text-[0.8rem] text-[#78A73B]">
-            {user ? `Hi ${user.name?.split(' ')[0]}, Your Assistant` : "Your Assistant"}
+            {user
+              ? `Hi ${user.name?.split(" ")[0]}, Your Assistant`
+              : "Your Assistant"}
           </p>
         </div>
       </header>

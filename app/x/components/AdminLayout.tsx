@@ -9,12 +9,7 @@ function AdminLayout({ children }: Props) {
   return (
     <main className="text-[#0F1729]">
       <AdminTopBar />
-      <section
-        className="p-12 pr-0
-      "
-      >
-        {children}
-      </section>
+      <section>{children}</section>
     </main>
   );
 }

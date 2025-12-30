@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 
@@ -30,6 +31,7 @@ export default function FilterOpportunity({ onClose }: OpportunityFilterProps) {
   const [selectedCategories, setSelectedCategories] = useState<
     FilterCategoriesType[]
   >(["Title", "Category", "Status", "Date", "Author", "Clicks"]);
+  const { toast } = useToast();
 
   const filterStatuses: FilterStatusType[] = ["Title", "Category", "Status"];
 
@@ -61,9 +63,10 @@ export default function FilterOpportunity({ onClose }: OpportunityFilterProps) {
       //   data,
     });
 
-    alert(
-      `Filtered as ${filterStatus} with ${allCategories.length} fields selected.`
-    );
+    toast({
+      title: "Filter Applied",
+      description: `Filtered as ${filterStatus} with ${allCategories.length} fields selected.`,
+    });
 
     // onClose();
   };

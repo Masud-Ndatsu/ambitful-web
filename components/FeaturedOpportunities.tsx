@@ -5,7 +5,7 @@ import { opportunities as data } from "@/app/data";
 export const FeaturedOpportunities = () => {
   const opportunities: Opportunity[] = data;
   return (
-    <div className="lg:max-w-[158.6rem] p-12 lg:p-40 pb-0 mx-auto">
+    <div className="lg:max-w-[158.6rem] p-12 lg:p-20  mx-auto">
       <div className="text-center">
         <h1 className="font-degular text-[5rem] font-bold md:text-[6rem]">
           Featured Opportunities

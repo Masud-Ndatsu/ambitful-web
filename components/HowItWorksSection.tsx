@@ -28,9 +28,9 @@ const steps = [
 
 export const HowItWorksSection = () => {
   return (
-    <section className="py-20 w-full text-center">
+    <section className="p-10 lg:p-20 w-full text-center">
       <div className="max-w-[159.7rem] mx-auto px-4">
-        <header className="mb-20">
+        <header className="mb-26">
           <h1 className="font-bold font-degular text-[6rem] mb-4">
             How It Works
           </h1>
@@ -41,7 +41,10 @@ export const HowItWorksSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 justify-items-center">
           {steps.map((step, index) => (
-            <div key={index} className="max-w-132 flex flex-col items-center px-4">
+            <div
+              key={index}
+              className="max-w-132 flex flex-col items-center px-4"
+            >
               <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-[11.4rem] md:h-[11.4rem] mb-6 md:mb-8 grid place-items-center shadow-glow-tile rounded-2xl border border-primary">
                 <Image
                   src={step.icon}

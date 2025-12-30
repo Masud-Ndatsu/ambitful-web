@@ -1,79 +1,143 @@
 import { Button } from "@/components/ui/button";
-import { Bookmark, Heart, House } from "lucide-react";
-import React from "react";
+import { Bookmark, Heart } from "lucide-react";
+import React, { useCallback } from "react";
+import { useSaveJob, useApplyToOpportunity } from "@/hooks/useOpportunities";
+import { OpportunityCategory } from "@/types/opportunity";
+import { useRouter } from "next/navigation";
 
 interface OpportunityItemProps {
+  id?: string;
   title: string;
+  company: string;
+  location: string;
   time: string;
   description: string;
   details: string[];
+  categories: OpportunityCategory[];
   salary?: string;
+  matchScore?: number;
 }
 
 export default function OpportunityItem({
+  id,
   title,
+  company,
+  location,
   time,
   description,
   details,
+  matchScore = 90,
 }: OpportunityItemProps) {
+  const router = useRouter();
+  const saveJobMutation = useSaveJob();
+  const applyMutation = useApplyToOpportunity();
+
+  const handleSaveJob = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (id) {
+        saveJobMutation.mutate(id);
+      }
+    },
+    [id, saveJobMutation]
+  );
+
+  const handleApply = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (id) {
+        applyMutation.mutate({ opportunityId: id });
+      }
+    },
+    [id, applyMutation]
+  );
+
+  const handleViewDetails = useCallback(() => {
+    if (id) {
+      router.push(`/x/opportunities/${id}`);
+    }
+  }, [id, router]);
+
   return (
-    <li className="bg-foreground text-background rounded-4xl w-full flex">
-      <div className="md:flex-4">
-        <div className="p-4 md:p-8 w-full flex gap-4 md:gap-8">
-          <div className="h-16 w-16 md:h-32 md:w-32 grid place-items-center bg-[#03624C] text-foreground rounded-[0.8rem] md:rounded-[1.6rem] shrink-0">
-            <House className="h-[1.28rem] w-[1.28rem] md:h-[2.56rem] md:w-[2.56rem]" />
+    <div
+      className="bg-[#FFFFFF] rounded-2xl p-8 border border-[#E3E3E3] relative flex flex-col h-full cursor-pointer hover:shadow-lg transition-shadow"
+      onClick={handleViewDetails}
+    >
+      {/* Header Section */}
+      <div className="flex items-start justify-between gap-6 mb-6">
+        {/* Logo and Info */}
+        <div className="flex gap-6 flex-1 min-w-0">
+          <div className="h-[4.8rem] w-[4.8rem] grid place-items-center bg-[#FF6B35] text-white rounded-2xl shrink-0 font-bold text-[1.8rem]">
+            G
           </div>
           <div className="flex-1 min-w-0">
-            <header className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 leading-10 md:leading-[4.112rem]">
-              <h1 className="text-[1.4rem] md:text-[2rem] font-semibold truncate">
-                {title}
-              </h1>
-              <span className="font-manrope text-[1.2rem] md:text-[1.6rem] text-[#00000080]">
-                {time}
-              </span>
-            </header>
-            <div>
-              <p className="leading-8 md:leading-[4.112rem] text-[1.2rem] md:text-[1.6rem] text-[#00000080] line-clamp-2 md:line-clamp-none">
-                {description}
-              </p>
-              <ul className="flex items-center gap-1 md:gap-2 text-[1rem] md:text-[1.4rem] mt-3 md:mt-8 flex-wrap">
-                {details.map((detail, index) => (
-                  <li key={index} className="text-xs md:text-[1.4rem]">
-                    {detail}
-                  </li>
-                ))}
-              </ul>
+            <h2 className="text-[1.6rem] font-semibold text-[#1A1D23] truncate">
+              {company}
+            </h2>
+            <div className="flex items-center gap-4 text-[1.2rem] text-[#505662] mt-2">
+              <span>{location}</span>
+              <span>•</span>
+              <span>{time}</span>
             </div>
-            <footer className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-8 mt-6 md:mt-12">
-              <div className="flex gap-3 md:gap-4">
-                <span className="h-10 w-10 md:h-14 md:w-14 bg-[#03624C0D] text-[#00000080] grid place-items-center rounded-xl md:rounded-2xl">
-                  <Bookmark className="w-4 h-[1.1rem] md:w-[1.33rem] md:h-[1.465rem]" />
-                </span>
-                <span className="h-10 w-10 md:h-14 md:w-14 bg-[#03624C0D] text-[#00000080] grid place-items-center rounded-xl md:rounded-2xl">
-                  <Heart className="w-4 h-[1.1rem] md:w-[1.33rem] md:h-[1.465rem]" />
-                </span>
-              </div>
-              <div className="flex gap-3 md:gap-6">
-                <Button className="bg-[#03624C]! rounded-2xl md:rounded-4xl! text-[1.2rem] md:text-[1.6rem] px-4 md:px-6 py-2 md:py-3">
-                  Apply Now
-                </Button>
-                <Button className="bg-[#FFFFFF]! rounded-2xl md:rounded-4xl! text-background! border border-[#E2E2E2] text-[1.2rem] md:text-[1.6rem] px-4 md:px-6 py-2 md:py-3">
-                  Ask Ai
-                </Button>
-              </div>
-            </footer>
           </div>
         </div>
-      </div>
-      <div className="bg-[#03624C] text-foreground md:flex-1 w-full rounded-r-4xl py-4 md:py-8 text-center flex md:block items-center md:items-stretch justify-center md:justify-start flex-col">
-        <div className="h-[60px] w-[60px] md:h-[90px] md:w-[90px] rounded-full bg-white text-[#03624C] mx-auto grid place-items-center text-[1.8rem] md:text-[2.5rem] font-semibold">
-          90%
+
+        {/* Match Score Badge */}
+        <div className="flex flex-col items-center shrink-0">
+          <div className="h-[4.4rem] w-[4.4rem] rounded-full bg-[#03624C] text-white grid place-items-center text-[1.2rem] font-bold">
+            {matchScore}%
+          </div>
+          <span className="text-[1rem] text-[#505662] mt-2">Match</span>
         </div>
-        <h2 className="my-2 md:my-4 text-[1.2rem] md:text-[2rem]">
-          Match Score
-        </h2>
-        <hr className="w-48 md:w-[18rem] mx-auto border-[#FFFFFF4D]" />
       </div>
-    </li>
+
+      {/* Title */}
+      <h3 className="text-[1.4rem] font-semibold text-[#1A1D23] mb-4 line-clamp-2">
+        {title}
+      </h3>
+
+      {/* Description */}
+      <p className="text-[1.2rem] text-[#505662] mb-6 line-clamp-3 flex-1 leading-[1.8rem]">
+        {description}
+      </p>
+
+      {/* Details Tags */}
+      <div className="flex items-center gap-3 flex-wrap mb-8">
+        {details.map((detail, index) => (
+          <span
+            key={index}
+            className="text-[1.1rem] text-[#1A1D23] bg-[#F6F8FB] px-4 py-2 rounded-lg border border-[#E3E3E3]"
+          >
+            {detail}
+          </span>
+        ))}
+      </div>
+
+      {/* Footer Actions */}
+      <div className="flex items-center justify-between gap-4 pt-6 border-t border-[#E3E3E3]">
+        {/* Action Icons */}
+        <div className="flex gap-3">
+          <button
+            onClick={handleSaveJob}
+            disabled={saveJobMutation.isPending}
+            className="h-[3.2rem] w-[3.2rem] bg-[#F6F8FB] hover:bg-[#E3E3E3] text-[#505662] grid place-items-center rounded-2xl border border-[#E3E3E3] transition-colors disabled:opacity-50"
+          >
+            <Bookmark className="w-[1.6rem] h-[1.6rem]" />
+          </button>
+          <button className="h-[3.2rem] w-[3.2rem] bg-[#F6F8FB] hover:bg-[#E3E3E3] text-[#505662] grid place-items-center rounded-2xl border border-[#E3E3E3] transition-colors">
+            <Heart className="w-[1.6rem] h-[1.6rem]" />
+          </button>
+        </div>
+
+        {/* Apply Button */}
+        <Button
+          onClick={handleApply}
+          disabled={applyMutation.isPending}
+          className="bg-[#03624C] hover:bg-[#03624C]/90 text-white rounded-2xl px-8 py-3 text-[1.4rem] font-medium h-[3.2rem] disabled:opacity-50"
+        >
+          {applyMutation.isPending ? "Applying..." : "Apply Now"}
+        </Button>
+      </div>
+    </div>
   );
 }

@@ -30,4 +30,24 @@ export const testimonials: Testimonial[] = [
     avatar:
       "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
   },
+  {
+    id: "4",
+    quote:
+      "From student to startup founder - this platform helped me find the entrepreneurship grant that launched my company.",
+    name: "Aisha Patel",
+    title: "CEO & Founder",
+    location: "Mumbai, India",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+  },
+  {
+    id: "5",
+    quote:
+      "From student to startup founder - this platform helped me find the entrepreneurship grant that launched my company.",
+    name: "Aisha Patel",
+    title: "CEO & Founder",
+    location: "Mumbai, India",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+  },
 ];

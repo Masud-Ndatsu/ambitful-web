@@ -5,19 +5,17 @@ import ReactPlayer from "react-player";
 export const HeroSection = () => {
   return (
     <>
-      <section className="text-center leading-24 py-8 md:py-8 px-4">
-        <div className="py-6 md:py-10">
-          <h1 className="font-degular text-[5rem] md:text-[8rem] lg:text-[10rem] font-bold leading-tight">
-            Make Your Dream Reality
-          </h1>
-        </div>
+      <section className="text-center leading-24 p-8 md:p-20">
+        <h1 className="font-degular py-5 md:py-8 text-[5rem] md:text-[8rem] lg:text-[10rem] font-bold leading-tight">
+          Make Your Dream Reality
+        </h1>
 
         <p className="text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] max-w-[90%] md:max-w-358 mx-auto leading-[2.6rem] md:leading-14 mb-10 md:mb-0">
           Connect with AI-powered career opportunities, get personalized
           guidance, and recommended insider connections in less than 1 min!
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 py-12 md:py-[9.2rem] px-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 p-10 md:py-20 px-4">
           <Button
             size="xl"
             className="bg-linear-to-r from-[#00df82] to-[#007947] flex items-center justify-center gap-4 w-full sm:w-auto"

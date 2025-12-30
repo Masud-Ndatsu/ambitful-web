@@ -6,35 +6,46 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { register as registerUser, RegisterFormData } from "@/actions/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema, RegisterFormData } from "@/validations";
+import { useRegister } from "@/hooks/useAuthentication";
 
 export default function RegisterPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormData>();
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const router = useRouter();
+  const registerMutation = useRegister();
+  const isLoading = registerMutation.isPending;
 
   const onSubmit = async (data: RegisterFormData) => {
-    setIsLoading(true);
     setError("");
 
     try {
-      const response = await registerUser(data);
+      const response = await registerMutation.mutateAsync(data);
 
-      if (response.success) {
-        router.push("/x/opportunities");
+      if (response.success && response.data) {
+        // Check role first - admins/moderators skip onboarding
+        const { user } = response.data;
+        
+        if (user.role === "ADMIN" || user.role === "MODERATOR") {
+          router.push("/x/admin/dashboard");
+        } else if (!user.isOnboardingComplete) {
+          router.push("/onboarding?step=1");
+        } else {
+          router.push("/x/opportunities");
+        }
       } else {
-        setError(response.message);
+        setError(response.message || "Registration failed");
       }
     } catch (error: any) {
       setError(error.message || "Registration failed. Please try again.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -132,10 +143,10 @@ export default function RegisterPage() {
       <div className="space-y-4">
         <Button
           type="submit"
-          disabled={isLoading}
-          className="w-full text-[1.6rem] bg-[#03624C] font-medium px-4 py-8 h-12 disabled:opacity-50"
+          loading={isLoading}
+          className="w-full text-[1.6rem] bg-[#03624C] font-medium px-4 py-8 h-12"
         >
-          {isLoading ? "Creating Account..." : "Create Account"}
+          Create Account
         </Button>
         <GoogleAuthButton />
       </div>

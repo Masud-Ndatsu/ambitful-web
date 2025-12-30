@@ -1,21 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Menu, ChevronDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Logo } from "@/components/Logo";
-import { User } from "@/actions/auth";
+import { User } from "@/types";
+import { useLogout } from "@/hooks/useAuthentication";
 
 interface Props {
-  isAuth: boolean;
-  user: User | null;
+  isAuth?: boolean;
+  user?: User | null;
 }
 
 export const TopBar = ({ isAuth, user }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [activeFilter, setActiveFilter] = useState("Recommended");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const logoutMutation = useLogout();
 
   const filters = [
     { id: 1, label: "Recommended", count: null },
@@ -41,6 +42,8 @@ export const TopBar = ({ isAuth, user }: Props) => {
     return "Opportunities";
   }, [pathname]);
 
+  const isOpportunityTab = activeNavItem.toLowerCase() === "opportunities";
+
   console.log({ user, isAuth });
 
   return (
@@ -50,29 +53,91 @@ export const TopBar = ({ isAuth, user }: Props) => {
           <h2 className="font-bold text-[2rem] leading-[41.12px] font-manrope uppercase">
             {activeNavItem}
           </h2>
-          <ul className="text-[1.3rem] flex gap-12 overflow-x-auto">
-            <li className="py-[0.8rem] px-[1.4rem] border rounded-4xl bg-background text-foreground">
-              Recommended
-            </li>
-            <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-              Saved
-              <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-            </li>
-            <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-              Like
-              <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-            </li>
-            <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-              Applied
-              <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-            </li>
-            <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-              Draft
-              <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-            </li>
-          </ul>
+          {isOpportunityTab && (
+            <ul className="text-[1.3rem] flex gap-12 overflow-x-auto">
+              <li className="py-[0.8rem] px-[1.4rem] border rounded-4xl bg-background text-foreground">
+                Recommended
+              </li>
+              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
+                Saved
+                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
+              </li>
+              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
+                Like
+                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
+              </li>
+              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
+                Applied
+                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
+              </li>
+              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
+                Draft
+                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
+              </li>
+            </ul>
+          )}
         </div>
-        {isAuth && user ? null : (
+        {isAuth && user ? (
+          <div className="relative">
+            <button
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="bg-primary text-white">
+                  {user.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="text-left">
+                <p className="text-[1.4rem] font-medium">{user.name}</p>
+                <p className="text-[1.2rem] text-gray-600 capitalize">
+                  {user.role.toLowerCase()}
+                </p>
+              </div>
+              <ChevronDown className="w-4 h-4 text-gray-400" />
+            </button>
+
+            {showUserMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowUserMenu(false)}
+                />
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                  <div className="p-4 border-b border-gray-100">
+                    <p className="font-medium text-[1.4rem]">{user.name}</p>
+                    <p className="text-[1.2rem] text-gray-600">
+                      {user.email.substring(0, 10)}
+                    </p>
+                  </div>
+                  <div className="py-2">
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        router.push("/x/profile");
+                      }}
+                      className="w-full text-left px-4 py-2 text-[1.3rem] hover:bg-gray-50"
+                    >
+                      Profile Settings
+                    </button>
+                    <Button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        logoutMutation.mutate();
+                      }}
+                      loading={logoutMutation.isPending}
+                      variant="ghost"
+                      className="w-full justify-start px-4 py-2 text-[1.3rem] text-red-600 hover:bg-gray-50 h-auto"
+                    >
+                      Sign Out
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
           <div>
             <Button
               className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl uppercase justify-self-end"
@@ -97,77 +162,11 @@ export const TopBar = ({ isAuth, user }: Props) => {
             </div>
           </div>
 
-          <button
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="p-2 rounded-md"
-            aria-label="Open menu"
-          >
+          <button className="p-2 rounded-md" aria-label="Open menu">
             <Menu className="h-6 w-6" />
           </button>
         </div>
       </div>
-
-      {/* Mobile Drawer */}
-      {isMobileMenuOpen && (
-        <>
-          {/* Overlay */}
-          <div
-            className="fixed  inset-0 bg-black/80 z-50 lg:hidden"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-
-          {/* Drawer from right */}
-          <div className="fixed top-0 inset-y-0 right-0 w-[50%] bg-secondary text-background z-50 lg:hidden transform transition-transform duration-300">
-            <Logo isMobile className="ml-8" />
-            {/* Filter Navigation */}
-            <nav className="p-6">
-              <div className="space-y-3">
-                {filters.map((filter) => (
-                  <button
-                    key={filter.id}
-                    className={`w-full text-left px-4 py-3 rounded-lg text-[1.4rem] font-medium flex items-center justify-between transition-colors ${
-                      activeFilter === filter.label
-                        ? "bg-[#03624C] text-white"
-                        : "text-[#03624C] hover:bg-gray-100/10"
-                    }`}
-                    onClick={() => {
-                      setActiveFilter(filter.label);
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <span>{filter.label}</span>
-                    {filter.count && (
-                      <span
-                        className={`text-[1.2rem] px-2 py-1 rounded-full ${
-                          activeFilter === filter.label
-                            ? "bg-white/20"
-                            : "bg-gray-100 text-gray-700"
-                        }`}
-                      >
-                        {filter.count}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              {/* Sign In Button */}
-              <div className="mt-8 pt-6 border-t border-gray-200/20">
-                <Button
-                  className="w-full text-[1.4rem] px-4 py-3 rounded-full border border-primary"
-                  variant="secondary"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    router.push("/auth/login");
-                  }}
-                >
-                  Sign In
-                </Button>
-              </div>
-            </nav>
-          </div>
-        </>
-      )}
     </>
   );
 };

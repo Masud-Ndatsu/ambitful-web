@@ -3,13 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { MessageCircle, Menu, X } from "lucide-react";
+import { MessageCircle, Menu, X, LayoutDashboard, Briefcase } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Logo } from "./Logo";
+import { useAuth } from "@/hooks/useAuthentication";
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -17,6 +19,17 @@ export const Navbar = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const isAdmin = user?.role === "ADMIN" || user?.role === "MODERATOR";
+  
+  const handleRoleBasedNavigation = () => {
+    if (isAdmin) {
+      router.push("/x/admin/dashboard");
+    } else {
+      router.push("/x/opportunities");
+    }
+    closeMobileMenu();
   };
 
   return (
@@ -65,13 +78,34 @@ export const Navbar = () => {
             <MessageCircle className="h-6 w-6" />
             Get Career Advice
           </Button>
-          <Button
-            className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl uppercase"
-            variant={"secondary"}
-            onClick={() => router.push("/auth/login")}
-          >
-            Sign In
-          </Button>
+          
+          {isAuthenticated ? (
+            <Button
+              className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl"
+              variant={"secondary"}
+              onClick={handleRoleBasedNavigation}
+            >
+              {isAdmin ? (
+                <>
+                  <LayoutDashboard className="h-5 w-5 mr-2" />
+                  Dashboard
+                </>
+              ) : (
+                <>
+                  <Briefcase className="h-5 w-5 mr-2" />
+                  Opportunities
+                </>
+              )}
+            </Button>
+          ) : (
+            <Button
+              className="border border-primary font-medium text-[1.8rem] px-6 py-3 rounded-4xl uppercase"
+              variant={"secondary"}
+              onClick={() => router.push("/auth/login")}
+            >
+              Sign In
+            </Button>
+          )}
         </div>
       </nav>
 
@@ -156,16 +190,36 @@ export const Navbar = () => {
                 Get Career Advice
               </Button>
 
-              <Button
-                className="w-full border border-primary cursor-pointer font-medium text-[1.6rem] py-6! h-20 rounded-4xl uppercase"
-                variant={"secondary"}
-                onClick={() => {
-                  closeMobileMenu();
-                  router.push("/auth/login");
-                }}
-              >
-                Sign In
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  className="w-full border border-primary cursor-pointer font-medium text-[1.6rem] py-6! h-20 rounded-4xl"
+                  variant={"secondary"}
+                  onClick={handleRoleBasedNavigation}
+                >
+                  {isAdmin ? (
+                    <>
+                      <LayoutDashboard className="h-5 w-5 mr-2" />
+                      Dashboard
+                    </>
+                  ) : (
+                    <>
+                      <Briefcase className="h-5 w-5 mr-2" />
+                      Opportunities
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  className="w-full border border-primary cursor-pointer font-medium text-[1.6rem] py-6! h-20 rounded-4xl uppercase"
+                  variant={"secondary"}
+                  onClick={() => {
+                    closeMobileMenu();
+                    router.push("/auth/login");
+                  }}
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
           </div>
         </div>

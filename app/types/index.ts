@@ -15,11 +15,18 @@ export interface OpportunityCardProp {
   opportunity: Opportunity;
 }
 
+export type UserRole = "ADMIN" | "USER" | "MODERATOR";
+export type UserStatus = "active" | "inactive" | "pending" | "suspended";
+
 export interface User {
   id: string;
   name: string;
   email: string;
-  profile?: UserProfile;
+  role: UserRole;
+  status: UserStatus;
+  avatar?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface UserProfile {
@@ -53,6 +60,8 @@ export type AdminOpportunity = {
   category: string;
   author: string;
   clicks: number;
-  dateAdded: string; // ISO date string for easy formatting
+  dateAdded: string;
   status: OpportunityStatus;
 };
+
+// export type

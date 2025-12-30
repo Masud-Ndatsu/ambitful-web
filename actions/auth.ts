@@ -1,4 +1,5 @@
 "use server";
+import { User } from "@/app/types";
 import { makeRequest, ApiResponse } from "@/lib/api";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -15,22 +16,20 @@ export interface RegisterFormData {
   password: string;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface AuthResponse {
   accessToken: string;
+  refreshToken: string;
   user: {
     id: string;
     email: string;
     name: string;
     isEmailVerified: boolean;
+    isOnboardingComplete: boolean;
+    role?: string;
+    status?: string;
+    avatar?: string;
+    createdAt?: string;
+    updatedAt?: string;
   };
 }
 
@@ -45,9 +44,16 @@ export async function login(
     });
 
     if (response.success && response.data) {
-      // Set auth token in cookies
       const cookieStore = await cookies();
+
       cookieStore.set("auth-token", response.data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 1, // 1 hour
+      });
+
+      cookieStore.set("refresh-token", response.data.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
@@ -71,9 +77,16 @@ export async function register(
     });
 
     if (response.success && response.data) {
-      // Set auth token in cookies
       const cookieStore = await cookies();
+
       cookieStore.set("auth-token", response.data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 1, // 1 hour
+      });
+
+      cookieStore.set("refresh-token", response.data.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
@@ -93,7 +106,6 @@ export async function logout(): Promise<void> {
     const token = cookieStore.get("auth-token")?.value;
 
     if (token) {
-      // Call logout endpoint to invalidate token on server
       await makeRequest("/auth/logout", {
         method: "POST",
         headers: {
@@ -102,12 +114,12 @@ export async function logout(): Promise<void> {
       });
     }
 
-    // Clear auth cookies
     cookieStore.delete("auth-token");
+    cookieStore.delete("refresh-token");
   } catch (error) {
-    // Still clear cookies even if server call fails
     const cookieStore = await cookies();
     cookieStore.delete("auth-token");
+    cookieStore.delete("refresh-token");
   }
 
   redirect("/auth/login");
@@ -136,9 +148,39 @@ export async function getCurrentUser(): Promise<ApiResponse<User> | null> {
 }
 
 export async function refreshToken(): Promise<ApiResponse<AuthResponse> | null> {
-  // Since the backend doesn't support refresh tokens,
-  // we'll just return null to indicate no refresh capability
-  return null;
+  try {
+    const cookieStore = await cookies();
+    const refreshTokenValue = cookieStore.get("refresh-token")?.value;
+
+    if (!refreshTokenValue) {
+      return null;
+    }
+
+    const response = await makeRequest<AuthResponse>("/auth/refresh", {
+      method: "POST",
+      body: { refreshToken: refreshTokenValue },
+    });
+
+    if (response.success && response.data) {
+      cookieStore.set("auth-token", response.data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 1, // 1 hour
+      });
+
+      cookieStore.set("refresh-token", response.data.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      });
+    }
+
+    return response;
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function getAuthToken(): Promise<string | null> {

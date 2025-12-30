@@ -14,11 +14,14 @@ import {
   Cpu,
   Shield,
   BarChart2,
+  LogOut,
+  Bot,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useMobile } from "@/hooks/useMobile";
 import { usePathname } from "next/navigation";
-import { User } from "@/actions/auth";
+import { User } from "@/types";
+import { useLogout } from "@/hooks/useAuthentication";
 
 interface SideBarItemProps {
   href: string;
@@ -64,6 +67,43 @@ const SideBarItem = ({
   );
 };
 
+const LogoutButton = ({ isExpanded, isMobile }: { isExpanded: boolean; isMobile: boolean }) => {
+  const logoutMutation = useLogout();
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+
+  return (
+    <li>
+      <button
+        onClick={handleLogout}
+        disabled={logoutMutation.isPending}
+        className={`
+          text-[1.8rem] tracking-[1.5] 
+          flex items-center rounded-4xl 
+          transition-all duration-200 
+          text-[#03624C] hover:bg-gray-100/10 w-full
+          ${isExpanded ? "py-3 px-4 gap-3" : "p-6 justify-center"}
+          ${logoutMutation.isPending ? "opacity-50 cursor-not-allowed" : ""}
+        `}
+      >
+        <LogOut
+          className={`${
+            isExpanded ? "w-5! h-5!" : isMobile ? "w-6! h-6!" : "w-6! h-6!"
+          } shrink-0`}
+          color="#03624C"
+        />
+        {isExpanded && (
+          <span className="font-medium">
+            {logoutMutation.isPending ? "Logging out..." : "Logout"}
+          </span>
+        )}
+      </button>
+    </li>
+  );
+};
+
 interface SideNavBarProps {
   isAuth: boolean;
   user: User | null;
@@ -73,7 +113,7 @@ export const SideNavBar = ({ user }: SideNavBarProps) => {
   const isMobile = useMobile(1024);
   const [isExpanded, setIsExpanded] = useState(false);
   const pathname = usePathname();
-  const isAdmin = pathname.includes("x/admin");
+  const isAdmin = user?.role === "ADMIN" || user?.role === "MODERATOR";
   console.log({ user });
 
   return (
@@ -121,101 +161,115 @@ export const SideNavBar = ({ user }: SideNavBarProps) => {
         </div>
       )}
 
-      <ul
-        className={`${
-          isExpanded ? "mt-12" : "mt-12"
-        } grid gap-3 text-[#03624C] ${
-          isExpanded ? "text-[1.8rem]" : "text-[1.6rem]"
-        }`}
-      >
-        {isAdmin ? (
-          <>
-            <SideBarItem
-              href="/x/admin/dashboard"
-              icon={Layout}
-              label="Dashboard"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/admin/opportunities"
-              icon={Briefcase}
-              label="Opportunities"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/admin/ai-draft"
-              icon={Cpu}
-              label="AI Drafts"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/admin/access-control"
-              icon={Shield}
-              label="Access Control"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/admin/analytics"
-              icon={BarChart2}
-              label="Analytics"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/admin/settings"
-              icon={Settings}
-              label="Settings"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-          </>
-        ) : (
-          <>
-            <SideBarItem
-              href="/x/opportunities"
-              icon={Briefcase}
-              label="Opportunities"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/resume"
-              icon={FileText}
-              label="Resume"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/profile"
-              icon={UserIcon}
-              label="Profile"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-            <SideBarItem
-              href="/x/settings"
-              icon={Settings}
-              label="Settings"
-              isExpanded={isExpanded}
-              pathname={pathname}
-              isMobile={isMobile}
-            />
-          </>
-        )}
-      </ul>
+      <nav className="flex flex-col h-full">
+        <ul
+          className={`${
+            isExpanded ? "mt-12" : "mt-12"
+          } grid gap-3 text-[#03624C] ${
+            isExpanded ? "text-[1.8rem]" : "text-[1.6rem]"
+          } flex-1`}
+        >
+          {isAdmin ? (
+            <>
+              <SideBarItem
+                href="/x/admin/dashboard"
+                icon={Layout}
+                label="Dashboard"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/admin/opportunities"
+                icon={Briefcase}
+                label="Opportunities"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/admin/ai-draft"
+                icon={Cpu}
+                label="AI Drafts"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/admin/access-control"
+                icon={Shield}
+                label="Access Control"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/admin/analytics"
+                icon={BarChart2}
+                label="Analytics"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/admin/settings"
+                icon={Settings}
+                label="Settings"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+            </>
+          ) : (
+            <>
+              <SideBarItem
+                href="/x/opportunities"
+                icon={Briefcase}
+                label="Opportunities"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/agent"
+                icon={Bot}
+                label="AI Agent"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/resume"
+                icon={FileText}
+                label="Resume"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/profile"
+                icon={UserIcon}
+                label="Profile"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/settings"
+                icon={Settings}
+                label="Settings"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+            </>
+          )}
+        </ul>
+
+        <ul className="mt-auto mb-4">
+          <LogoutButton isExpanded={isExpanded} isMobile={isMobile} />
+        </ul>
+      </nav>
     </aside>
   );
 };
