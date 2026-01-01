@@ -4,6 +4,8 @@ import { Download } from "lucide-react";
 import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SiteVisitChart from "../../components/SiteVisitChart";
 import RegionProgress from "../../components/RegionProgress";
+import WeeklyEngagementChart from "../../components/WeeklyEngagementChart";
+import TraficResourcesChart from "../../components/TraficResourcesChart";
 
 export default function AdminAnalyticsPage() {
   return (
@@ -130,14 +132,50 @@ export default function AdminAnalyticsPage() {
               </div>
             </div>
           </div>
-          <div className="flex-1 flex flex-col gap-6">
+          <div className="flex-1 flex flex-col gap-6 text-[#0F1729]">
             <div className="bg-white border border-[#E3E3E3] flex-1 rounded-2xl p-8">
               <h3 className="text-[2rem] leading-[1.6rem]">Highest Activity</h3>
+              <div className="flex flex-col justify-between gap-[1rem] mt-8">
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">Job Applications</p>
+                  <p className="text-[1.2rem]">12,847</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">Profile views</p>
+                  <p className="text-[1.2rem]">2,847</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">Job Searches</p>
+                  <p className="text-[1.2rem]">1,847</p>
+                </div>
+              </div>
             </div>
             <div className="bg-white border border-[#E3E3E3] flex-2 rounded-2xl p-8">
               <h3 className="text-[2rem] leading-[1.6rem]">
                 Most Searched Terms
               </h3>
+              <div className="flex flex-col justify-between gap-[1rem] mt-8">
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">Software Engineer</p>
+                  <p className="text-[1.2rem]">12,847</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">Product Manager</p>
+                  <p className="text-[1.2rem]">2,847</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">Data Analyst</p>
+                  <p className="text-[1.2rem]">1,847</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">UX Designer</p>
+                  <p className="text-[1.2rem]">1,847</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-[1.4rem]">Marketing</p>
+                  <p className="text-[1.2rem]">1,847</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -160,8 +198,14 @@ export default function AdminAnalyticsPage() {
           </div>
         </section>
         <section className="flex gap-6 mt-12">
-          <div className="bg-white border border-[#E3E3E3] flex-2 h-[442px] rounded-2xl p-8"></div>
-          <div className="bg-white border border-[#E3E3E3] flex-1 rounded-2xl p-8"></div>
+          <div className="bg-white border border-[#E3E3E3] flex-2 h-[442px] rounded-2xl p-8">
+            <h3 className="text-[2rem] leading-[1.6rem]">Weekly Enagagement</h3>
+            <WeeklyEngagementChart />
+          </div>
+          <div className="bg-white border border-[#E3E3E3] flex-1 rounded-2xl p-8">
+            <h3 className="text-[2rem] leading-[1.6rem]">Traffic Sources </h3>
+            <TraficResourcesChart />
+          </div>
         </section>
       </main>
     </AdminLayout>

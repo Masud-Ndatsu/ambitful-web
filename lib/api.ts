@@ -64,11 +64,12 @@ export async function makeRequest<T = any>(
       const { cookies } = await import("next/headers");
       const cookieStore = await cookies();
       const token = cookieStore.get("auth-token")?.value;
-      
+
       if (token) {
         (requestHeaders as any).Authorization = `Bearer ${token}`;
       }
-    } catch (error) {
+    } catch {
+      console.log("Error accessing cookies");
       // Ignore cookie access errors
     }
   }
@@ -84,11 +85,11 @@ export async function makeRequest<T = any>(
 
   try {
     const request = await fetch(url, requestConfig);
-    
+
     // Handle 401 with token refresh retry
     if (request.status === 401 && retryCount === 0) {
       const refreshSuccess = await attemptTokenRefresh();
-      
+
       if (refreshSuccess) {
         // Retry the original request with refreshed token
         return makeRequest(endpoint, config, 1);

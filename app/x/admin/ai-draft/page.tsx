@@ -6,27 +6,35 @@ import { AIDraftCard } from "../../components/AIDreaftCard";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { useConfirmationDialog } from "@/components/ui/confirmation-dialog";
-import { useAIDrafts, useReviewedAIDrafts, useReviewAIDraft } from "@/hooks/useAIDrafts";
+import {
+  useAIDrafts,
+  useReviewedAIDrafts,
+  useReviewAIDraft,
+} from "@/hooks/useAIDrafts";
 
 export default function AdminAIDraftPage() {
   const [tab, setTab] = useState<"New" | "Reviewed">("New");
   const { toast } = useToast();
   const { confirm, dialog } = useConfirmationDialog();
-  
+
   // React Query hooks
-  const { data: pendingData, isLoading: pendingLoading } = useAIDrafts('PENDING', 100);
-  const { data: reviewedData, isLoading: reviewedLoading } = useReviewedAIDrafts();
+  const { data: pendingData, isLoading: pendingLoading } = useAIDrafts(
+    "PENDING",
+    100
+  );
+  const { data: reviewedData, isLoading: reviewedLoading } =
+    useReviewedAIDrafts();
   const reviewMutation = useReviewAIDraft();
 
   const pendingDrafts = pendingData?.data?.drafts || [];
   const reviewedDrafts = reviewedData?.data?.drafts || [];
   const loading = pendingLoading || reviewedLoading;
 
-
   const handleApprove = (id: string) => {
     confirm({
       title: "Approve Draft",
-      description: "Approving this draft will automatically create and publish a live opportunity on the platform. Continue?",
+      description:
+        "Approving this draft will automatically create and publish a live opportunity on the platform. Continue?",
       onConfirm: () => {
         reviewMutation.mutate(
           { id, data: { status: "APPROVED" } },
@@ -35,7 +43,8 @@ export default function AdminAIDraftPage() {
               if (response.success) {
                 toast({
                   title: "Success",
-                  description: "Draft approved and opportunity created successfully! The opportunity is now live on the platform.",
+                  description:
+                    "Draft approved and opportunity created successfully! The opportunity is now live on the platform.",
                 });
               }
             },
@@ -49,18 +58,18 @@ export default function AdminAIDraftPage() {
           }
         );
       },
-      confirmText: "Approve"
+      confirmText: "Approve",
     });
   };
 
   const handleReject = (id: string) => {
     reviewMutation.mutate(
-      { 
-        id, 
-        data: { 
+      {
+        id,
+        data: {
           status: "REJECTED",
-          rejectionReason: "Does not meet quality standards" 
-        } 
+          rejectionReason: "Does not meet quality standards",
+        },
       },
       {
         onSuccess: (response) => {
@@ -85,7 +94,7 @@ export default function AdminAIDraftPage() {
   return (
     <AdminLayout>
       {dialog}
-      <section className="p-8">
+      <section className="p-8 pb-20">
         <Tabs defaultValue={tab} className="">
           <TabsList className="w-[25.9rem] h-18 text-[1.8rem]! rounded-xl! p-4 bg-[#E8EAED]! text-black/50 border border-[#E3E3E3]">
             <TabsTrigger
@@ -112,7 +121,7 @@ export default function AdminAIDraftPage() {
             </TabsTrigger>
           </TabsList>
           <TabsContent className="py-12" value="New">
-            <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8">
+            <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8 max-h-[700px] overflow-y-scroll">
               <h3 className="text-[2.4rem] font-semibold">New AI Drafts</h3>
               {loading ? (
                 <div className="flex justify-center items-center py-12">
@@ -147,7 +156,7 @@ export default function AdminAIDraftPage() {
             </section>
           </TabsContent>
           <TabsContent className="py-12" value="Reviewed">
-            <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8">
+            <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8 max-h-[700px] overflow-y-scroll">
               <h3 className="text-[2.4rem] font-semibold">Reviewed Drafts</h3>
               {loading ? (
                 <div className="flex justify-center items-center py-12">
