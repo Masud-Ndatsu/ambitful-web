@@ -63,9 +63,28 @@ const DropdownMenuSeparator = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("my-1 border-gray-200", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn("my-1 border-t border-gray-200", className)}
+    {...props}
+  />
 ));
 DropdownMenuSeparator.displayName = "DropdownMenuSeparator";
+
+const DropdownMenuLabel = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "px-4 py-2 text-[1.2rem] font-semibold text-gray-700",
+      className
+    )}
+    {...props}
+  />
+));
+DropdownMenuLabel.displayName = "DropdownMenuLabel";
 
 export {
   DropdownMenu,
@@ -73,4 +92,5 @@ export {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuLabel,
 };

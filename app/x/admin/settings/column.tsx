@@ -120,102 +120,105 @@ function CrawlSourceActionCell({ source }: { source: CrawlSource }) {
   const triggerCrawl = useTriggerCrawl();
   const deleteCrawlSource = useDeleteCrawlSource();
   const { confirm, dialog } = useConfirmationDialog();
-  
+
   // Use custom hook to handle dropdown positioning
-  const { buttonRef, positionClasses } = useDropdownPosition({ 
-    isOpen: showDropdown 
+  const { buttonRef, positionClasses } = useDropdownPosition({
+    isOpen: showDropdown,
   });
 
-      const handleTriggerCrawl = async () => {
-        setShowDropdown(false);
-        try {
-          const result = await triggerCrawl.mutateAsync(source.id);
-          toast({
-            title: "Crawl Started",
-            description: `Successfully crawled ${
-              result.data?.opportunitiesCreated || 0
-            } opportunities`,
-          });
-        } catch (error: any) {
-          toast({
-            title: "Error",
-            description: error.message || "Failed to trigger crawl",
-            variant: "destructive",
-          });
-        }
-      };
+  const handleTriggerCrawl = async () => {
+    setShowDropdown(false);
+    try {
+      const result = await triggerCrawl.mutateAsync(source.id);
+      toast({
+        title: "Crawl Started",
+        description: `Successfully crawled ${
+          result.data?.opportunitiesCreated || 0
+        } opportunities`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to trigger crawl",
+        variant: "destructive",
+      });
+    }
+  };
 
-      const handleDelete = async () => {
-        setShowDropdown(false);
-        confirm({
-          title: "Delete Crawl Source",
-          description: `Are you sure you want to delete "${source.name}"? This action cannot be undone.`,
-          onConfirm: async () => {
-            try {
-              await deleteCrawlSource.mutateAsync(source.id);
-              toast({
-                title: "Success",
-                description: "Crawl source deleted successfully",
-              });
-            } catch (error: any) {
-              toast({
-                title: "Error",
-                description: error.message || "Failed to delete crawl source",
-                variant: "destructive",
-              });
-            }
-          },
-          confirmText: "Delete",
-          variant: "destructive"
+  const handleDelete = async () => {
+    setShowDropdown(false);
+    const confirmed = await confirm({
+      title: "Delete Crawl Source",
+      description: `Are you sure you want to delete "${source.name}"? This action cannot be undone.`,
+      confirmText: "Delete",
+      variant: "destructive",
+    });
+
+    if (confirmed) {
+      try {
+        await deleteCrawlSource.mutateAsync(source.id);
+        toast({
+          title: "Success",
+          description: "Crawl source deleted successfully",
         });
-      };
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to delete crawl source",
+          variant: "destructive",
+        });
+      }
+    }
+  };
 
-      const isLoading = triggerCrawl.isPending || deleteCrawlSource.isPending;
+  const isLoading = triggerCrawl.isPending || deleteCrawlSource.isPending;
 
-      return (
-        <div className="relative">
-          {dialog}
-          <button
-            ref={buttonRef}
-            onClick={() => setShowDropdown(!showDropdown)}
-            className="bg-[#E3E3E333] h-12 w-12 rounded-full grid place-items-center hover:bg-gray-200"
-            disabled={isLoading}
+  return (
+    <div className="relative">
+      {dialog}
+      <button
+        ref={buttonRef}
+        onClick={() => setShowDropdown(!showDropdown)}
+        className="bg-[#E3E3E333] h-12 w-12 rounded-full grid place-items-center hover:bg-gray-200"
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <EllipsisVertical />
+        )}
+      </button>
+
+      {showDropdown && (
+        <>
+          {/* Backdrop to close dropdown when clicked outside */}
+          <div
+            className="fixed inset-0 z-0"
+            onClick={() => setShowDropdown(false)}
+          />
+          <div
+            className={`absolute right-0 ${positionClasses} bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[150px] max-w-[200px]`}
           >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <EllipsisVertical />
-            )}
-          </button>
-
-          {showDropdown && (
-            <>
-              {/* Backdrop to close dropdown when clicked outside */}
-              <div 
-                className="fixed inset-0 z-0" 
-                onClick={() => setShowDropdown(false)}
-              />
-              <div className={`absolute right-0 ${positionClasses} bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[150px] max-w-[200px]`}>
-                <button
-                  onClick={handleTriggerCrawl}
-                  className="block w-full text-left px-5 py-3 hover:bg-gray-100 text-[1.2rem] whitespace-nowrap"
-                  disabled={isLoading}
-                >
-                  <Play className="inline h-4 w-4 mr-2" />
-                  Trigger Crawl
-                </button>
-                <hr className="border-gray-100" />
-                <button
-                  onClick={handleDelete}
-                  className="block w-full text-left px-5 py-3 hover:bg-red-50 text-[1.2rem] text-red-600 whitespace-nowrap"
-                  disabled={isLoading}
-                >
-                  <Trash2 className="inline h-4 w-4 mr-2" />
-                  Delete Source
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      );
+            <button
+              onClick={handleTriggerCrawl}
+              className="block w-full text-left px-5 py-3 hover:bg-gray-100 text-[1.2rem] whitespace-nowrap"
+              disabled={isLoading}
+            >
+              <Play className="inline h-4 w-4 mr-2" />
+              Trigger Crawl
+            </button>
+            <hr className="border-gray-100" />
+            <button
+              onClick={handleDelete}
+              className="block w-full text-left px-5 py-3 hover:bg-red-50 text-[1.2rem] text-red-600 whitespace-nowrap"
+              disabled={isLoading}
+            >
+              <Trash2 className="inline h-4 w-4 mr-2" />
+              Delete Source
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }

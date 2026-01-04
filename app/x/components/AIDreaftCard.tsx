@@ -37,8 +37,8 @@ export function AIDraftCard({
   return (
     <div className="border border-[#E5E7EB] rounded-[0.9rem] p-8 mt-8 flex items-center justify-between">
       {/* Left */}
-      <div>
-        <h4 className="text-[1.4rem] leading-8">{title}</h4>
+      <div className="flex-1 pr-4">
+        <h4 className="text-[1.4rem] leading-8 break-words">{title}</h4>
 
         <div className="text-[1.2rem] flex gap-4 mt-2">
           <span className="leading-[1.6rem]">{source}</span>

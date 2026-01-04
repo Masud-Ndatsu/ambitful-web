@@ -61,14 +61,14 @@ const chartConfig = {
 
 const WeeklyEngagementChart = () => {
   // Calculate total engagement for the week
-  const totalViews = weeklyData.reduce((sum, day) => sum + day.views, 0);
-  const totalBookmarks = weeklyData.reduce(
-    (sum, day) => sum + day.bookmarks,
-    0
-  );
+  // const totalViews = weeklyData.reduce((sum, day) => sum + day.views, 0);
+  // const totalBookmarks = weeklyData.reduce(
+  //   (sum, day) => sum + day.bookmarks,
+  //   0
+  // );
 
   // Calculate percentage change (simulated for demo)
-  const weeklyGrowth = 12.3;
+  // const weeklyGrowth = 12.3;
 
   return (
     <>

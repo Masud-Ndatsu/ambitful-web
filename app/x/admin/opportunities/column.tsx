@@ -10,6 +10,20 @@ export const opportunityColumns: ColumnDef<AdminOpportunity>[] = [
   {
     accessorKey: "title",
     header: "Title",
+    cell: ({ row }) => {
+      const title = row.getValue("title") as string;
+      const truncatedTitle = title.length > 50 ? title.substring(0, 50) + "..." : title;
+      return (
+        <div className="max-w-[300px]">
+          <div 
+            className="text-[1.4rem] font-medium" 
+            title={title}
+          >
+            {truncatedTitle}
+          </div>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "category",

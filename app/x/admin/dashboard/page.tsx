@@ -14,6 +14,7 @@ import RegionProgress from "../../components/RegionProgress";
 import AdminLayout from "../../components/AdminLayout";
 import { useOpportunityStats } from "@/hooks/useOpportunities";
 import { usePendingAIDrafts, useReviewAIDraft } from "@/hooks/useAIDrafts";
+import { useRecentActivities } from "@/hooks/useActivityLogs";
 import { useToast } from "@/hooks/use-toast";
 import { useConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { useRouter } from "next/navigation";
@@ -21,51 +22,56 @@ import { useRouter } from "next/navigation";
 export default function AdminDashboardPage() {
   const { data: stats, isLoading } = useOpportunityStats();
   const { data: pendingData } = usePendingAIDrafts(3);
+  const { data: activitiesData } = useRecentActivities(5);
   const reviewMutation = useReviewAIDraft();
   const { toast } = useToast();
   const { confirm, dialog } = useConfirmationDialog();
   const router = useRouter();
 
   const pendingDrafts = pendingData?.data?.drafts || [];
+  const recentActivities = activitiesData?.data?.activities || [];
 
-  const handleApprove = (id: string) => {
-    confirm({
+  const handleApprove = async (id: string) => {
+    const confirmed = await confirm({
       title: "Approve Draft",
-      description: "Approving this draft will automatically create and publish a live opportunity. Continue?",
-      onConfirm: () => {
-        reviewMutation.mutate(
-          { id, data: { status: "APPROVED" } },
-          {
-            onSuccess: (response) => {
-              if (response.success) {
-                toast({
-                  title: "Success",
-                  description: "Draft approved and opportunity published successfully!",
-                });
-              }
-            },
-            onError: () => {
-              toast({
-                title: "Error",
-                description: "Failed to approve draft",
-                variant: "destructive",
-              });
-            },
-          }
-        );
-      },
-      confirmText: "Approve"
+      description:
+        "Approving this draft will automatically create and publish a live opportunity. Continue?",
+      confirmText: "Approve",
     });
+
+    if (confirmed) {
+      reviewMutation.mutate(
+        { id, data: { status: "APPROVED" } },
+        {
+          onSuccess: (response) => {
+            if (response.success) {
+              toast({
+                title: "Success",
+                description:
+                  "Draft approved and opportunity published successfully!",
+              });
+            }
+          },
+          onError: () => {
+            toast({
+              title: "Error",
+              description: "Failed to approve draft",
+              variant: "destructive",
+            });
+          },
+        }
+      );
+    }
   };
 
   const handleReject = (id: string) => {
     reviewMutation.mutate(
-      { 
-        id, 
-        data: { 
+      {
+        id,
+        data: {
           status: "REJECTED",
-          rejectionReason: "Does not meet quality standards" 
-        } 
+          rejectionReason: "Does not meet quality standards",
+        },
       },
       {
         onSuccess: (response) => {
@@ -157,48 +163,79 @@ export default function AdminDashboardPage() {
                 View All
               </button>
             </div>
-            {pendingDrafts.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                No pending drafts
-              </div>
-            ) : (
-              pendingDrafts.map((draft) => (
-                <AIDraftCard
-                  key={draft.id}
-                  title={draft.title}
-                  source={draft.crawlSource?.name || "Unknown Source"}
-                  date={new Date(draft.createdAt).toLocaleDateString()}
-                  status="Pending"
-                  onApprove={() => handleApprove(draft.id)}
-                  onReject={() => handleReject(draft.id)}
-                />
-              ))
-            )}
+            <div className="overflow-y-auto h-[38rem]">
+              {pendingDrafts.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  No pending drafts
+                </div>
+              ) : (
+                pendingDrafts.map((draft) => (
+                  <AIDraftCard
+                    key={draft.id}
+                    title={draft.title}
+                    source={draft.crawlSource?.name || "Unknown Source"}
+                    date={new Date(draft.createdAt).toLocaleDateString()}
+                    status="Pending"
+                    onApprove={() => handleApprove(draft.id)}
+                    onReject={() => handleReject(draft.id)}
+                  />
+                ))
+              )}
+            </div>
           </div>
           <div className="w-[39.1rem] h-[47.8rem] bg-[#FFFFFF] border border-[#E3E3E3] rounded-2xl p-8">
             <h3 className="text-[2rem] font-degular font-medium">
               Recent Activity
             </h3>
-            <RecentActivityCard
-              title="AI Draft #23 approved by Admin Tolu"
-              icon={<CircleCheck className="text-[#21C45D]" />}
-              timestamp="2 minutes"
-            />
-            <RecentActivityCard
-              title="AI Draft #23 approved by Admin Tolu"
-              icon={<CircleCheck className="text-[#21C45D]" />}
-              timestamp="2 minutes"
-            />
-            <RecentActivityCard
-              title="AI Draft #23 approved by Admin Tolu"
-              icon={<CircleCheck className="text-[#21C45D]" />}
-              timestamp="2 minutes"
-            />
-            <RecentActivityCard
-              title="AI Draft #23 approved by Admin Tolu"
-              icon={<CircleCheck className="text-[#21C45D]" />}
-              timestamp="2 minutes"
-            />
+            <div className="overflow-y-auto h-[38rem]">
+              {recentActivities.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  No recent activity
+                </div>
+              ) : (
+                recentActivities.map((activity) => {
+                  const getActivityIcon = (action: string) => {
+                    switch (action) {
+                      case "APPROVED":
+                        return <CircleCheck className="text-[#21C45D]" />;
+                      case "REJECTED":
+                        return <CircleCheck className="text-red-500" />;
+                      case "PUBLISHED":
+                        return <TrendingUp className="text-blue-500" />;
+                      case "CREATED":
+                        return <FileText className="text-gray-500" />;
+                      default:
+                        return <CircleCheck className="text-gray-500" />;
+                    }
+                  };
+
+                  const getTimeAgo = (dateString: string) => {
+                    const date = new Date(dateString);
+                    const now = new Date();
+                    const diffMs = now.getTime() - date.getTime();
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMins / 60);
+                    const diffDays = Math.floor(diffHours / 24);
+
+                    if (diffMins < 1) return "just now";
+                    if (diffMins < 60)
+                      return `${diffMins} minute${diffMins > 1 ? "s" : ""}`;
+                    if (diffHours < 24)
+                      return `${diffHours} hour${diffHours > 1 ? "s" : ""}`;
+                    return `${diffDays} day${diffDays > 1 ? "s" : ""}`;
+                  };
+
+                  return (
+                    <RecentActivityCard
+                      key={activity.id}
+                      title={activity.description}
+                      icon={getActivityIcon(activity.action)}
+                      timestamp={getTimeAgo(activity.createdAt)}
+                    />
+                  );
+                })
+              )}
+            </div>
           </div>
         </section>
       </div>

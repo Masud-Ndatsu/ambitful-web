@@ -4,6 +4,8 @@ import {
   login as loginAction,
   register as registerAction,
   logout as logoutAction,
+  updateProfile as updateProfileAction,
+  UpdateProfileData,
 } from "@/actions/auth";
 import {
   LoginFormData,
@@ -87,6 +89,20 @@ export function useLogout() {
     mutationFn: logoutAction,
     onSettled: () => {
       queryClient.clear();
+    },
+  });
+}
+
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: UpdateProfileData) => updateProfileAction(data),
+    onSuccess: (response) => {
+      if (response.success && response.data) {
+        queryClient.setQueryData(authKeys.currentUser(), response.data);
+        queryClient.invalidateQueries({ queryKey: authKeys.currentUser() });
+      }
     },
   });
 }

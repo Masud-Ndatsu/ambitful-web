@@ -15,13 +15,20 @@ import Image from "next/image";
 import { useSubmitOnboarding } from "@/hooks/useOnboarding";
 import { useAuth } from "@/hooks/useAuthentication";
 import { useToast } from "@/hooks/use-toast";
+import { useOpportunityTypes } from "@/hooks/useOpportunityTypes";
+
+type WorkAuthorization =
+  | 'AUTHORIZED_NO_SPONSORSHIP'
+  | 'AUTHORIZED_WITH_SPONSORSHIP'
+  | 'REMOTE_CONTRACTOR'
+  | 'NOT_AUTHORIZED';
 
 interface FormData {
   jobFunction: string;
   jobTypes: string[];
   location: string;
   remoteWork: boolean;
-  workAuthorization: string;
+  workAuthorization: WorkAuthorization;
   resume?: FileList;
 }
 
@@ -35,21 +42,29 @@ function OnboardingForm() {
   const { user } = useAuth();
   const submitOnboardingMutation = useSubmitOnboarding();
   const { toast } = useToast();
+  const { data: opportunityTypesData, isLoading: isLoadingTypes } =
+    useOpportunityTypes();
+    
+  const opportunityTypes = opportunityTypesData || [];
 
-  const jobFunctions = [
-    "Software Engineering",
-    "Data Science",
-    "Product Management",
-    "Design",
-    "Marketing",
-    "Sales",
-    "Operations",
-    "Finance",
-    "Human Resources",
-    "Consulting",
-    "Research",
-    "Other",
-  ];
+  // Use opportunity types from database, fallback to default list if loading or empty
+  const jobFunctions =
+    opportunityTypes?.length > 0
+      ? opportunityTypes.map((type) => type.name)
+      : [
+          "Software Engineering",
+          "Data Science",
+          "Product Management",
+          "Design",
+          "Marketing",
+          "Sales",
+          "Operations",
+          "Finance",
+          "Human Resources",
+          "Consulting",
+          "Research",
+          "Other",
+        ];
 
   const { register, handleSubmit, setValue, control } = useForm<FormData>({
     defaultValues: {
@@ -91,7 +106,7 @@ function OnboardingForm() {
 
       try {
         const response = await submitOnboardingMutation.mutateAsync(submitData);
-        
+
         if (response.success) {
           // Redirect based on user role
           if (user?.role === "ADMIN" || user?.role === "MODERATOR") {
@@ -103,7 +118,7 @@ function OnboardingForm() {
           toast({
             title: "Onboarding Failed",
             description: response.message || "Failed to complete onboarding",
-            variant: "destructive"
+            variant: "destructive",
           });
         }
       } catch (error) {
@@ -111,7 +126,7 @@ function OnboardingForm() {
         toast({
           title: "Error",
           description: "Failed to complete onboarding. Please try again.",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -154,7 +169,7 @@ function OnboardingForm() {
   }, []);
 
   return (
-    <main className="w-full max-w-[65.7rem] mx-auto text-[2rem] bg-[#FFFFFF] p-4 sm:p-8 lg:p-16">
+    <main className="w-full max-w-[65.7rem] mx-auto text-[2rem] bg-white p-4 sm:p-8 lg:p-16">
       <header className="flex items-center justify-center gap-4 py-12">
         <div className="h-[1.14rem] w-[1.14rem] bg-[#03624C] rounded-full"></div>
         <div className="h-[0.228125rem] w-[3.65rem] bg-[#03624C]"></div>
@@ -180,20 +195,37 @@ function OnboardingForm() {
                 </label>
                 <Select
                   onValueChange={(value) => setValue("jobFunction", value)}
+                  disabled={isLoadingTypes}
                 >
-                  <SelectTrigger className="p-10! px-8! text-[1.6rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full h-auto">
-                    <SelectValue placeholder="Select your job function for best result" />
+                  <SelectTrigger className="p-10! px-8! text-[1.6rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full h-auto bg-white">
+                    <SelectValue
+                      placeholder={
+                        isLoadingTypes
+                          ? "Loading job functions..."
+                          : "Select your job function for best result"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent>
-                    {jobFunctions.map((jobFunction) => (
+                    {isLoadingTypes ? (
                       <SelectItem
-                        className="text-background! text-[1.6rem] py-8! px-10!"
-                        key={jobFunction}
-                        value={jobFunction}
+                        value="loading"
+                        disabled
+                        className="text-[1.6rem] py-8! px-10! text-gray-500 bg-white"
                       >
-                        {jobFunction}
+                        Loading job functions...
                       </SelectItem>
-                    ))}
+                    ) : (
+                      jobFunctions.map((jobFunction) => (
+                        <SelectItem
+                          className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                          key={jobFunction}
+                          value={jobFunction}
+                        >
+                          {jobFunction}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
                 <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] my-8">
@@ -260,7 +292,7 @@ function OnboardingForm() {
                 <input
                   type="text"
                   id="location"
-                  className="py-[1.333rem] px-[1.867rem] border-[0.133rem] mt-[0.8]  rounded-[0.684rem] w-full"
+                  className="py-[1.333rem] px-[1.867rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full bg-white border-[#E3E3E3] text-[#0F1729] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="e.g San Francisco, CA"
                   {...register("location")}
                 />
@@ -288,15 +320,39 @@ function OnboardingForm() {
                 >
                   Work Authorization
                 </label>
-                <input
-                  type="text"
-                  id="workAuthorization"
-                  className="py-[1.333rem] px-[1.867rem] border-[0.133rem] mt-[0.8]  rounded-[0.684rem] w-full"
-                  placeholder="Select your work authorization status"
-                  {...register("workAuthorization")}
-                />
+                <Select onValueChange={(value) => setValue('workAuthorization', value as WorkAuthorization)}>
+                  <SelectTrigger className="p-10! px-8! text-[1.6rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full h-auto bg-white">
+                    <SelectValue placeholder="Select your work authorization status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem 
+                      value="AUTHORIZED_NO_SPONSORSHIP"
+                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                    >
+                      Authorized to work — no sponsorship required
+                    </SelectItem>
+                    <SelectItem 
+                      value="AUTHORIZED_WITH_SPONSORSHIP"
+                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                    >
+                      Authorized to work — sponsorship required
+                    </SelectItem>
+                    <SelectItem 
+                      value="REMOTE_CONTRACTOR"
+                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                    >
+                      Authorized to work remotely as an independent contractor
+                    </SelectItem>
+                    <SelectItem 
+                      value="NOT_AUTHORIZED"
+                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                    >
+                      Not authorized to work at this time
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
                 <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] my-8">
-                  This helps us show you eligible opportunities{" "}
+                  This helps us show you eligible opportunities
                 </p>
               </div>
             </>
@@ -309,7 +365,7 @@ function OnboardingForm() {
                 Help us find the perfect match for you{" "}
               </p>
 
-              <div className="bg-[#03624C1A] p-4 flex items-center gap-4 rounded-2xl">
+              <div className="bg-[#E7F5E1] p-4 flex items-center gap-4 rounded-2xl border border-[#E3E3E3]">
                 <svg
                   width="18"
                   height="18"
@@ -330,10 +386,10 @@ function OnboardingForm() {
                 </p>
               </div>
               <div
-                className={`h-96 sm:h-120 lg:h-[36.9rem] mt-8 border border-dashed rounded-2xl grid place-items-center text-center transition-colors ${
+                className={`h-96 sm:h-120 lg:h-[36.9rem] mt-8 border border-dashed rounded-2xl grid place-items-center text-center transition-colors bg-white ${
                   isDragOver
-                    ? "border-[#03624C] bg-[#03624C1A]"
-                    : "border-gray-300"
+                    ? "border-[#03624C] bg-[#E7F5E1]"
+                    : "border-[#E3E3E3]"
                 }`}
                 onDragOver={handleDragOver}
                 onDragEnter={handleDragEnter}
@@ -368,7 +424,7 @@ function OnboardingForm() {
                   />
                   <label
                     htmlFor="resume"
-                    className="block bg-white border border-[#E3E3E3] text-black max-w-[22.9rem] text-[1.6rem] sm:text-[1.8rem] w-full my-8 lg:my-12 mx-auto py-3 px-6 rounded-md cursor-pointer hover:bg-gray-50 transition-colors text-center"
+                    className="block bg-white border border-[#E3E3E3] text-[#0F1729] max-w-[22.9rem] text-[1.6rem] sm:text-[1.8rem] w-full my-8 lg:my-12 mx-auto py-3 px-6 rounded-xl cursor-pointer hover:bg-[#F8F9FC] transition-colors text-center"
                   >
                     Browse files
                   </label>
@@ -393,7 +449,7 @@ export default function OnboardingPage() {
   return (
     <Suspense
       fallback={
-        <main className="w-full max-w-[65.7rem] mx-auto text-[2rem] bg-[#FFFFFF] p-4 sm:p-8 lg:p-16">
+        <main className="w-full max-w-[65.7rem] mx-auto text-[2rem] bg-white p-4 sm:p-8 lg:p-16">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#03624C] mx-auto mb-4"></div>

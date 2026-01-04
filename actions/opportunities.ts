@@ -11,7 +11,10 @@ import {
   OpportunityFilters,
   AdminOpportunityListResponse,
   OpportunityStatsResponse,
-} from "@/types";
+  RecommendationResult,
+  SavedJobsResponse,
+  LikedJobsResponse,
+} from "@/types/opportunity";
 
 // Server Actions
 export async function getOpportunities(
@@ -192,7 +195,7 @@ export async function unsaveJob(
   }
 }
 
-export async function getSavedJobs(): Promise<ApiResponse<Opportunity[]>> {
+export async function getSavedJobs(): Promise<ApiResponse<SavedJobsResponse>> {
   try {
     const token = await getAuthToken();
 
@@ -200,7 +203,78 @@ export async function getSavedJobs(): Promise<ApiResponse<Opportunity[]>> {
       throw new Error("Authentication required");
     }
 
-    return await makeRequest<Opportunity[]>("/opportunities/saved/list", {
+    return await makeRequest<SavedJobsResponse>("/opportunities/saved/list", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Like/Unlike opportunities
+export async function likeJob(
+  opportunityId: string
+): Promise<ApiResponse<any>> {
+  try {
+    const token = await getAuthToken();
+
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await makeRequest("/opportunities/liked", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: { opportunityId },
+    });
+
+    revalidatePath("/x/opportunities");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function unlikeJob(
+  opportunityId: string
+): Promise<ApiResponse<any>> {
+  try {
+    const token = await getAuthToken();
+
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await makeRequest(
+      `/opportunities/liked/${opportunityId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    revalidatePath("/x/opportunities");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getLikedJobs(): Promise<ApiResponse<LikedJobsResponse>> {
+  try {
+    const token = await getAuthToken();
+
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    return await makeRequest<LikedJobsResponse>("/opportunities/liked/list", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -331,6 +405,30 @@ export async function getOpportunityStats(): Promise<
 
     return await makeRequest<OpportunityStatsResponse>(
       "/admin/opportunities/stats",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    throw error;
+  }
+}
+
+// AI-Powered Recommendations
+export async function getRecommendations(
+  limit: number = 10
+): Promise<ApiResponse<RecommendationResult>> {
+  try {
+    const token = await getAuthToken();
+
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    return await makeRequest<RecommendationResult>(
+      `/opportunities/recommendations?limit=${limit}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

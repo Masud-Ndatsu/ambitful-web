@@ -124,14 +124,17 @@ function UserActionCell({ user }: { user: User }) {
         setShowDropdown(false);
       };
 
-      const handleDelete = () => {
-        confirm({
+      const handleDelete = async () => {
+        const confirmed = await confirm({
           title: "Delete User",
           description: "Are you sure you want to delete this user? This action cannot be undone.",
-          onConfirm: () => deleteUserMutation.mutate(user.id),
           confirmText: "Delete",
           variant: "destructive"
         });
+        
+        if (confirmed) {
+          deleteUserMutation.mutate(user.id);
+        }
         setShowDropdown(false);
       };
 

@@ -20,6 +20,9 @@ export const AdminTopBar = () => {
     if (pathname.includes("/x/admin/access-control")) {
       return "Access Control";
     }
+    if (pathname.includes("/x/admin/crawl-jobs")) {
+      return "Crawl Jobs";
+    }
     if (pathname.includes("/x/admin/analytics")) {
       return "Analytics";
     }

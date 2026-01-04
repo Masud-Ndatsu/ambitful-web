@@ -1,53 +1,109 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User } from "@/types";
-import { Send } from "lucide-react";
-import React from "react";
+import { Send, Bot } from "lucide-react";
+import React, { useState } from "react";
 
 interface AgentComponentProps {
   user: User | null;
 }
 
-export default function AgentComponent({ user }: AgentComponentProps) {
-  return (
-    <article className="flex-1 bg-[#FFFFFF] text-background/70 border-[#E2E2E2] relative hidden lg:block">
-      <header className="border-b h-28 px-8 flex items-center gap-8">
-        <div className="h-[3.2rem] w-[3.2rem] rounded-full bg-[#0B455033] grid place-items-center">
-          <svg
-            width="14"
-            height="15"
-            viewBox="0 0 14 15"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M9.77626 8.07994C10.9018 8.61126 11.8615 9.43892 12.5525 10.4742C13.2435 11.5094 13.6397 12.7132 13.6985 13.9565C13.7064 14.0704 13.6914 14.1847 13.6545 14.2927C13.6175 14.4007 13.5594 14.5003 13.4835 14.5855C13.4076 14.6708 13.3154 14.74 13.2123 14.7891C13.1093 14.8382 12.9975 14.8663 12.8834 14.8716C12.7694 14.8769 12.6555 14.8594 12.5483 14.8201C12.4411 14.7808 12.3429 14.7205 12.2593 14.6427C12.1758 14.5649 12.1086 14.4712 12.0618 14.3671C12.0149 14.263 11.9894 14.1506 11.9865 14.0365C11.9242 12.716 11.3558 11.4701 10.3992 10.5576C9.44265 9.64512 8.17141 9.13602 6.8494 9.13602C5.52739 9.13602 4.25615 9.64512 3.29958 10.5576C2.343 11.4701 1.77456 12.716 1.71226 14.0365C1.69686 14.26 1.59456 14.4686 1.42725 14.6177C1.25995 14.7667 1.04094 14.8443 0.817133 14.8338C0.593325 14.8234 0.382509 14.7257 0.229829 14.5617C0.0771492 14.3977 -0.00525608 14.1805 0.000260112 13.9565C0.0590369 12.7134 0.455034 11.5096 1.1458 10.4744C1.83657 9.43915 2.79605 8.61142 3.9214 8.07994C3.20027 7.47844 2.68193 6.6694 2.43689 5.76288C2.19185 4.85636 2.232 3.89636 2.55188 3.01346C2.87176 2.13057 3.45584 1.36764 4.22468 0.828452C4.99351 0.289267 5.90977 0 6.84883 0C7.78789 0 8.70415 0.289267 9.47299 0.828452C10.2418 1.36764 10.8259 2.13057 11.1458 3.01346C11.4657 3.89636 11.5058 4.85636 11.2608 5.76288C11.0157 6.6694 10.4974 7.47844 9.77626 8.07994ZM9.70655 4.56794C9.70655 3.81018 9.40553 3.08345 8.86971 2.54763C8.33389 2.01182 7.60716 1.7108 6.8494 1.7108C6.09164 1.7108 5.36492 2.01182 4.8291 2.54763C4.29328 3.08345 3.99226 3.81018 3.99226 4.56794C3.99226 5.3257 4.29328 6.05243 4.8291 6.58824C5.36492 7.12406 6.09164 7.42508 6.8494 7.42508C7.60716 7.42508 8.33389 7.12406 8.86971 6.58824C9.40553 6.05243 9.70655 5.3257 9.70655 4.56794Z"
-              fill="#03624C"
-            />
-          </svg>
-        </div>
+interface Message {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+}
 
+export default function AgentComponent({ }: AgentComponentProps) {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "1",
+      role: "assistant",
+      content: `Hi there! I'm your AI Career Agent. I'm here to help you find amazing career opportunities. What brings you here today?`,
+    },
+  ]);
+  const [input, setInput] = useState("");
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: input,
+    };
+
+    const assistantMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      role: "assistant",
+      content:
+        "Hi there! I'm your AI Career Agent. I'm here to help you find amazing career opportunities. What brings you here today?",
+    };
+
+    setMessages([...messages, userMessage, assistantMessage]);
+    setInput("");
+  };
+
+  return (
+    <aside className="flex-1 w-lg bg-white border-l border-[#E3E3E3] hidden lg:flex flex-col h-full">
+      {/* Header */}
+      <header className="border-b border-[#E3E3E3] p-4 flex items-center gap-3">
+        <div className="h-10 w-10 rounded-full bg-[#E8F5F1] flex items-center justify-center">
+          <Bot className="h-5 w-5 text-[#03624C]" />
+        </div>
         <div>
-          <h2 className="text-[1.412rem] leading-[2.903rem] font-medium text-[#000000]">
-            Ambit
+          <h2 className="text-[1.4rem] font-semibold text-[#1A1D23]">
+            AI Career Agent
           </h2>
-          <p className="text-[0.8rem] text-[#78A73B]">
-            {user
-              ? `Hi ${user.name?.split(" ")[0]}, Your Assistant`
-              : "Your Assistant"}
-          </p>
         </div>
       </header>
 
-      <footer className="absolute w-full top-[85%] text-[#0000000]/50 px-8 flex items-center gap-6">
-        <Input
-          className="py-8 outline-0 border! text-[1.6rem]!"
-          placeholder="Ask AI anything"
-        />
-        <Button className="p-4 w-[5.4rem] h-20 bg-[#03624C]">
-          <Send className="h-[2.2rem]! w-[2.2rem]!" />
-        </Button>
-      </footer>
-    </article>
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`flex ${
+              message.role === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
+            {message.role === "assistant" && (
+              <div className="h-8 w-8 rounded-full bg-[#E8F5F1] flex items-center justify-center shrink-0 mr-2">
+                <Bot className="h-4 w-4 text-[#03624C]" />
+              </div>
+            )}
+            <div
+              className={`max-w-[80%] rounded-2xl px-4 py-3 text-[1.2rem] ${
+                message.role === "user"
+                  ? "bg-[#03624C] text-white"
+                  : "bg-[#F6F8FB] text-[#1A1D23]"
+              }`}
+            >
+              {message.content}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Input Area */}
+      <div className="p-4 border-t border-[#E3E3E3]">
+        <div className="flex items-center gap-3">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            className="flex-1 h-12 rounded-xl border-[#E3E3E3] text-[1.2rem] px-4"
+            placeholder="Ask AI anything"
+          />
+          <Button
+            onClick={handleSend}
+            className="h-12 w-12 rounded-xl bg-[#03624C] hover:bg-[#03624C]/90 p-0"
+          >
+            <Send className="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+    </aside>
   );
 }

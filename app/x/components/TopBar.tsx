@@ -10,9 +10,17 @@ import { useLogout } from "@/hooks/useAuthentication";
 interface Props {
   isAuth?: boolean;
   user?: User | null;
+  onFilterChange?: (filter: string) => void;
+  activeFilter?: string;
+  filterCounts?: {
+    saved?: number;
+    liked?: number;
+    applied?: number;
+    draft?: number;
+  };
 }
 
-export const TopBar = ({ isAuth, user }: Props) => {
+export const TopBar = ({ isAuth, user, onFilterChange, activeFilter = "recommended", filterCounts }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -20,10 +28,10 @@ export const TopBar = ({ isAuth, user }: Props) => {
 
   const filters = [
     { id: 1, label: "Recommended", count: null },
-    { id: 2, label: "Saved", count: 3 },
-    { id: 3, label: "Like", count: 12 },
-    { id: 4, label: "Applied", count: 5 },
-    { id: 5, label: "Draft", count: 2 },
+    { id: 2, label: "Saved", count: filterCounts?.saved || 0 },
+    { id: 3, label: "Like", count: filterCounts?.liked || 0 },
+    { id: 4, label: "Applied", count: filterCounts?.applied || 0 },
+    { id: 5, label: "Draft", count: filterCounts?.draft || 0 },
   ];
 
   const activeNavItem = React.useMemo(() => {
@@ -55,25 +63,25 @@ export const TopBar = ({ isAuth, user }: Props) => {
           </h2>
           {isOpportunityTab && (
             <ul className="text-[1.3rem] flex gap-12 overflow-x-auto">
-              <li className="py-[0.8rem] px-[1.4rem] border rounded-4xl bg-background text-foreground">
-                Recommended
-              </li>
-              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-                Saved
-                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-              </li>
-              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-                Like
-                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-              </li>
-              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-                Applied
-                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-              </li>
-              <li className="py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl">
-                Draft
-                <span className="block h-[1.3rem] w-[1.3rem]  bg-[#0000004D] rounded-full"></span>
-              </li>
+              {filters.map((filter) => (
+                <li key={filter.id}>
+                  <button
+                    onClick={() => onFilterChange?.(filter.label.toLowerCase())}
+                    className={`py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl transition-colors cursor-pointer hover:bg-gray-50 ${
+                      activeFilter === filter.label.toLowerCase()
+                        ? "bg-background text-foreground"
+                        : "bg-white text-gray-700 hover:text-gray-900"
+                    }`}
+                  >
+                    {filter.label}
+                    {filter.count !== null && (
+                      <span className="flex items-center justify-center h-[1.3rem] w-[1.3rem] bg-[#0000004D] text-white text-[0.9rem] font-semibold rounded-full">
+                        {filter.count}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))}
             </ul>
           )}
         </div>

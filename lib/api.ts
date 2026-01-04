@@ -48,7 +48,9 @@ export async function makeRequest<T = any>(
     method = "GET",
     headers = {},
     body,
-    baseURL = process.env.API_URL || "http://localhost:3001",
+    baseURL = typeof window !== "undefined"
+      ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"
+      : process.env.API_URL || "http://localhost:3001",
   } = config;
 
   const url = `${baseURL}/api${endpoint}`;
@@ -77,6 +79,7 @@ export async function makeRequest<T = any>(
   const requestConfig: RequestInit = {
     method,
     headers: requestHeaders,
+    credentials: "include", // Include cookies in requests
   };
 
   if (body && method !== "GET") {

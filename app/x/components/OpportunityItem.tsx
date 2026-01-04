@@ -128,15 +128,26 @@ export default function OpportunityItem({
             <Heart className="w-[1.6rem] h-[1.6rem]" />
           </button>
         </div>
+        <div className="flex gap-4">
+          {/* Ask Ai Button */}
+          <Button
+            variant="outline"
+            onClick={handleApply}
+            disabled={applyMutation.isPending}
+            className="bg-[#FFFFFF] hover:bg-[#E3E3E3] text-[#505662] rounded-2xl px-8 py-3 text-[1.4rem] font-medium h-[3.2rem] disabled:opacity-50"
+          >
+            {applyMutation.isPending ? "Asking..." : "Ask Ai"}
+          </Button>
 
-        {/* Apply Button */}
-        <Button
-          onClick={handleApply}
-          disabled={applyMutation.isPending}
-          className="bg-[#03624C] hover:bg-[#03624C]/90 text-white rounded-2xl px-8 py-3 text-[1.4rem] font-medium h-[3.2rem] disabled:opacity-50"
-        >
-          {applyMutation.isPending ? "Applying..." : "Apply Now"}
-        </Button>
+          {/* Apply Button */}
+          <Button
+            onClick={handleApply}
+            disabled={applyMutation.isPending}
+            className="bg-[#03624C] hover:bg-[#03624C]/90 text-white rounded-2xl px-8 py-3 text-[1.4rem] font-medium h-[3.2rem] disabled:opacity-50"
+          >
+            {applyMutation.isPending ? "Applying..." : "Apply Now"}
+          </Button>
+        </div>
       </div>
     </div>
   );

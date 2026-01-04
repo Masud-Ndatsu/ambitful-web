@@ -76,25 +76,33 @@ export function useConfirmationDialog() {
   const [config, setConfig] = useState<{
     title: string;
     description?: string;
-    onConfirm: () => void;
     confirmText?: string;
     cancelText?: string;
     variant?: "default" | "destructive";
+    resolve?: (value: boolean) => void;
   } | null>(null);
 
   const confirm = (options: {
     title: string;
     description?: string;
-    onConfirm: () => void;
     confirmText?: string;
     cancelText?: string;
     variant?: "default" | "destructive";
-  }) => {
-    setConfig(options);
-    setIsOpen(true);
+  }): Promise<boolean> => {
+    return new Promise((resolve) => {
+      setConfig({ ...options, resolve });
+      setIsOpen(true);
+    });
   };
 
-  const close = () => {
+  const handleConfirm = () => {
+    config?.resolve?.(true);
+    setIsOpen(false);
+    setConfig(null);
+  };
+
+  const handleClose = () => {
+    config?.resolve?.(false);
     setIsOpen(false);
     setConfig(null);
   };
@@ -102,8 +110,8 @@ export function useConfirmationDialog() {
   const dialog = config ? (
     <ConfirmationDialog
       isOpen={isOpen}
-      onClose={close}
-      onConfirm={config.onConfirm}
+      onClose={handleClose}
+      onConfirm={handleConfirm}
       title={config.title}
       description={config.description}
       confirmText={config.confirmText}

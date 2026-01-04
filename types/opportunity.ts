@@ -41,7 +41,7 @@ export interface Opportunity {
   // Backend fields
   author?: string;
   views: number;
-  
+
   // Computed fields for frontend
   status?: OpportunityStatus;
   clicks?: number;
@@ -73,6 +73,7 @@ export interface OpportunityFilters {
   search?: string;
   category?: string;
   type?: string;
+  opportunityTypeIds?: string;
   remote?: boolean;
   experienceLevel?: string;
   status?: OpportunityStatus;
@@ -124,4 +125,67 @@ export interface OpportunityStatsResponse {
   archived: number;
   totalApplications: number;
   recentApplications: number;
+}
+
+// AI Recommendation Types
+export interface RecommendationReason {
+  type: "location" | "remote" | "category" | "job_function" | "semantic";
+  description: string;
+  matchScore: number;
+}
+
+export interface RecommendedOpportunity extends Opportunity {
+  matchScore: number;
+  matchReasons: RecommendationReason[];
+}
+
+export interface RecommendationUserProfile {
+  jobFunction?: string;
+  preferredLocations?: string[];
+  remoteWork?: boolean;
+  opportunityTypes?: string[];
+}
+
+export interface RecommendationResult {
+  recommendations: RecommendedOpportunity[];
+  userProfile: RecommendationUserProfile;
+  totalFound: number;
+}
+
+// Saved Jobs Types
+export interface SavedJob {
+  id: string;
+  savedAt: string;
+  opportunity: Opportunity;
+}
+
+export interface SavedJobsResponse {
+  savedJobs: SavedJob[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
+// Liked Jobs Types
+export interface LikedJob {
+  id: string;
+  likedAt: string;
+  opportunity: Opportunity;
+}
+
+export interface LikedJobsResponse {
+  likedJobs: LikedJob[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
 }

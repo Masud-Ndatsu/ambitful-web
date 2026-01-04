@@ -11,9 +11,12 @@ import {
   useReviewedAIDrafts,
   useReviewAIDraft,
 } from "@/hooks/useAIDrafts";
+import EditAIDraftModal from "./components/EditAIDraftModal";
 
 export default function AdminAIDraftPage() {
   const [tab, setTab] = useState<"New" | "Reviewed">("New");
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
   const { toast } = useToast();
   const { confirm, dialog } = useConfirmationDialog();
 
@@ -30,36 +33,37 @@ export default function AdminAIDraftPage() {
   const reviewedDrafts = reviewedData?.data?.drafts || [];
   const loading = pendingLoading || reviewedLoading;
 
-  const handleApprove = (id: string) => {
-    confirm({
+  const handleApprove = async (id: string) => {
+    const confirmed = await confirm({
       title: "Approve Draft",
       description:
         "Approving this draft will automatically create and publish a live opportunity on the platform. Continue?",
-      onConfirm: () => {
-        reviewMutation.mutate(
-          { id, data: { status: "APPROVED" } },
-          {
-            onSuccess: (response) => {
-              if (response.success) {
-                toast({
-                  title: "Success",
-                  description:
-                    "Draft approved and opportunity created successfully! The opportunity is now live on the platform.",
-                });
-              }
-            },
-            onError: () => {
-              toast({
-                title: "Error",
-                description: "Failed to approve draft",
-                variant: "destructive",
-              });
-            },
-          }
-        );
-      },
       confirmText: "Approve",
     });
+
+    if (confirmed) {
+      reviewMutation.mutate(
+        { id, data: { status: "APPROVED" } },
+        {
+          onSuccess: (response) => {
+            if (response.success) {
+              toast({
+                title: "Success",
+                description:
+                  "Draft approved and opportunity created successfully! The opportunity is now live on the platform.",
+              });
+            }
+          },
+          onError: () => {
+            toast({
+              title: "Error",
+              description: "Failed to approve draft",
+              variant: "destructive",
+            });
+          },
+        }
+      );
+    }
   };
 
   const handleReject = (id: string) => {
@@ -89,6 +93,16 @@ export default function AdminAIDraftPage() {
         },
       }
     );
+  };
+
+  const handleEdit = (id: string) => {
+    setSelectedDraftId(id);
+    setEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    setSelectedDraftId(null);
   };
 
   return (
@@ -146,9 +160,7 @@ export default function AdminAIDraftPage() {
                       onView={() => {
                         window.open(draft.sourceUrl, "_blank");
                       }}
-                      onEdit={() => {
-                        // TODO: Implement edit functionality
-                      }}
+                      onEdit={() => handleEdit(draft.id)}
                     />
                   ))}
                 </div>
@@ -195,6 +207,15 @@ export default function AdminAIDraftPage() {
             </section>
           </TabsContent>
         </Tabs>
+
+        {/* Edit Modal */}
+        {selectedDraftId && (
+          <EditAIDraftModal
+            draftId={selectedDraftId}
+            isOpen={editModalOpen}
+            onClose={handleCloseEditModal}
+          />
+        )}
       </section>
     </AdminLayout>
   );

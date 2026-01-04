@@ -16,6 +16,7 @@ import {
   BarChart2,
   LogOut,
   Bot,
+  ListChecks,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useMobile } from "@/hooks/useMobile";
@@ -67,7 +68,13 @@ const SideBarItem = ({
   );
 };
 
-const LogoutButton = ({ isExpanded, isMobile }: { isExpanded: boolean; isMobile: boolean }) => {
+const LogoutButton = ({
+  isExpanded,
+  isMobile,
+}: {
+  isExpanded: boolean;
+  isMobile: boolean;
+}) => {
   const logoutMutation = useLogout();
 
   const handleLogout = () => {
@@ -199,6 +206,14 @@ export const SideNavBar = ({ user }: SideNavBarProps) => {
                 href="/x/admin/access-control"
                 icon={Shield}
                 label="Access Control"
+                isExpanded={isExpanded}
+                pathname={pathname}
+                isMobile={isMobile}
+              />
+              <SideBarItem
+                href="/x/admin/crawl-jobs"
+                icon={ListChecks}
+                label="Crawl Jobs"
                 isExpanded={isExpanded}
                 pathname={pathname}
                 isMobile={isMobile}

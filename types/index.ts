@@ -28,6 +28,10 @@ export type {
   AdminOpportunity,
   AdminOpportunityListResponse,
   OpportunityStatsResponse,
+  RecommendationReason,
+  RecommendedOpportunity,
+  RecommendationUserProfile,
+  RecommendationResult,
 } from "./opportunity";
 
 // Re-export legacy types for backward compatibility

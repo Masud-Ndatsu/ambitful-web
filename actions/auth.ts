@@ -192,3 +192,37 @@ export async function isAuthenticated(): Promise<boolean> {
   const user = await getCurrentUser();
   return user !== null && user.success;
 }
+
+// Profile update action
+export interface UpdateProfileData {
+  name?: string;
+  phone?: string;
+  jobFunction?: string;
+  preferredLocations?: string[];
+  workAuthorization?: string;
+  remoteWork?: boolean;
+}
+
+export async function updateProfile(
+  data: UpdateProfileData
+): Promise<ApiResponse<User>> {
+  try {
+    const token = await getAuthToken();
+    
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await makeRequest<User>("/auth/profile", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: data,
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

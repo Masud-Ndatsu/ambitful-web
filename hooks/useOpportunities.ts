@@ -8,13 +8,17 @@ import {
   saveJob,
   unsaveJob,
   getSavedJobs,
+  likeJob,
+  unlikeJob,
+  getLikedJobs,
   applyToOpportunity,
   getUserApplications,
   getAdminOpportunities,
   updateOpportunityStatus,
   getOpportunityStats,
+  getRecommendations,
 } from "@/actions/opportunities";
-import { OpportunityFilters } from "@/types";
+import { OpportunityFilters, RecommendationResult, SavedJobsResponse, LikedJobsResponse } from "@/types/opportunity";
 import { CreateOpportunityApiData } from "@/validations";
 
 export const opportunityKeys = {
@@ -25,7 +29,9 @@ export const opportunityKeys = {
   details: () => [...opportunityKeys.all, "detail"] as const,
   detail: (id: string) => [...opportunityKeys.details(), id] as const,
   saved: () => [...opportunityKeys.all, "saved"] as const,
+  liked: () => [...opportunityKeys.all, "liked"] as const,
   applications: () => [...opportunityKeys.all, "applications"] as const,
+  recommendations: () => [...opportunityKeys.all, "recommendations"] as const,
   admin: () => [...opportunityKeys.all, "admin"] as const,
   adminList: (filters: OpportunityFilters) =>
     [...opportunityKeys.admin(), "list", filters] as const,
@@ -69,9 +75,19 @@ export function useOpportunity(id: string) {
 export function useSavedJobs() {
   return useQuery({
     queryKey: opportunityKeys.saved(),
-    queryFn: async () => {
+    queryFn: async (): Promise<SavedJobsResponse | null> => {
       const response = await getSavedJobs();
-      return response?.data || [];
+      return response?.data || null;
+    },
+  });
+}
+
+export function useLikedJobs() {
+  return useQuery({
+    queryKey: opportunityKeys.liked(),
+    queryFn: async (): Promise<LikedJobsResponse | null> => {
+      const response = await getLikedJobs();
+      return response?.data || null;
     },
   });
 }
@@ -147,6 +163,30 @@ export function useUnsaveJob() {
     mutationFn: (opportunityId: string) => unsaveJob(opportunityId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: opportunityKeys.saved() });
+      queryClient.invalidateQueries({ queryKey: opportunityKeys.lists() });
+    },
+  });
+}
+
+export function useLikeJob() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (opportunityId: string) => likeJob(opportunityId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: opportunityKeys.liked() });
+      queryClient.invalidateQueries({ queryKey: opportunityKeys.lists() });
+    },
+  });
+}
+
+export function useUnlikeJob() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (opportunityId: string) => unlikeJob(opportunityId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: opportunityKeys.liked() });
       queryClient.invalidateQueries({ queryKey: opportunityKeys.lists() });
     },
   });
@@ -228,5 +268,28 @@ export function useUpdateOpportunityStatus() {
       queryClient.invalidateQueries({ queryKey: opportunityKeys.admin() });
       queryClient.invalidateQueries({ queryKey: opportunityKeys.stats() });
     },
+  });
+}
+
+// AI-Powered Recommendations
+export function useRecommendations(
+  limit: number = 10,
+  enabled: boolean = true
+) {
+  return useQuery({
+    queryKey: [...opportunityKeys.recommendations(), limit],
+    queryFn: async (): Promise<RecommendationResult> => {
+      const response = await getRecommendations(limit);
+      return (
+        response?.data || {
+          recommendations: [],
+          userProfile: {},
+          totalFound: 0,
+        }
+      );
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    refetchOnWindowFocus: false,
   });
 }
