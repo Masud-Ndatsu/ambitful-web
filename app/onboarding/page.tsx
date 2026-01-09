@@ -86,6 +86,24 @@ function OnboardingForm() {
 
   const onSubmit = async (data: FormData) => {
     if (step === 1) {
+      // Validate step 1 required fields before proceeding
+      if (!data.jobFunction) {
+        toast({
+          title: "Job Function Required",
+          description: "Please select your job function before continuing.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (selectedOpportunityTypes.length === 0) {
+        toast({
+          title: "Opportunity Types Required",
+          description:
+            "Please select at least one opportunity type before continuing.",
+          variant: "destructive",
+        });
+        return;
+      }
       updateStep(2);
     } else {
       // Handle final submission
