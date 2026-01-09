@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { useEffect, useCallback, useState, Suspense } from "react";
@@ -16,17 +17,16 @@ import { useSubmitOnboarding } from "@/hooks/useOnboarding";
 import { useAuth } from "@/hooks/useAuthentication";
 import { useToast } from "@/hooks/use-toast";
 import { useOpportunityTypes } from "@/hooks/useOpportunityTypes";
-
-type WorkAuthorization =
-  | 'AUTHORIZED_NO_SPONSORSHIP'
-  | 'AUTHORIZED_WITH_SPONSORSHIP'
-  | 'REMOTE_CONTRACTOR'
-  | 'NOT_AUTHORIZED';
+import { useCountries, usePreferredLocations } from "@/hooks/useGeoData";
+import {
+  JOB_FUNCTIONS,
+  WORK_AUTHORIZATION_OPTIONS,
+  WorkAuthorization,
+} from "@/lib/constants";
 
 interface FormData {
   jobFunction: string;
-  jobTypes: string[];
-  location: string;
+  country: string;
   remoteWork: boolean;
   workAuthorization: WorkAuthorization;
   resume?: FileList;
@@ -37,38 +37,32 @@ function OnboardingForm() {
   const searchParams = useSearchParams();
   const step = parseInt(searchParams.get("step") || "1", 10);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]);
+  const [selectedOpportunityTypes, setSelectedOpportunityTypes] = useState<
+    string[]
+  >([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const { user } = useAuth();
   const submitOnboardingMutation = useSubmitOnboarding();
   const { toast } = useToast();
   const { data: opportunityTypesData, isLoading: isLoadingTypes } =
     useOpportunityTypes();
-    
+
+  // Fetch countries and locations from public APIs
+  const { data: countriesData } = useCountries();
+  const { options: locationOptions } = usePreferredLocations();
+
   const opportunityTypes = opportunityTypesData || [];
 
-  // Use opportunity types from database, fallback to default list if loading or empty
-  const jobFunctions =
-    opportunityTypes?.length > 0
-      ? opportunityTypes.map((type) => type.name)
-      : [
-          "Software Engineering",
-          "Data Science",
-          "Product Management",
-          "Design",
-          "Marketing",
-          "Sales",
-          "Operations",
-          "Finance",
-          "Human Resources",
-          "Consulting",
-          "Research",
-          "Other",
-        ];
+  // Convert countries to select options
+  const countryOptions =
+    countriesData?.map((country) => ({
+      value: country.name,
+      label: country.name,
+    })) || [];
 
-  const { register, handleSubmit, setValue, control } = useForm<FormData>({
+  const { handleSubmit, setValue, control } = useForm<FormData>({
     defaultValues: {
-      jobTypes: [],
       remoteWork: false,
     },
   });
@@ -97,8 +91,9 @@ function OnboardingForm() {
       // Handle final submission
       const submitData = {
         jobFunction: data.jobFunction,
-        jobTypes: selectedJobTypes,
-        preferredLocations: [data.location],
+        opportunityTypeIds: selectedOpportunityTypes,
+        preferredLocations: selectedLocations,
+        country: data.country,
         remoteWork: data.remoteWork,
         workAuthorization: data.workAuthorization,
         resumeUrl: uploadedFile ? URL.createObjectURL(uploadedFile) : undefined,
@@ -132,11 +127,11 @@ function OnboardingForm() {
     }
   };
 
-  const handleJobTypeChange = (type: string, checked: boolean) => {
+  const handleOpportunityTypeChange = (typeId: string, checked: boolean) => {
     if (checked) {
-      setSelectedJobTypes((prev) => [...prev, type]);
+      setSelectedOpportunityTypes((prev) => [...prev, typeId]);
     } else {
-      setSelectedJobTypes((prev) => prev.filter((t) => t !== type));
+      setSelectedOpportunityTypes((prev) => prev.filter((t) => t !== typeId));
     }
   };
 
@@ -195,107 +190,91 @@ function OnboardingForm() {
                 </label>
                 <Select
                   onValueChange={(value) => setValue("jobFunction", value)}
-                  disabled={isLoadingTypes}
                 >
                   <SelectTrigger className="p-10! px-8! text-[1.6rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full h-auto bg-white">
-                    <SelectValue
-                      placeholder={
-                        isLoadingTypes
-                          ? "Loading job functions..."
-                          : "Select your job function for best result"
-                      }
-                    />
+                    <SelectValue placeholder="Select your professional field" />
                   </SelectTrigger>
                   <SelectContent>
-                    {isLoadingTypes ? (
+                    {JOB_FUNCTIONS.map((jobFunction) => (
                       <SelectItem
-                        value="loading"
-                        disabled
-                        className="text-[1.6rem] py-8! px-10! text-gray-500 bg-white"
+                        className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                        key={jobFunction}
+                        value={jobFunction}
                       >
-                        Loading job functions...
+                        {jobFunction}
                       </SelectItem>
-                    ) : (
-                      jobFunctions.map((jobFunction) => (
-                        <SelectItem
-                          className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
-                          key={jobFunction}
-                          value={jobFunction}
-                        >
-                          {jobFunction}
-                        </SelectItem>
-                      ))
-                    )}
+                    ))}
                   </SelectContent>
                 </Select>
                 <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] my-8">
                   Choose the field that best matches your expertise
                 </p>
               </div>
+
+              {/* Opportunity Types Selection */}
               <div className="text-[1.597rem] mb-8">
-                <label
-                  className="block text-[#344054] uppercase mb-4"
-                  htmlFor="jobTypes"
-                >
-                  Job Type
+                <label className="block text-[#344054] uppercase mb-4">
+                  Opportunity Types
                 </label>
-                <div className="grid grid-cols-2 sm:flex sm:justify-between gap-4">
-                  {["Full-time", "Contract", "Part-time", "Internship"].map(
-                    (type) => (
-                      <div key={type} className="flex items-center space-x-3">
+                <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] mb-4">
+                  What types of opportunities are you looking for?
+                </p>
+                {isLoadingTypes ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-12 bg-gray-200 rounded-lg animate-pulse"
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {opportunityTypes.map((type) => (
+                      <div
+                        key={type.id}
+                        className="flex items-center space-x-3"
+                      >
                         <Checkbox
-                          id={`job-type-${type}`}
+                          id={`opp-type-${type.id}`}
                           className="h-6 w-6"
-                          checked={selectedJobTypes.includes(type)}
+                          checked={selectedOpportunityTypes.includes(type.id)}
                           onCheckedChange={(checked) =>
-                            handleJobTypeChange(type, checked as boolean)
+                            handleOpportunityTypeChange(
+                              type.id,
+                              checked as boolean
+                            )
                           }
                         />
                         <label
-                          htmlFor={`job-type-${type}`}
+                          htmlFor={`opp-type-${type.id}`}
                           className="text-[1.597rem] text-[#1F242E] cursor-pointer"
                         >
-                          {type}
+                          {type.name}
                         </label>
                       </div>
-                    )
-                  )}
-                </div>
-                <div className="flex items-center space-x-3 mt-6">
-                  <Checkbox
-                    id="job-type-other"
-                    className="h-6 w-6"
-                    checked={selectedJobTypes.includes("Other")}
-                    onCheckedChange={(checked) =>
-                      handleJobTypeChange("Other", checked as boolean)
-                    }
-                  />
-                  <label
-                    htmlFor="job-type-other"
-                    className="text-[1.597rem] text-[#1F242E] cursor-pointer"
-                  >
-                    Other
-                  </label>
-                </div>
-
+                    ))}
+                  </div>
+                )}
                 <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] my-8">
-                  Select all that apply{" "}
+                  Select all that interest you
                 </p>
               </div>
+
               <div className="text-[1.597rem] mb-8">
-                <label
-                  className="block text-[#344054] uppercase mb-4"
-                  htmlFor="location"
-                >
-                  Location
+                <label className="block text-[#344054] uppercase mb-4">
+                  Preferred Locations
                 </label>
-                <input
-                  type="text"
-                  id="location"
-                  className="py-[1.333rem] px-[1.867rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full bg-white border-[#E3E3E3] text-[#0F1729] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  placeholder="e.g San Francisco, CA"
-                  {...register("location")}
+                <MultiSelect
+                  options={locationOptions}
+                  selected={selectedLocations}
+                  onChange={setSelectedLocations}
+                  placeholder="Select your preferred locations..."
+                  maxDisplayed={3}
                 />
+                <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] my-4">
+                  Select all locations where you&apos;d like to work
+                </p>
                 <div className="flex items-center space-x-3 mt-6">
                   <Checkbox
                     id="remote-work"
@@ -313,6 +292,34 @@ function OnboardingForm() {
                   </label>
                 </div>
               </div>
+
+              <div className="text-[1.597rem] mb-8">
+                <label
+                  className="block text-[#344054] uppercase mb-4"
+                  htmlFor="country"
+                >
+                  Country
+                </label>
+                <Select onValueChange={(value) => setValue("country", value)}>
+                  <SelectTrigger className="p-10! px-8! text-[1.6rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full h-auto bg-white">
+                    <SelectValue placeholder="Select your country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countryOptions.map((country) => (
+                      <SelectItem
+                        className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                        key={country.value}
+                        value={country.value}
+                      >
+                        {country.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] my-4">
+                  Select your country (optional)
+                </p>
+              </div>
               <div className="text-[1.597rem] mb-8">
                 <label
                   className="block text-[#344054] uppercase mb-4"
@@ -320,35 +327,24 @@ function OnboardingForm() {
                 >
                   Work Authorization
                 </label>
-                <Select onValueChange={(value) => setValue('workAuthorization', value as WorkAuthorization)}>
+                <Select
+                  onValueChange={(value) =>
+                    setValue("workAuthorization", value as WorkAuthorization)
+                  }
+                >
                   <SelectTrigger className="p-10! px-8! text-[1.6rem] border-[0.133rem] mt-[0.8] rounded-[0.684rem] w-full h-auto bg-white">
                     <SelectValue placeholder="Select your work authorization status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem 
-                      value="AUTHORIZED_NO_SPONSORSHIP"
-                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
-                    >
-                      Authorized to work — no sponsorship required
-                    </SelectItem>
-                    <SelectItem 
-                      value="AUTHORIZED_WITH_SPONSORSHIP"
-                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
-                    >
-                      Authorized to work — sponsorship required
-                    </SelectItem>
-                    <SelectItem 
-                      value="REMOTE_CONTRACTOR"
-                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
-                    >
-                      Authorized to work remotely as an independent contractor
-                    </SelectItem>
-                    <SelectItem 
-                      value="NOT_AUTHORIZED"
-                      className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
-                    >
-                      Not authorized to work at this time
-                    </SelectItem>
+                    {WORK_AUTHORIZATION_OPTIONS.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        className="text-[#0F1729] text-[1.6rem] py-8! px-10! bg-white hover:bg-[#F8F9FC]"
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <p className="text-[#676F7E] text-[1.6rem] leading-[1.825rem] my-8">

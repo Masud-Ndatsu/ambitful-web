@@ -108,7 +108,7 @@ export default function AdminAIDraftPage() {
   return (
     <AdminLayout>
       {dialog}
-      <section className="p-8 pb-20">
+      <section className="p-8 pb-20 max-h-screen overflow-y-scroll scroll-smooth">
         <Tabs defaultValue={tab} className="">
           <TabsList className="w-[25.9rem] h-18 text-[1.8rem]! rounded-xl! p-4 bg-[#E8EAED]! text-black/50 border border-[#E3E3E3]">
             <TabsTrigger

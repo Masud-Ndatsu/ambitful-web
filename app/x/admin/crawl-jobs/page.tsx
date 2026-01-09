@@ -136,7 +136,7 @@ export default function CrawlJobsPage() {
   return (
     <AdminLayout>
       {dialog}
-      <div className="p-8 bg-[#F8F9FC] min-h-screen">
+      <div className="p-8 pb-20 bg-[#F8F9FC] min-h-screen max-h-screen overflow-y-scroll scroll-smooth">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="bg-white border-[#E3E3E3] rounded-2xl">

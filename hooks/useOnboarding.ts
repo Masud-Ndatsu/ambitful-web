@@ -31,7 +31,9 @@ export function useSubmitOnboarding() {
         // Invalidate status and user data to refetch
         queryClient.invalidateQueries({ queryKey: onboardingKeys.status() });
         // Also invalidate auth user data since onboarding status changed
-        queryClient.invalidateQueries({ queryKey: ["auth", "user", "current"] });
+        queryClient.invalidateQueries({
+          queryKey: ["auth", "user", "current"],
+        });
       }
     },
     onError: (error) => {

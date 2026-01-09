@@ -57,7 +57,7 @@ export default function AdminSettingsPage() {
 
   return (
     <AdminLayout>
-      <div className="p-8 overflow-hidden">
+      <div className="p-8 max-h-screen overflow-y-scroll scroll-smooth">
         <header className="flex items-center justify-between bg-white border border-b-0 p-8 border-[#E3E3E3] rounded-t-4xl">
           <div>
             <h1 className="text-[2.134rem] leading-[2.561rem] font-semibold">

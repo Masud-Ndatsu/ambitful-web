@@ -43,7 +43,7 @@ export default function AdminOpportunitiesPage() {
 
   return (
     <AdminLayout>
-      <section className="p-8">
+      <section className="p-8 pb-20 max-h-screen overflow-y-scroll scroll-smooth">
         <header className="flex items-center justify-between">
           <div>
             <h1 className="text-[2.134rem] leading-[2.561rem] font-semibold">

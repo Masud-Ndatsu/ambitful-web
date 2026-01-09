@@ -11,16 +11,29 @@ import CreateUserForm from "./components/CreateUserForm";
 
 export default function AdminAccessControlPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"ADMIN" | "MODERATOR" | "USER" | "all">("all");
-  const [selectedStatus, setSelectedStatus] = useState<"active" | "inactive" | "all">("all");
+  const [selectedRole, setSelectedRole] = useState<
+    "ADMIN" | "MODERATOR" | "USER" | "all"
+  >("all");
+  const [selectedStatus, setSelectedStatus] = useState<
+    "active" | "inactive" | "all"
+  >("all");
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
 
-  const { data: usersResponse, isLoading, error } = useUsers({
+  const {
+    data: usersResponse,
+    isLoading,
+    error,
+  } = useUsers({
     search: searchQuery || undefined,
     role: selectedRole !== "all" ? selectedRole : undefined,
-    isEmailVerified: selectedStatus === "active" ? true : selectedStatus === "inactive" ? false : undefined,
+    isEmailVerified:
+      selectedStatus === "active"
+        ? true
+        : selectedStatus === "inactive"
+        ? false
+        : undefined,
   });
 
   const users = usersResponse?.users || [];
@@ -30,23 +43,32 @@ export default function AdminAccessControlPage() {
     setSearchQuery(e.target.value);
   }, []);
 
-  const handleRoleFilter = useCallback((role: "ADMIN" | "MODERATOR" | "USER" | "all") => {
-    setSelectedRole(role);
-    setShowRoleDropdown(false);
-  }, []);
+  const handleRoleFilter = useCallback(
+    (role: "ADMIN" | "MODERATOR" | "USER" | "all") => {
+      setSelectedRole(role);
+      setShowRoleDropdown(false);
+    },
+    []
+  );
 
-  const handleStatusFilter = useCallback((status: "active" | "inactive" | "all") => {
-    setSelectedStatus(status);
-    setShowStatusDropdown(false);
-  }, []);
+  const handleStatusFilter = useCallback(
+    (status: "active" | "inactive" | "all") => {
+      setSelectedStatus(status);
+      setShowStatusDropdown(false);
+    },
+    []
+  );
 
-  const handleCreateUser = useCallback(async (data: any) => {
-    await createUserMutation.mutateAsync({
-      ...data,
-      password: "tempPassword123", // TODO: Generate or prompt for password
-    });
-    setShowAddUserModal(false);
-  }, [createUserMutation]);
+  const handleCreateUser = useCallback(
+    async (data: any) => {
+      await createUserMutation.mutateAsync({
+        ...data,
+        password: "tempPassword123", // TODO: Generate or prompt for password
+      });
+      setShowAddUserModal(false);
+    },
+    [createUserMutation]
+  );
 
   const filteredUsers = users;
 
@@ -61,7 +83,7 @@ export default function AdminAccessControlPage() {
 
   return (
     <AdminLayout>
-      <section className="p-8">
+      <section className="p-8 pb-20 max-h-screen overflow-y-scroll scroll-smooth">
         <header className="flex items-center justify-between">
           <div className="flex gap-6 items-center">
             <div className="relative">
@@ -163,14 +185,21 @@ export default function AdminAccessControlPage() {
         <section className="mt-12">
           {error ? (
             <div className="text-center py-8">
-              <div className="text-[1.4rem] text-red-600">Error loading users</div>
+              <div className="text-[1.4rem] text-red-600">
+                Error loading users
+              </div>
             </div>
           ) : (
             <>
               <div className="mb-4 text-[1.4rem] text-gray-600">
-                Showing {filteredUsers.length} of {usersResponse?.pagination.total || 0} users
+                Showing {filteredUsers.length} of{" "}
+                {usersResponse?.pagination.total || 0} users
               </div>
-              <DataTable columns={userColumns} data={filteredUsers} isLoading={isLoading} />
+              <DataTable
+                columns={userColumns}
+                data={filteredUsers}
+                isLoading={isLoading}
+              />
             </>
           )}
         </section>

@@ -51,40 +51,6 @@ export async function getAgentHealth(): Promise<ApiResponse<AgentHealth>> {
   }
 }
 
-export async function indexUserData(): Promise<
-  ApiResponse<{ indexed: boolean }>
-> {
-  try {
-    const response = await makeRequest<{ indexed: boolean }>(
-      "/agent/index-user-data",
-      {
-        method: "POST",
-      }
-    );
-
-    return response;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function initializeVectorStore(): Promise<
-  ApiResponse<{ initialized: boolean }>
-> {
-  try {
-    const response = await makeRequest<{ initialized: boolean }>(
-      "/agent/initialize-vector-store",
-      {
-        method: "POST",
-      }
-    );
-
-    return response;
-  } catch (error) {
-    throw error;
-  }
-}
-
 // Conversation Management
 export interface Conversation {
   id: string;

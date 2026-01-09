@@ -3,8 +3,9 @@ import { ApiResponse, makeRequest } from "@/lib/api";
 
 export interface OnboardingData {
   jobFunction: string;
-  jobTypes: string[];
+  opportunityTypeIds: string[];
   preferredLocations: string[];
+  country?: string;
   remoteWork: boolean;
   workAuthorization: string;
   resumeUrl?: string;

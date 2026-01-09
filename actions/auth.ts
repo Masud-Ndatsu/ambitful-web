@@ -31,6 +31,11 @@ export interface AuthResponse {
     createdAt?: string;
     updatedAt?: string;
   };
+  isNewUser?: boolean;
+}
+
+export interface GoogleAuthData {
+  idToken: string;
 }
 
 // Auth actions
@@ -74,6 +79,39 @@ export async function register(
     const response = await makeRequest<AuthResponse>("/auth/register", {
       method: "POST",
       body: formData,
+    });
+
+    if (response.success && response.data) {
+      const cookieStore = await cookies();
+
+      cookieStore.set("auth-token", response.data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 1, // 1 hour
+      });
+
+      cookieStore.set("refresh-token", response.data.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      });
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function googleAuth(
+  data: GoogleAuthData
+): Promise<ApiResponse<AuthResponse>> {
+  try {
+    const response = await makeRequest<AuthResponse>("/auth/google", {
+      method: "POST",
+      body: data,
     });
 
     if (response.success && response.data) {
@@ -208,7 +246,7 @@ export async function updateProfile(
 ): Promise<ApiResponse<User>> {
   try {
     const token = await getAuthToken();
-    
+
     if (!token) {
       throw new Error("Authentication required");
     }

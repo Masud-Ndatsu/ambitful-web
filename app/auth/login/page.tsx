@@ -5,11 +5,11 @@ import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "@/validations";
 import { useLogin } from "@/hooks/useAuthentication";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const {
@@ -20,14 +20,12 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const [error, setError] = useState<string>("");
   const router = useRouter();
   const loginMutation = useLogin();
   const isLoading = loginMutation.isPending;
+  const { toast } = useToast();
 
   const onSubmit = async (data: LoginFormData) => {
-    setError("");
-
     try {
       const response = await loginMutation.mutateAsync(data);
 
@@ -43,10 +41,18 @@ export default function LoginPage() {
           router.push("/x/opportunities");
         }
       } else {
-        setError(response.message || "Login failed");
+        toast({
+          title: "Login Failed",
+          description: response.message || "Unable to sign in",
+          variant: "destructive",
+        });
       }
     } catch (error: any) {
-      setError(error.message || "Login failed. Please try again.");
+      toast({
+        title: "Login Failed",
+        description: error.message || "Login failed. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -108,12 +114,6 @@ export default function LoginPage() {
           )}
         </div>
       </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600 text-[1.4rem]">{error}</p>
-        </div>
-      )}
 
       <div className="space-y-4">
         <Button

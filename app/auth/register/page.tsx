@@ -4,11 +4,11 @@ import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterFormData } from "@/validations";
 import { useRegister } from "@/hooks/useAuthentication";
+import { useToast } from "@/hooks/use-toast";
 
 export default function RegisterPage() {
   const {
@@ -19,21 +19,19 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  const [error, setError] = useState<string>("");
   const router = useRouter();
   const registerMutation = useRegister();
   const isLoading = registerMutation.isPending;
+  const { toast } = useToast();
 
   const onSubmit = async (data: RegisterFormData) => {
-    setError("");
-
     try {
       const response = await registerMutation.mutateAsync(data);
 
       if (response.success && response.data) {
         // Check role first - admins/moderators skip onboarding
         const { user } = response.data;
-        
+
         if (user.role === "ADMIN" || user.role === "MODERATOR") {
           router.push("/x/admin/dashboard");
         } else if (!user.isOnboardingComplete) {
@@ -42,10 +40,18 @@ export default function RegisterPage() {
           router.push("/x/opportunities");
         }
       } else {
-        setError(response.message || "Registration failed");
+        toast({
+          title: "Registration Failed",
+          description: response.message || "Unable to create account",
+          variant: "destructive",
+        });
       }
     } catch (error: any) {
-      setError(error.message || "Registration failed. Please try again.");
+      toast({
+        title: "Registration Failed",
+        description: error.message || "Registration failed. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -133,12 +139,6 @@ export default function RegisterPage() {
           )}
         </div>
       </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600 text-[1.4rem]">{error}</p>
-        </div>
-      )}
 
       <div className="space-y-4">
         <Button

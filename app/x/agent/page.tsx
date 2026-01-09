@@ -2,8 +2,6 @@
 import {
   Bot,
   Send,
-  AlertCircle,
-  CheckCircle,
   RefreshCw,
   Plus,
   MessageSquare,
@@ -11,15 +9,12 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import {
-  useAgentHealth,
-  useIndexUserData,
   useConversations,
   useConversation,
   useCreateConversation,
   useChatWithConversation,
   useDeleteConversation,
 } from "@/hooks/useAgent";
-import { useAuth } from "@/hooks/useAuthentication";
 
 interface DisplayMessage {
   role: "USER" | "ASSISTANT" | "SYSTEM";
@@ -30,7 +25,6 @@ interface DisplayMessage {
 }
 
 export default function AgentPage() {
-  const { user } = useAuth();
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [currentConversationId, setCurrentConversationId] = useState<
@@ -39,14 +33,12 @@ export default function AgentPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Hooks
-  const { data: agentHealth, isLoading: healthLoading } = useAgentHealth();
   const { data: conversations = [], isLoading: conversationsLoading } =
     useConversations();
   const { data: currentConversation } = useConversation(currentConversationId);
   const createConversationMutation = useCreateConversation();
   const chatMutation = useChatWithConversation();
   const deleteConversationMutation = useDeleteConversation();
-  const indexUserMutation = useIndexUserData();
 
   const isLoading = chatMutation.isPending;
 
@@ -67,14 +59,6 @@ export default function AgentPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  // Index user data on first load
-  useEffect(() => {
-    if (user && agentHealth?.status === "ready") {
-      indexUserMutation.mutate();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, agentHealth?.status]);
 
   // Auto-select first conversation or create one
   useEffect(() => {
@@ -298,46 +282,7 @@ export default function AgentPage() {
                 </p>
               </div>
             </div>
-
-            {/* Agent Status */}
-            <div className="flex items-center gap-3">
-              {healthLoading ? (
-                <RefreshCw className="w-5 h-5 animate-spin text-gray-400" />
-              ) : (
-                <>
-                  {agentHealth?.status === "ready" ? (
-                    <div className="flex items-center gap-2 text-green-600">
-                      <CheckCircle className="w-5 h-5" />
-                      <span className="text-[1.4rem]">Ready</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-orange-600">
-                      <AlertCircle className="w-5 h-5" />
-                      <span className="text-[1.4rem]">
-                        {agentHealth?.status === "initializing"
-                          ? "Initializing"
-                          : "Offline"}
-                      </span>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
           </div>
-
-          {/* Tools Status */}
-          {agentHealth?.tools && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {agentHealth.tools.map((tool) => (
-                <span
-                  key={tool}
-                  className="text-[1.2rem] bg-[#03624C]/10 text-[#03624C] px-2 py-1 rounded-full"
-                >
-                  {tool.replace("_", " ")}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Messages Container */}
@@ -416,18 +361,6 @@ export default function AgentPage() {
 
         {/* Input Area */}
         <div className="bg-white border-t border-gray-200 p-6">
-          {agentHealth?.status !== "ready" && (
-            <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-              <p className="text-[1.4rem] text-orange-700">
-                AI Agent is{" "}
-                {agentHealth?.status === "initializing"
-                  ? "starting up"
-                  : "offline"}
-                . Please wait a moment for full functionality.
-              </p>
-            </div>
-          )}
-
           <div className="flex items-end gap-3">
             <div className="flex-1 relative">
               <textarea

@@ -20,7 +20,13 @@ interface Props {
   };
 }
 
-export const TopBar = ({ isAuth, user, onFilterChange, activeFilter = "recommended", filterCounts }: Props) => {
+export const TopBar = ({
+  isAuth,
+  user,
+  onFilterChange,
+  activeFilter = "recommended",
+  filterCounts,
+}: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -113,12 +119,6 @@ export const TopBar = ({ isAuth, user, onFilterChange, activeFilter = "recommend
                   onClick={() => setShowUserMenu(false)}
                 />
                 <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                  <div className="p-4 border-b border-gray-100">
-                    <p className="font-medium text-[1.4rem]">{user.name}</p>
-                    <p className="text-[1.2rem] text-gray-600">
-                      {user.email.substring(0, 10)}
-                    </p>
-                  </div>
                   <div className="py-2">
                     <button
                       onClick={() => {

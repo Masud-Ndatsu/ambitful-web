@@ -5,7 +5,9 @@ import {
   register as registerAction,
   logout as logoutAction,
   updateProfile as updateProfileAction,
+  googleAuth as googleAuthAction,
   UpdateProfileData,
+  GoogleAuthData,
 } from "@/actions/auth";
 import {
   LoginFormData,
@@ -103,6 +105,23 @@ export function useUpdateProfile() {
         queryClient.setQueryData(authKeys.currentUser(), response.data);
         queryClient.invalidateQueries({ queryKey: authKeys.currentUser() });
       }
+    },
+  });
+}
+
+export function useGoogleAuth() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: GoogleAuthData) => googleAuthAction(data),
+    onSuccess: (response) => {
+      if (response.success && response.data) {
+        const userData = convertToUser(response.data.user);
+        queryClient.setQueryData(authKeys.currentUser(), userData);
+      }
+    },
+    onError: () => {
+      queryClient.setQueryData(authKeys.currentUser(), null);
     },
   });
 }

@@ -26,7 +26,7 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ToastContainer />
+      <ToastContainer className="text-[1.4rem]!" />
     </QueryClientProvider>
   );
 }
