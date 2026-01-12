@@ -235,7 +235,7 @@ export default function AdminAIDraftPage() {
                             onApprove={() => handleApprove(draft.id)}
                             onReject={() => handleReject(draft.id)}
                             onView={() => {
-                              window.location.href = `/x/admin/ai-draft/${draft.id}`;
+                              router.push(`/x/admin/ai-draft/${draft.id}`);
                             }}
                             onEdit={() => handleEdit(draft.id)}
                           />
@@ -279,7 +279,7 @@ export default function AdminAIDraftPage() {
                             opportunityId={draft.opportunityId}
                             isAIDraft={false}
                             onView={() => {
-                              window.location.href = `/x/admin/ai-draft/${draft.id}`;
+                              router.push(`/x/admin/ai-draft/${draft.id}`);
                             }}
                           />
                         ))}
