@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import AdminLayout from "../../components/AdminLayout";
 import { ChevronDown, User, Search, Filter } from "lucide-react";
 import { DataTable } from "../../components/DataTable";
 import { useState, useCallback } from "react";
@@ -8,6 +7,8 @@ import { userColumns } from "./column";
 import { useUsers, useCreateUser } from "@/hooks/useUsers";
 import { Modal } from "@/components/Modal";
 import CreateUserForm from "./components/CreateUserForm";
+import { AdminRoute } from "@/components/ProtectedRoute";
+import { AdminTopBar } from "../../components/AdminTopBar";
 
 export default function AdminAccessControlPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -82,8 +83,11 @@ export default function AdminAccessControlPage() {
       : "User";
 
   return (
-    <AdminLayout>
-      <section className="p-8 pb-20 max-h-screen overflow-y-scroll scroll-smooth">
+    <AdminRoute>
+      <main className="h-full flex flex-col overflow-hidden">
+        <AdminTopBar />
+        <div className="h-full flex flex-col overflow-y-scroll">
+          <section className="p-8 pb-20 text-[#0F1729]">
         <header className="flex items-center justify-between">
           <div className="flex gap-6 items-center">
             <div className="relative">
@@ -213,6 +217,8 @@ export default function AdminAccessControlPage() {
           />
         </Modal>
       </section>
-    </AdminLayout>
+        </div>
+      </main>
+    </AdminRoute>
   );
 }

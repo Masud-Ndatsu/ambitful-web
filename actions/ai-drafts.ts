@@ -21,10 +21,12 @@ export interface AIDraft {
   experienceLevel: string | null;
   duration: string | null;
   eligibility: string[];
-  status: "PENDING" | "APPROVED" | "REJECTED" | "PUBLISHED";
+  status: "PENDING" | "CRAWLING" | "CRAWLED" | "APPROVED" | "REJECTED" | "PUBLISHED";
   reviewedBy: string | null;
   reviewedAt: string | null;
   rejectionReason: string | null;
+  isDetailsCrawled: boolean;
+  rawScrapedData: any | null;
   opportunityId: string | null;
   crawlSourceId: string;
   sourceUrl: string;
@@ -53,6 +55,8 @@ export interface AIDraftListResponse {
 export interface AIDraftStatsResponse {
   total: number;
   pending: number;
+  crawling: number;
+  crawled: number;
   approved: number;
   rejected: number;
   published: number;
@@ -62,7 +66,7 @@ export interface AIDraftFilters {
   page?: number;
   limit?: number;
   search?: string;
-  status?: "PENDING" | "APPROVED" | "REJECTED" | "PUBLISHED";
+  status?: "PENDING" | "CRAWLING" | "CRAWLED" | "APPROVED" | "REJECTED" | "PUBLISHED";
   crawlSourceId?: string;
   sortBy?: "createdAt" | "deadline" | "title" | "organization";
   sortOrder?: "asc" | "desc";
@@ -307,6 +311,36 @@ export async function getAIDraftStats(): Promise<
       }
     );
 
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Crawl details page for AI draft
+export async function crawlAIDraftDetails(
+  id: string,
+  engine?: "SCRAPER_DO" | "CHEERIO" | "PLAYWRIGHT"
+): Promise<ApiResponse<AIDraft>> {
+  try {
+    const token = await getAuthToken();
+
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await makeRequest<AIDraft>(
+      `/ai-drafts/${id}/crawl-details`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: { engine },
+      }
+    );
+
+    revalidatePath("/x/admin/ai-draft");
     return response;
   } catch (error) {
     throw error;

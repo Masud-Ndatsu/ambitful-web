@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import AdminLayout from "../../components/AdminLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AIDraftCard } from "../../components/AIDreaftCard";
 import { useToast } from "@/hooks/use-toast";
@@ -11,18 +10,39 @@ import {
   useReviewedAIDrafts,
   useReviewAIDraft,
 } from "@/hooks/useAIDrafts";
+import { useDraftMonitoring } from "@/hooks/useDraftMonitoring";
 import EditAIDraftModal from "./components/EditAIDraftModal";
+import { AdminRoute } from "@/components/ProtectedRoute";
+import { AdminTopBar } from "../../components/AdminTopBar";
+import { useRouter } from "next/navigation";
 
 export default function AdminAIDraftPage() {
-  const [tab, setTab] = useState<"New" | "Reviewed">("New");
+  const router = useRouter();
+  const [tab, setTab] = useState<"New" | "Crawled" | "Reviewed">("New");
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
   const { toast } = useToast();
   const { confirm, dialog } = useConfirmationDialog();
 
+  // Subscribe to all draft updates
+  useDraftMonitoring({
+    onStatusUpdate: (update) => {
+      toast({
+        title: "Draft Status Updated",
+        description: `Draft "${
+          update.draft?.title || update.draftId
+        }" status changed to ${update.status}`,
+      });
+    },
+  });
+
   // React Query hooks
   const { data: pendingData, isLoading: pendingLoading } = useAIDrafts(
     "PENDING",
+    100
+  );
+  const { data: crawledData, isLoading: crawledLoading } = useAIDrafts(
+    "CRAWLED",
     100
   );
   const { data: reviewedData, isLoading: reviewedLoading } =
@@ -30,8 +50,9 @@ export default function AdminAIDraftPage() {
   const reviewMutation = useReviewAIDraft();
 
   const pendingDrafts = pendingData?.data?.drafts || [];
+  const crawledDrafts = crawledData?.data?.drafts || [];
   const reviewedDrafts = reviewedData?.data?.drafts || [];
-  const loading = pendingLoading || reviewedLoading;
+  const loading = pendingLoading || crawledLoading || reviewedLoading;
 
   const handleApprove = async (id: string) => {
     const confirmed = await confirm({
@@ -106,117 +127,180 @@ export default function AdminAIDraftPage() {
   };
 
   return (
-    <AdminLayout>
-      {dialog}
-      <section className="p-8 pb-20 max-h-screen overflow-y-scroll scroll-smooth">
-        <Tabs defaultValue={tab} className="">
-          <TabsList className="w-[25.9rem] h-18 text-[1.8rem]! rounded-xl! p-4 bg-[#E8EAED]! text-black/50 border border-[#E3E3E3]">
-            <TabsTrigger
-              className={`py-1! px-6! h-[33px] rounded-xl text-[1.8rem] active:bg-none ${
-                tab == "New"
-                  ? "bg-white! text-black/50"
-                  : "bg-[#E8EAED]! text-black/50"
-              }`}
-              value="New"
-              onClick={() => setTab("New")}
-            >
-              New ({pendingDrafts.length})
-            </TabsTrigger>
-            <TabsTrigger
-              className={`py-1! px-6! h-[33px] rounded-xl text-[1.8rem] active:bg-none ${
-                tab == "Reviewed"
-                  ? "bg-white! text-black/50"
-                  : "bg-[#E8EAED]! text-black/50"
-              }`}
-              value="Reviewed"
-              onClick={() => setTab("Reviewed")}
-            >
-              Reviewed ({reviewedDrafts.length})
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent className="py-12" value="New">
-            <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8 max-h-[700px] overflow-y-scroll">
-              <h3 className="text-[2.4rem] font-semibold">New AI Drafts</h3>
-              {loading ? (
-                <div className="flex justify-center items-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-              ) : pendingDrafts.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
-                  No pending drafts
-                </div>
-              ) : (
-                <div>
-                  {pendingDrafts.map((draft) => (
-                    <AIDraftCard
-                      key={draft.id}
-                      title={draft.title}
-                      source={draft.crawlSource?.name || "Unknown Source"}
-                      date={new Date(draft.createdAt).toLocaleDateString()}
-                      status="Pending"
-                      isAIDraft
-                      onApprove={() => handleApprove(draft.id)}
-                      onReject={() => handleReject(draft.id)}
-                      onView={() => {
-                        window.open(draft.sourceUrl, "_blank");
-                      }}
-                      onEdit={() => handleEdit(draft.id)}
-                    />
-                  ))}
-                </div>
-              )}
-            </section>
-          </TabsContent>
-          <TabsContent className="py-12" value="Reviewed">
-            <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8 max-h-[700px] overflow-y-scroll">
-              <h3 className="text-[2.4rem] font-semibold">Reviewed Drafts</h3>
-              {loading ? (
-                <div className="flex justify-center items-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-              ) : reviewedDrafts.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
-                  No reviewed drafts
-                </div>
-              ) : (
-                <div>
-                  {reviewedDrafts.map((draft) => (
-                    <AIDraftCard
-                      key={draft.id}
-                      title={draft.title}
-                      source={draft.crawlSource?.name || "Unknown Source"}
-                      date={new Date(draft.createdAt).toLocaleDateString()}
-                      status={
-                        draft.status === "PUBLISHED"
-                          ? "Published"
-                          : draft.status === "APPROVED"
-                          ? "Approved"
-                          : draft.status === "REJECTED"
-                          ? "Rejected"
-                          : "Pending"
-                      }
-                      opportunityId={draft.opportunityId}
-                      isAIDraft={false}
-                      onView={() => {
-                        window.open(draft.sourceUrl, "_blank");
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </section>
-          </TabsContent>
-        </Tabs>
+    <AdminRoute>
+      <main className="h-full flex flex-col overflow-hidden">
+        <AdminTopBar />
+        <>
+          {dialog}
+          <div className="h-full flex flex-col overflow-y-scroll">
+            <div className="p-8 pb-20">
+              <Tabs defaultValue={tab} className="">
+                <TabsList className="w-auto h-18 text-[1.8rem]! rounded-xl! p-4 bg-[#E8EAED]! text-black/50 border border-[#E3E3E3]">
+                  <TabsTrigger
+                    className={`py-1! px-6! h-[33px] rounded-xl text-[1.8rem] active:bg-none ${
+                      tab == "New"
+                        ? "bg-white! text-black/50"
+                        : "bg-[#E8EAED]! text-black/50"
+                    }`}
+                    value="New"
+                    onClick={() => setTab("New")}
+                  >
+                    New ({pendingDrafts.length})
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className={`py-1! px-6! h-[33px] rounded-xl text-[1.8rem] active:bg-none ${
+                      tab == "Crawled"
+                        ? "bg-white! text-black/50"
+                        : "bg-[#E8EAED]! text-black/50"
+                    }`}
+                    value="Crawled"
+                    onClick={() => setTab("Crawled")}
+                  >
+                    Crawled ({crawledDrafts.length})
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className={`py-1! px-6! h-[33px] rounded-xl text-[1.8rem] active:bg-none ${
+                      tab == "Reviewed"
+                        ? "bg-white! text-black/50"
+                        : "bg-[#E8EAED]! text-black/50"
+                    }`}
+                    value="Reviewed"
+                    onClick={() => setTab("Reviewed")}
+                  >
+                    Reviewed ({reviewedDrafts.length})
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent className="py-12" value="New">
+                  <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8 max-h-[100vh-10%] overflow-y-scroll">
+                    <h3 className="text-[2.4rem] font-semibold">
+                      New AI Drafts
+                    </h3>
+                    {loading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <Loader2 className="h-8 w-8 animate-spin" />
+                      </div>
+                    ) : pendingDrafts.length === 0 ? (
+                      <div className="text-center py-12 text-gray-500">
+                        No pending drafts
+                      </div>
+                    ) : (
+                      <div>
+                        {pendingDrafts.map((draft) => (
+                          <AIDraftCard
+                            key={draft.id}
+                            title={draft.title}
+                            source={draft.crawlSource?.name || "Unknown Source"}
+                            date={new Date(
+                              draft.createdAt
+                            ).toLocaleDateString()}
+                            status="Pending"
+                            isAIDraft
+                            onApprove={() => handleApprove(draft.id)}
+                            onReject={() => handleReject(draft.id)}
+                            onView={() => {
+                              router.push(`/x/admin/ai-draft/${draft.id}`);
+                            }}
+                            onEdit={() => handleEdit(draft.id)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                </TabsContent>
+                <TabsContent className="py-12" value="Crawled">
+                  <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8 max-h-[700px] overflow-y-scroll">
+                    <h3 className="text-[2.4rem] font-semibold">
+                      Crawled AI Drafts
+                    </h3>
+                    {loading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <Loader2 className="h-8 w-8 animate-spin" />
+                      </div>
+                    ) : crawledDrafts.length === 0 ? (
+                      <div className="text-center py-12 text-gray-500">
+                        No crawled drafts
+                      </div>
+                    ) : (
+                      <div>
+                        {crawledDrafts.map((draft) => (
+                          <AIDraftCard
+                            key={draft.id}
+                            title={draft.title}
+                            source={draft.crawlSource?.name || "Unknown Source"}
+                            date={new Date(
+                              draft.createdAt
+                            ).toLocaleDateString()}
+                            status="Crawled"
+                            isAIDraft
+                            onApprove={() => handleApprove(draft.id)}
+                            onReject={() => handleReject(draft.id)}
+                            onView={() => {
+                              window.location.href = `/x/admin/ai-draft/${draft.id}`;
+                            }}
+                            onEdit={() => handleEdit(draft.id)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                </TabsContent>
+                <TabsContent className="py-12" value="Reviewed">
+                  <section className="bg-white border border-[#E3E3E3] rounded-2xl p-8 max-h-[700px] overflow-y-scroll">
+                    <h3 className="text-[2.4rem] font-semibold">
+                      Reviewed Drafts
+                    </h3>
+                    {loading ? (
+                      <div className="flex justify-center items-center py-12">
+                        <Loader2 className="h-8 w-8 animate-spin" />
+                      </div>
+                    ) : reviewedDrafts.length === 0 ? (
+                      <div className="text-center py-12 text-gray-500">
+                        No reviewed drafts
+                      </div>
+                    ) : (
+                      <div>
+                        {reviewedDrafts.map((draft) => (
+                          <AIDraftCard
+                            key={draft.id}
+                            title={draft.title}
+                            source={draft.crawlSource?.name || "Unknown Source"}
+                            date={new Date(
+                              draft.createdAt
+                            ).toLocaleDateString()}
+                            status={
+                              draft.status === "PUBLISHED"
+                                ? "Published"
+                                : draft.status === "APPROVED"
+                                ? "Approved"
+                                : draft.status === "REJECTED"
+                                ? "Rejected"
+                                : "Pending"
+                            }
+                            opportunityId={draft.opportunityId}
+                            isAIDraft={false}
+                            onView={() => {
+                              window.location.href = `/x/admin/ai-draft/${draft.id}`;
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                </TabsContent>
+              </Tabs>
 
-        {/* Edit Modal */}
-        {selectedDraftId && (
-          <EditAIDraftModal
-            draftId={selectedDraftId}
-            isOpen={editModalOpen}
-            onClose={handleCloseEditModal}
-          />
-        )}
-      </section>
-    </AdminLayout>
+              {/* Edit Modal */}
+              {selectedDraftId && (
+                <EditAIDraftModal
+                  draftId={selectedDraftId}
+                  isOpen={editModalOpen}
+                  onClose={handleCloseEditModal}
+                />
+              )}
+            </div>
+          </div>
+        </>
+      </main>
+    </AdminRoute>
   );
 }

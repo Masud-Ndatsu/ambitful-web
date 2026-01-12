@@ -9,6 +9,7 @@ import {
   CrawlSourceFilters,
   CreateCrawlSourceData,
 } from "@/actions/crawl-sources";
+import { CrawlEngine } from "@/types/crawl";
 
 export const crawlSourceKeys = {
   all: ["crawlSources"] as const,
@@ -97,8 +98,9 @@ export function useTriggerCrawl() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => triggerCrawl(id),
-    onSuccess: (_, id) => {
+    mutationFn: ({ id, engine }: { id: string; engine: CrawlEngine }) =>
+      triggerCrawl(id, engine),
+    onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: crawlSourceKeys.lists() });
       queryClient.invalidateQueries({
         queryKey: crawlSourceKeys.detail(id),
@@ -108,4 +110,3 @@ export function useTriggerCrawl() {
     },
   });
 }
-

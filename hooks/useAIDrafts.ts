@@ -1,23 +1,23 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAIDrafts, reviewAIDraft, updateAIDraft, getAIDraftById, AIDraft, CreateAIDraftData } from '@/actions/ai-drafts';
+import { getAIDrafts, reviewAIDraft, updateAIDraft, getAIDraftById, crawlAIDraftDetails, AIDraft, CreateAIDraftData } from '@/actions/ai-drafts';
 
-export const useAIDrafts = (status?: 'PENDING' | 'APPROVED' | 'REJECTED', limit?: number) => {
+export const useAIDrafts = (status?: 'PENDING' | 'CRAWLING' | 'CRAWLED' | 'APPROVED' | 'REJECTED' | 'PUBLISHED', limit?: number) => {
   return useQuery({
-    queryKey: ['ai-drafts', status, limit],
+    queryKey: ['aiDrafts', status, limit],
     queryFn: () => getAIDrafts({ status, limit }),
   });
 };
 
 export const usePendingAIDrafts = (limit = 3) => {
   return useQuery({
-    queryKey: ['ai-drafts', 'PENDING', limit],
+    queryKey: ['aiDrafts', 'PENDING', limit],
     queryFn: () => getAIDrafts({ status: 'PENDING', limit }),
   });
 };
 
 export const useReviewedAIDrafts = () => {
   return useQuery({
-    queryKey: ['ai-drafts', 'reviewed'],
+    queryKey: ['aiDrafts', 'reviewed'],
     queryFn: () => getAIDrafts({}),
     select: (data) => {
       if (data?.success && data?.data) {
@@ -25,7 +25,7 @@ export const useReviewedAIDrafts = () => {
           ...data,
           data: {
             ...data.data,
-            drafts: data.data.drafts.filter((draft: AIDraft) => draft.status !== 'PENDING')
+            drafts: data.data.drafts.filter((draft: AIDraft) => !['PENDING', 'CRAWLING', 'CRAWLED'].includes(draft.status))
           }
         };
       }
@@ -38,11 +38,11 @@ export const useReviewAIDraft = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: { status: 'APPROVED' | 'REJECTED'; rejectionReason?: string } }) => 
+    mutationFn: ({ id, data }: { id: string; data: { status: 'APPROVED' | 'REJECTED'; rejectionReason?: string } }) =>
       reviewAIDraft(id, data),
     onSuccess: () => {
       // Invalidate and refetch AI drafts queries
-      queryClient.invalidateQueries({ queryKey: ['ai-drafts'] });
+      queryClient.invalidateQueries({ queryKey: ['aiDrafts'] });
     },
   });
 };
@@ -59,12 +59,26 @@ export const useUpdateAIDraft = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<CreateAIDraftData> }) => 
+    mutationFn: ({ id, data }: { id: string; data: Partial<CreateAIDraftData> }) =>
       updateAIDraft(id, data),
     onSuccess: () => {
       // Invalidate and refetch AI drafts queries
       queryClient.invalidateQueries({ queryKey: ['ai-drafts'] });
       queryClient.invalidateQueries({ queryKey: ['ai-draft'] });
+    },
+  });
+};
+
+export const useCrawlAIDraftDetails = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, engine }: { id: string; engine?: "SCRAPER_DO" | "CHEERIO" | "PLAYWRIGHT" }) =>
+      crawlAIDraftDetails(id, engine),
+    onSuccess: (_, { id }) => {
+      // Invalidate and refetch the specific AI draft and list
+      queryClient.invalidateQueries({ queryKey: ['ai-draft', id] });
+      queryClient.invalidateQueries({ queryKey: ['ai-drafts'] });
     },
   });
 };

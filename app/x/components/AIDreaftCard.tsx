@@ -1,6 +1,6 @@
 import { Check, Eye, X } from "lucide-react";
 
-type AIDraftStatus = "Pending" | "Approved" | "Rejected" | "Published";
+type AIDraftStatus = "Pending" | "Crawling" | "Crawled" | "Approved" | "Rejected" | "Published";
 
 interface AIDraftCardProps {
   title: string;
@@ -17,6 +17,8 @@ interface AIDraftCardProps {
 
 const STATUS_STYLES: Record<AIDraftStatus, string> = {
   Pending: "text-[#F59F0A] bg-[#F59F0A1A]",
+  Crawling: "text-[#8B5CF6] bg-[#8B5CF61A]",
+  Crawled: "text-[#06B6D4] bg-[#06B6D41A]",
   Approved: "text-[#21C45D] bg-[#03624C]",
   Rejected: "text-[#EF4343] bg-[#EF43431A]",
   Published: "text-[#3B82F6] bg-[#3B82F61A]",
@@ -35,7 +37,7 @@ export function AIDraftCard({
   onView,
 }: AIDraftCardProps) {
   return (
-    <div className="border border-[#E5E7EB] rounded-[0.9rem] p-8 mt-8 flex items-center justify-between">
+    <div className="border border-[#E5E7EB] text-[#1A1D23]! rounded-[0.9rem] p-8 mt-8 flex items-center justify-between">
       {/* Left */}
       <div className="flex-1 pr-4">
         <h4 className="text-[1.4rem] leading-8 break-words">{title}</h4>

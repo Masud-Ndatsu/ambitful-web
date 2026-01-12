@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import AdminLayout from "../../components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../../components/DataTable";
 import { crawlJobColumns } from "./column";
@@ -25,6 +24,8 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import JobDetailsModal from "./components/JobDetailsModal";
+import { AdminRoute } from "@/components/ProtectedRoute";
+import { AdminTopBar } from "../../components/AdminTopBar";
 
 export default function CrawlJobsPage() {
   const [selectedStatus, setSelectedStatus] = useState<
@@ -134,190 +135,197 @@ export default function CrawlJobsPage() {
       : selectedStatus.charAt(0) + selectedStatus.slice(1).toLowerCase();
 
   return (
-    <AdminLayout>
-      {dialog}
-      <div className="p-8 pb-20 bg-[#F8F9FC] min-h-screen max-h-screen overflow-y-scroll scroll-smooth">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-white border-[#E3E3E3] rounded-2xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
-                Total Jobs
-              </CardTitle>
-              <Activity className="h-5 w-5 text-[#505662]" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-[2.4rem] font-bold text-[#0F1729]">
-                {stats?.total || 0}
-              </div>
-              <p className="text-[1.2rem] text-[#505662]">
-                {stats?.successRate?.toFixed(1) || 0}% success rate
-              </p>
-            </CardContent>
-          </Card>
+    <AdminRoute>
+      <main className="h-full flex flex-col overflow-hidden">
+        <AdminTopBar />
+        <>
+          {dialog}
+          <div className="h-full flex flex-col overflow-y-scroll">
+        <div className="p-8 pb-20 bg-[#F8F9FC] text-[#0F1729]">
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-white border-[#E3E3E3] rounded-2xl">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
+                  Total Jobs
+                </CardTitle>
+                <Activity className="h-5 w-5 text-[#505662]" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-[2.4rem] font-bold text-[#0F1729]">
+                  {stats?.total || 0}
+                </div>
+                <p className="text-[1.2rem] text-[#505662]">
+                  {stats?.successRate?.toFixed(1) || 0}% success rate
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="bg-white border-[#E3E3E3] rounded-2xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
-                Active Jobs
-              </CardTitle>
-              <Clock className="h-5 w-5 text-blue-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-[2.4rem] font-bold text-blue-600">
-                {stats?.active || 0}
-              </div>
-              <p className="text-[1.2rem] text-[#505662]">
-                {queueMetrics?.queueDepth || 0} queued
-              </p>
-            </CardContent>
-          </Card>
+            <Card className="bg-white border-[#E3E3E3] rounded-2xl">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
+                  Active Jobs
+                </CardTitle>
+                <Clock className="h-5 w-5 text-blue-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-[2.4rem] font-bold text-blue-600">
+                  {stats?.active || 0}
+                </div>
+                <p className="text-[1.2rem] text-[#505662]">
+                  {queueMetrics?.queueDepth || 0} queued
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="bg-white border-[#E3E3E3] rounded-2xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
-                Completed
-              </CardTitle>
-              <CheckCircle className="h-5 w-5 text-green-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-[2.4rem] font-bold text-green-600">
-                {stats?.completed || 0}
-              </div>
-              <p className="text-[1.2rem] text-[#505662]">
-                {stats?.totalItemsCreated || 0} items created
-              </p>
-            </CardContent>
-          </Card>
+            <Card className="bg-white border-[#E3E3E3] rounded-2xl">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
+                  Completed
+                </CardTitle>
+                <CheckCircle className="h-5 w-5 text-green-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-[2.4rem] font-bold text-green-600">
+                  {stats?.completed || 0}
+                </div>
+                <p className="text-[1.2rem] text-[#505662]">
+                  {stats?.totalItemsCreated || 0} items created
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="bg-white border-[#E3E3E3] rounded-2xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
-                Failed
-              </CardTitle>
-              <XCircle className="h-5 w-5 text-red-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-[2.4rem] font-bold text-red-600">
-                {stats?.failed || 0}
-              </div>
-              <p className="text-[1.2rem] text-[#505662]">
-                {stats?.retrying || 0} retrying
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Header with filters */}
-        <header className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-[2.4rem] font-semibold text-[#0F1729] mb-2">
-              Crawl Jobs
-            </h1>
-            <p className="text-[#505662] text-[1.4rem]">
-              Monitor and manage web crawling jobs
-            </p>
+            <Card className="bg-white border-[#E3E3E3] rounded-2xl">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-[1.4rem] font-medium text-[#0F1729]">
+                  Failed
+                </CardTitle>
+                <XCircle className="h-5 w-5 text-red-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-[2.4rem] font-bold text-red-600">
+                  {stats?.failed || 0}
+                </div>
+                <p className="text-[1.2rem] text-[#505662]">
+                  {stats?.retrying || 0} retrying
+                </p>
+              </CardContent>
+            </Card>
           </div>
-          <div className="flex gap-4">
-            <div className="relative">
+
+          {/* Header with filters */}
+          <header className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-[2.4rem] font-semibold text-[#0F1729] mb-2">
+                Crawl Jobs
+              </h1>
+              <p className="text-[#505662] text-[1.4rem]">
+                Monitor and manage web crawling jobs
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  className="text-[1.4rem] bg-white! font-semibold rounded-2xl gap-3 border-[#E3E3E3] hover:bg-[#F8F9FC]!"
+                  onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                >
+                  <Filter className="h-4 w-4" />
+                  {statusDisplayText}
+                </Button>
+
+                {showFilterDropdown && (
+                  <div className="absolute top-full mt-2 right-0 bg-white border border-[#E3E3E3] rounded-2xl shadow-lg z-10 min-w-[180px] overflow-hidden">
+                    <button
+                      onClick={() => handleStatusFilter("all")}
+                      className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
+                    >
+                      All Statuses
+                    </button>
+                    <button
+                      onClick={() => handleStatusFilter("QUEUED")}
+                      className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
+                    >
+                      Queued
+                    </button>
+                    <button
+                      onClick={() => handleStatusFilter("ACTIVE")}
+                      className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
+                    >
+                      Active
+                    </button>
+                    <button
+                      onClick={() => handleStatusFilter("COMPLETED")}
+                      className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
+                    >
+                      Completed
+                    </button>
+                    <button
+                      onClick={() => handleStatusFilter("FAILED")}
+                      className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
+                    >
+                      Failed
+                    </button>
+                    <button
+                      onClick={() => handleStatusFilter("CANCELLED")}
+                      className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
+                    >
+                      Cancelled
+                    </button>
+                    <button
+                      onClick={() => handleStatusFilter("RETRYING")}
+                      className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
+                    >
+                      Retrying
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <Button
                 variant="outline"
-                className="text-[1.4rem] bg-white! font-semibold rounded-2xl gap-3 border-[#E3E3E3] hover:bg-[#F8F9FC]!"
-                onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                className="text-[1.4rem] bg-white! font-semibold rounded-2xl gap-3 border-[#E3E3E3] hover:bg-red-50! text-red-600 hover:text-red-700 hover:border-red-200"
+                onClick={handleCleanup}
+                disabled={cleanupMutation.isPending}
               >
-                <Filter className="h-4 w-4" />
-                {statusDisplayText}
+                <Trash2 className="h-4 w-4" />
+                Cleanup Old Jobs
               </Button>
-
-              {showFilterDropdown && (
-                <div className="absolute top-full mt-2 right-0 bg-white border border-[#E3E3E3] rounded-2xl shadow-lg z-10 min-w-[180px] overflow-hidden">
-                  <button
-                    onClick={() => handleStatusFilter("all")}
-                    className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
-                  >
-                    All Statuses
-                  </button>
-                  <button
-                    onClick={() => handleStatusFilter("QUEUED")}
-                    className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
-                  >
-                    Queued
-                  </button>
-                  <button
-                    onClick={() => handleStatusFilter("ACTIVE")}
-                    className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
-                  >
-                    Active
-                  </button>
-                  <button
-                    onClick={() => handleStatusFilter("COMPLETED")}
-                    className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
-                  >
-                    Completed
-                  </button>
-                  <button
-                    onClick={() => handleStatusFilter("FAILED")}
-                    className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
-                  >
-                    Failed
-                  </button>
-                  <button
-                    onClick={() => handleStatusFilter("CANCELLED")}
-                    className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
-                  >
-                    Cancelled
-                  </button>
-                  <button
-                    onClick={() => handleStatusFilter("RETRYING")}
-                    className="block w-full text-left px-4 py-3 hover:bg-[#F8F9FC] text-[1.4rem] text-[#0F1729] transition-colors"
-                  >
-                    Retrying
-                  </button>
-                </div>
-              )}
             </div>
+          </header>
 
-            <Button
-              variant="outline"
-              className="text-[1.4rem] bg-white! font-semibold rounded-2xl gap-3 border-[#E3E3E3] hover:bg-red-50! text-red-600 hover:text-red-700 hover:border-red-200"
-              onClick={handleCleanup}
-              disabled={cleanupMutation.isPending}
-            >
-              <Trash2 className="h-4 w-4" />
-              Cleanup Old Jobs
-            </Button>
-          </div>
-        </header>
+          {/* Jobs Table */}
+          <section className="bg-white rounded-2xl border border-[#E3E3E3] p-6">
+            <DataTable
+              columns={columns}
+              data={jobs}
+              isLoading={isLoading}
+              meta={tableMetadata}
+            />
+          </section>
 
-        {/* Jobs Table */}
-        <section className="bg-white rounded-2xl border border-[#E3E3E3] p-6">
-          <DataTable
-            columns={columns}
-            data={jobs}
-            isLoading={isLoading}
-            meta={tableMetadata}
-          />
-        </section>
-
-        {/* Job Details Modal */}
-        {selectedJobId && (
-          <Modal
-            isOpen={showDetailsModal}
-            onClose={() => {
-              setShowDetailsModal(false);
-              setSelectedJobId(null);
-            }}
-          >
-            <JobDetailsModal
-              jobId={selectedJobId}
+          {/* Job Details Modal */}
+          {selectedJobId && (
+            <Modal
+              isOpen={showDetailsModal}
               onClose={() => {
                 setShowDetailsModal(false);
                 setSelectedJobId(null);
               }}
-            />
-          </Modal>
-        )}
-      </div>
-    </AdminLayout>
+            >
+              <JobDetailsModal
+                jobId={selectedJobId}
+                onClose={() => {
+                  setShowDetailsModal(false);
+                  setSelectedJobId(null);
+                }}
+              />
+            </Modal>
+          )}
+        </div>
+          </div>
+        </>
+      </main>
+    </AdminRoute>
   );
 }

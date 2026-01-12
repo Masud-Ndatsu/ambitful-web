@@ -9,12 +9,14 @@ import {
   EllipsisVertical,
   Loader2,
 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { CrawlSource } from "@/actions/crawl-sources";
 import { useTriggerCrawl, useDeleteCrawlSource } from "@/hooks/useCrawlSources";
 import { useToast } from "@/hooks/use-toast";
-import { useDropdownPosition } from "@/hooks/useDropdownPosition";
 import { useConfirmationDialog } from "@/components/ui/confirmation-dialog";
+import { Modal } from "@/components/Modal";
+import { Button } from "@/components/ui/button";
+import { CrawlEngine } from "@/types/crawl";
 
 export const crawlSourceColumns: ColumnDef<CrawlSource>[] = [
   {
@@ -116,30 +118,56 @@ export const crawlSourceColumns: ColumnDef<CrawlSource>[] = [
 
 function CrawlSourceActionCell({ source }: { source: CrawlSource }) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [crawlModalOpen, setCrawlModalOpen] = useState(false);
+  const [selectedEngine, setSelectedEngine] =
+    useState<CrawlEngine>("SCRAPER_DO");
+
   const { toast } = useToast();
   const triggerCrawl = useTriggerCrawl();
   const deleteCrawlSource = useDeleteCrawlSource();
   const { confirm, dialog } = useConfirmationDialog();
 
-  // Use custom hook to handle dropdown positioning
-  const { buttonRef, positionClasses } = useDropdownPosition({
-    isOpen: showDropdown,
-  });
+  const isLoading = triggerCrawl.isPending || deleteCrawlSource.isPending;
 
-  const handleTriggerCrawl = async () => {
+  /* -------------------------------------------------------------------------- */
+  /*                                  HANDLERS                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const handleOpenCrawlModal = () => {
     setShowDropdown(false);
+    setCrawlModalOpen(true);
+  };
+
+  const handleCloseCrawlModal = useCallback(() => {
+    setCrawlModalOpen(false);
+  }, []);
+
+  const handleEngineChange = useCallback(
+    (engine: "SCRAPER_DO" | "CHEERIO" | "PLAYWRIGHT") => {
+      setSelectedEngine(engine);
+    },
+    []
+  );
+
+  const handleCrawlSubmit = async () => {
     try {
-      const result = await triggerCrawl.mutateAsync(source.id);
+      const result = await triggerCrawl.mutateAsync({
+        id: source.id,
+        engine: selectedEngine,
+      });
+
       toast({
         title: "Crawl Started",
         description: `Successfully crawled ${
-          result.data?.opportunitiesCreated || 0
+          result.data?.opportunitiesCreated ?? 0
         } opportunities`,
       });
+
+      setCrawlModalOpen(false);
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to trigger crawl",
+        description: error?.message || "Failed to trigger crawl",
         variant: "destructive",
       });
     }
@@ -147,6 +175,7 @@ function CrawlSourceActionCell({ source }: { source: CrawlSource }) {
 
   const handleDelete = async () => {
     setShowDropdown(false);
+
     const confirmed = await confirm({
       title: "Delete Crawl Source",
       description: `Are you sure you want to delete "${source.name}"? This action cannot be undone.`,
@@ -154,32 +183,34 @@ function CrawlSourceActionCell({ source }: { source: CrawlSource }) {
       variant: "destructive",
     });
 
-    if (confirmed) {
-      try {
-        await deleteCrawlSource.mutateAsync(source.id);
-        toast({
-          title: "Success",
-          description: "Crawl source deleted successfully",
-        });
-      } catch (error: any) {
-        toast({
-          title: "Error",
-          description: error.message || "Failed to delete crawl source",
-          variant: "destructive",
-        });
-      }
+    if (!confirmed) return;
+
+    try {
+      await deleteCrawlSource.mutateAsync(source.id);
+      toast({
+        title: "Success",
+        description: "Crawl source deleted successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error?.message || "Failed to delete crawl source",
+        variant: "destructive",
+      });
     }
   };
 
-  const isLoading = triggerCrawl.isPending || deleteCrawlSource.isPending;
+  /* -------------------------------------------------------------------------- */
+  /*                                   RENDER                                   */
+  /* -------------------------------------------------------------------------- */
 
   return (
-    <div className="relative">
+    <div className="relative text-[#0F1729]">
       {dialog}
+
       <button
-        ref={buttonRef}
-        onClick={() => setShowDropdown(!showDropdown)}
-        className="bg-[#E3E3E333] h-12 w-12 rounded-full grid place-items-center hover:bg-gray-200"
+        onClick={() => setShowDropdown((prev) => !prev)}
+        className="bg-[#E3E3E333]  h-12 w-12 rounded-full grid place-items-center hover:bg-gray-200"
         disabled={isLoading}
       >
         {isLoading ? (
@@ -191,17 +222,14 @@ function CrawlSourceActionCell({ source }: { source: CrawlSource }) {
 
       {showDropdown && (
         <>
-          {/* Backdrop to close dropdown when clicked outside */}
           <div
             className="fixed inset-0 z-0"
             onClick={() => setShowDropdown(false)}
           />
-          <div
-            className={`absolute right-0 ${positionClasses} bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[150px] max-w-[200px]`}
-          >
+          <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px]">
             <button
-              onClick={handleTriggerCrawl}
-              className="block w-full text-left px-5 py-3 hover:bg-gray-100 text-[1.2rem] whitespace-nowrap"
+              onClick={handleOpenCrawlModal}
+              className="block w-full text-left px-5 py-3 hover:bg-gray-100 text-[1.2rem]"
               disabled={isLoading}
             >
               <Play className="inline h-4 w-4 mr-2" />
@@ -210,7 +238,7 @@ function CrawlSourceActionCell({ source }: { source: CrawlSource }) {
             <hr className="border-gray-100" />
             <button
               onClick={handleDelete}
-              className="block w-full text-left px-5 py-3 hover:bg-red-50 text-[1.2rem] text-red-600 whitespace-nowrap"
+              className="block w-full text-left px-5 py-3 hover:bg-red-50 text-[1.2rem] text-red-600"
               disabled={isLoading}
             >
               <Trash2 className="inline h-4 w-4 mr-2" />
@@ -219,6 +247,80 @@ function CrawlSourceActionCell({ source }: { source: CrawlSource }) {
           </div>
         </>
       )}
+
+      {/* ---------------------------------------------------------------------- */}
+      {/*                            CRAWL ENGINE MODAL                           */}
+      {/* ---------------------------------------------------------------------- */}
+
+      <Modal isOpen={crawlModalOpen} onClose={handleCloseCrawlModal}>
+        <div className="w-[500px] text-[#0F1729]">
+          <h2 className="text-[2.4rem] font-semibold mb-4">
+            Select Crawl Engine
+          </h2>
+
+          <p className="text-[1.4rem] text-gray-600 mb-6">
+            Choose which crawler engine to use for extracting the details page.
+          </p>
+
+          <div className="space-y-4 mb-6">
+            {[
+              {
+                key: "SCRAPER_DO",
+                title: "Scraper.do",
+                description: "Professional scraping API with proxy rotation",
+              },
+              {
+                key: "CHEERIO",
+                title: "Cheerio",
+                description: "Fast and lightweight static HTML parser",
+              },
+              {
+                key: "PLAYWRIGHT",
+                title: "Playwright",
+                description: "Full browser automation for dynamic sites",
+              },
+            ].map((engine) => (
+              <label
+                key={engine.key}
+                className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="crawlEngine"
+                  checked={selectedEngine === engine.key}
+                  onChange={() => handleEngineChange(engine.key as any)}
+                />
+                <div>
+                  <p className="text-[1.6rem] font-medium">{engine.title}</p>
+                  <p className="text-[1.2rem] text-gray-500">
+                    {engine.description}
+                  </p>
+                </div>
+              </label>
+            ))}
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={handleCloseCrawlModal}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCrawlSubmit}
+              className="bg-[#03624C] hover:bg-[#024d3d]"
+              disabled={triggerCrawl.isPending}
+            >
+              {triggerCrawl.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Crawling...
+                </>
+              ) : (
+                "Start Crawl"
+              )}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -5,7 +5,16 @@ import { Button } from "@/components/ui/button";
 import { useAuth, useUpdateProfile } from "@/hooks/useAuthentication";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import { User, Mail, Phone, MapPin, Briefcase, Globe, Plus, X } from "lucide-react";
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Briefcase,
+  Globe,
+  Plus,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 
 interface ProfileFormData {
@@ -70,7 +79,7 @@ export default function ProfilePage() {
   };
 
   const removeLocation = (locationToRemove: string) => {
-    const newLocations = locations.filter(loc => loc !== locationToRemove);
+    const newLocations = locations.filter((loc) => loc !== locationToRemove);
     setLocations(newLocations);
   };
 
@@ -100,7 +109,8 @@ export default function ProfilePage() {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error?.message || "Failed to update profile. Please try again.",
+        description:
+          error?.message || "Failed to update profile. Please try again.",
         variant: "destructive",
       });
     }
@@ -128,7 +138,7 @@ export default function ProfilePage() {
         <div className="bg-white rounded-2xl border border-[#E3E3E3] p-8 mb-8">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-6">
-              <div className="relative h-24 w-24 rounded-full bg-gradient-to-br from-[#03624C] to-[#00df82] flex items-center justify-center text-white text-[3rem] font-bold">
+              <div className="relative h-24 w-24 rounded-full bg-linear-to-br from-[#03624C] to-[#00df82] flex items-center justify-center text-white text-[3rem] font-bold">
                 {user?.avatar ? (
                   <Image
                     src={user.avatar}
@@ -266,7 +276,7 @@ export default function ProfilePage() {
                   <MapPin className="h-5 w-5 text-[#676F7E]" />
                   Preferred Locations
                 </label>
-                
+
                 {/* Location Tags Display */}
                 <div className="flex flex-wrap gap-2 mb-3">
                   {locations.map((location, index) => (

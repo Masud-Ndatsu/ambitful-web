@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import AdminLayout from "../../components/AdminLayout";
 import { Download } from "lucide-react";
 import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SiteVisitChart from "../../components/SiteVisitChart";
@@ -9,8 +8,8 @@ import TraficResourcesChart from "../../components/TraficResourcesChart";
 
 export default function AdminAnalyticsPage() {
   return (
-    <AdminLayout>
-      <main className="p-8 pb-48 max-h-screen overflow-y-scroll scroll-smooth">
+    <>
+      <main className="p-8 pb-48 text-[#0F1729] max-h-screen overflow-y-scroll scroll-smooth">
         <header className="flex items-center justify-between">
           <h3 className="text-[2rem] leading-[2.4rem] tracking-[-0.6px]">
             Track engagement and performance metrics.
@@ -208,6 +207,6 @@ export default function AdminAnalyticsPage() {
           </div>
         </section>
       </main>
-    </AdminLayout>
+    </>
   );
 }

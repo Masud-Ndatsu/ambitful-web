@@ -9,7 +9,6 @@ const crawlSourceSchema = z.object({
   sourceName: z.string().min(1, "Source name is required"),
   sourceLink: z.string().url("Please enter a valid URL"),
   crawlFrequency: z.enum(["daily", "weekly", "monthly"]),
-  cssSelectors: z.string().optional(),
 });
 
 type CrawlSourceFormData = z.infer<typeof crawlSourceSchema>;
@@ -33,7 +32,6 @@ const AddCrawlSourceForm = ({ onClose, onSubmit }: Props) => {
       sourceName: "",
       sourceLink: "",
       crawlFrequency: "weekly",
-      cssSelectors: "",
     },
   });
 
@@ -113,7 +111,7 @@ const AddCrawlSourceForm = ({ onClose, onSubmit }: Props) => {
 
         <div>
           <label htmlFor="crawlFrequency" className="block text-[1.6rem]">
-            Crawl Frequency{" "}
+            Crawl Frequency *{" "}
           </label>
           <select
             {...register("crawlFrequency")}
@@ -131,25 +129,6 @@ const AddCrawlSourceForm = ({ onClose, onSubmit }: Props) => {
             </p>
           )}
         </div>
-        <div className="max-w-[75.1rem] w-full mx-auto mt-8">
-          <label htmlFor="cssSelectors" className="block text-[1.6rem]">
-            CSS Selectors (Optional){" "}
-          </label>
-          <textarea
-            {...register("cssSelectors")}
-            id="cssSelectors"
-            className="border border-[#B6BCC9] text-[1.2rem] w-full h-[18.7rem] p-6 resize-none"
-            disabled={isLoading}
-          ></textarea>
-          {errors.cssSelectors && (
-            <p className="text-red-500 text-[1.1rem] mt-1">
-              {errors.cssSelectors.message}
-            </p>
-          )}
-        </div>
-        <p className="text-[#1A1D2380] text-[1.2rem]">
-          Specify CSS selectors to target specific elements on the page
-        </p>
       </div>
       <footer className="flex items-end justify-end gap-4 w-full max-w-[75.1rem] mx-auto mt-8">
         <Button

@@ -11,7 +11,6 @@ import { AIDraftCard } from "../../components/AIDreaftCard";
 import RecentActivityCard from "./components/RecentActivityCard";
 import SiteVisitChart from "../../components/SiteVisitChart";
 import RegionProgress from "../../components/RegionProgress";
-import AdminLayout from "../../components/AdminLayout";
 import { useOpportunityStats } from "@/hooks/useOpportunities";
 import { usePendingAIDrafts, useReviewAIDraft } from "@/hooks/useAIDrafts";
 import { useRecentActivities } from "@/hooks/useActivityLogs";
@@ -94,9 +93,9 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <AdminLayout>
+    <>
       {dialog}
-      <div className="p-8 pb-48 grid gap-8 place-items-center max-h-screen overflow-y-scroll scroll-smooth">
+      <div className="p-8 pb-48 grid gap-8 place-items-center max-h-screen overflow-y-scroll scroll-smooth text-[#0F1729]">
         <header className="flex gap-[1.1rem]">
           <MetricTile
             title="Total Opportunities"
@@ -239,6 +238,6 @@ export default function AdminDashboardPage() {
           </div>
         </section>
       </div>
-    </AdminLayout>
+    </>
   );
 }

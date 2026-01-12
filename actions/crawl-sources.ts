@@ -186,7 +186,8 @@ export async function deleteCrawlSource(
 
 // Trigger crawl
 export async function triggerCrawl(
-  id: string
+  id: string,
+  engine: "SCRAPER_DO" | "CHEERIO" | "PLAYWRIGHT"
 ): Promise<ApiResponse<{ message: string; opportunitiesCreated: number }>> {
   try {
     const token = await getAuthToken();
@@ -198,10 +199,14 @@ export async function triggerCrawl(
     const response = await makeRequest<{
       message: string;
       opportunitiesCreated: number;
-    }>(`/crawl-sources/${id}/trigger`, {
+    }>(`/crawl-sources/trigger`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      body: {
+        crawlSourceId: id,
+        engine,
       },
     });
 
