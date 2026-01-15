@@ -7,6 +7,11 @@ import React, { useState } from "react";
 
 interface AgentComponentProps {
   user: User | null;
+  askAiPayload?: {
+    opportunityId: string;
+    title: string;
+    organisation: string;
+  };
 }
 
 interface Message {
@@ -15,7 +20,7 @@ interface Message {
   content: string;
 }
 
-export default function AgentComponent({ }: AgentComponentProps) {
+export default function AgentComponent({}: AgentComponentProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",

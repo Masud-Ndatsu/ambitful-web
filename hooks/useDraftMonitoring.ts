@@ -38,19 +38,19 @@ export const useDraftMonitoring = (options?: UseDraftMonitoringOptions) => {
       // Invalidate and refetch queries immediately
       queryClient.invalidateQueries({
         queryKey: ["aiDrafts"],
-        refetchType: "active"
+        refetchType: "active",
       });
       queryClient.invalidateQueries({
         queryKey: ["ai-drafts"],
-        refetchType: "active"
+        refetchType: "active",
       });
       queryClient.invalidateQueries({
         queryKey: ["ai-draft", update.draftId],
-        refetchType: "active"
+        refetchType: "active",
       });
       queryClient.invalidateQueries({
         queryKey: ["aiDraftStats"],
-        refetchType: "active"
+        refetchType: "active",
       });
 
       // Call custom callback if provided

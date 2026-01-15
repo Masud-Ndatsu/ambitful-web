@@ -136,7 +136,6 @@ export interface RecommendationReason {
 
 export interface RecommendedOpportunity extends Opportunity {
   matchScore: number;
-  matchReasons: RecommendationReason[];
 }
 
 export interface RecommendationUserProfile {
@@ -148,8 +147,6 @@ export interface RecommendationUserProfile {
 
 export interface RecommendationResult {
   recommendations: RecommendedOpportunity[];
-  userProfile: RecommendationUserProfile;
-  totalFound: number;
 }
 
 // Saved Jobs Types

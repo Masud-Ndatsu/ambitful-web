@@ -23,6 +23,7 @@ import {
   WORK_AUTHORIZATION_OPTIONS,
   WorkAuthorization,
 } from "@/lib/constants";
+import { fileToDataUrl } from "@/lib/utils";
 
 interface FormData {
   jobFunction: string;
@@ -114,7 +115,7 @@ function OnboardingForm() {
         country: data.country,
         remoteWork: data.remoteWork,
         workAuthorization: data.workAuthorization,
-        resumeUrl: uploadedFile ? URL.createObjectURL(uploadedFile) : undefined,
+        resumeUrl: uploadedFile ? await fileToDataUrl(uploadedFile) : undefined,
       };
 
       try {

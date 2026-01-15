@@ -20,15 +20,13 @@ export default function OpportunityListing({
 }: OpportunityListingProps) {
   const { isAuthenticated } = useAuth();
 
-  // Filter state
   const [filters, setFilters] = useState<FilterOptions>({
     selectedTypes: [],
   });
 
-  // Convert filter state to API filters
   const apiFilters: OpportunityFilters = useMemo(
     () => ({
-      limit: 50, // Get more results when filtering
+      limit: 50,
       ...(filters.selectedTypes.length > 0 && {
         opportunityTypeIds: filters.selectedTypes.join(","),
       }),
@@ -36,7 +34,6 @@ export default function OpportunityListing({
     [filters]
   );
 
-  // Fetch data with filters
   const {
     data: opportunitiesData,
     isLoading,
@@ -47,9 +44,6 @@ export default function OpportunityListing({
   const { data: savedJobsResponse } = useSavedJobs();
   const { data: likedJobsResponse } = useLikedJobs();
 
-  console.log({ opportunitiesData });
-
-  // Determine which data to display based on activeFilter
   const displayOpportunities = useMemo(() => {
     const opportunities = opportunitiesData?.opportunities || [];
     const recommendations = recommendationsData?.recommendations || [];
@@ -65,7 +59,6 @@ export default function OpportunityListing({
       return opportunities;
     }
 
-    // Otherwise, show data based on activeFilter
     switch (activeFilter) {
       case "saved":
         return savedJobsData;
@@ -74,10 +67,10 @@ export default function OpportunityListing({
       case "applied":
         return [];
       case "draft":
-        return []; // TODO: Implement draft opportunities
+        return [];
       case "recommended":
       default:
-        return recommendations.length > 0 ? recommendations : opportunities;
+        return recommendations;
     }
   }, [
     activeFilter,
@@ -174,11 +167,8 @@ export default function OpportunityListing({
               id={opportunity.id}
               title={opportunity.title}
               company={opportunity.organization}
-              location={opportunity.locations?.join(", ") || "Remote"}
+              // location={opportunity.locations?.join(", ") || "Remote"}
               time={getTimeAgo(opportunity.createdAt)}
-              description={
-                opportunity.description || "No description available"
-              }
               details={[
                 opportunity.isRemote ? "Remote" : "Onsite",
                 ...(opportunity.locations?.slice(0, 2) || []),

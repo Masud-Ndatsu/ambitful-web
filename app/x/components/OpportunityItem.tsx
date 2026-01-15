@@ -5,39 +5,43 @@ import { useSaveJob, useApplyToOpportunity } from "@/hooks/useOpportunities";
 import { OpportunityCategory } from "@/types/opportunity";
 import { useRouter } from "next/navigation";
 
+// Define props interface with required and optional fields
 interface OpportunityItemProps {
   id?: string;
   title: string;
   company: string;
-  location: string;
   time: string;
-  description: string;
   details: string[];
   categories: OpportunityCategory[];
   salary?: string;
   matchScore?: number;
 }
 
+// Default match score
+const DEFAULT_MATCH_SCORE = 90;
+
 export default function OpportunityItem({
   id,
   title,
   company,
-  location,
   time,
-  description,
   details,
-  matchScore = 90,
+  categories,
+  matchScore = DEFAULT_MATCH_SCORE,
 }: OpportunityItemProps) {
   const router = useRouter();
   const saveJobMutation = useSaveJob();
   const applyMutation = useApplyToOpportunity();
 
+  // Extract the first category name or default to "General"
+  const category = categories[0]?.opportunityType?.name ?? "General";
+
+  // Event handlers
   const handleSaveJob = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (id) {
-        saveJobMutation.mutate(id);
-      }
+      if (!id) return;
+      saveJobMutation.mutate(id);
     },
     [id, saveJobMutation]
   );
@@ -45,22 +49,24 @@ export default function OpportunityItem({
   const handleApply = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (id) {
-        applyMutation.mutate({ opportunityId: id });
-      }
+      if (!id) return;
+      applyMutation.mutate({ opportunityId: id });
     },
     [id, applyMutation]
   );
 
+  const handleAskAi = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+  }, []);
+
   const handleViewDetails = useCallback(() => {
-    if (id) {
-      router.push(`/x/opportunities/${id}`);
-    }
+    if (!id) return;
+    router.push(`/x/opportunities/${id}`);
   }, [id, router]);
 
   return (
     <div
-      className="bg-[#FFFFFF] rounded-2xl p-8 border border-[#E3E3E3] relative flex flex-col h-full cursor-pointer hover:shadow-lg transition-shadow"
+      className="bg-white rounded-2xl p-8 border border-[#E3E3E3] relative flex flex-col h-full cursor-pointer hover:shadow-lg transition-shadow"
       onClick={handleViewDetails}
     >
       {/* Header Section */}
@@ -68,19 +74,20 @@ export default function OpportunityItem({
         {/* Logo and Info */}
         <div className="flex gap-6 flex-1 min-w-0">
           <div className="h-[4.8rem] w-[4.8rem] grid place-items-center bg-[#FF6B35] text-white rounded-2xl shrink-0 font-bold text-[1.8rem]">
-            G
+            {company.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
+            <span className="text-[#1A1D23] text-[1rem]">{time}</span>
             <h2 className="text-[1.6rem] font-semibold text-[#1A1D23] truncate">
               {company}
             </h2>
-            <div className="flex items-center gap-4 text-[1.2rem] text-[#505662] mt-2">
-              <span>{location}</span>
-              <span>•</span>
-              <span>{time}</span>
-            </div>
           </div>
         </div>
+
+        {/* Category Button */}
+        <button className="border py-[0.4rem] px-4 text-[1rem] bg-[#FF6B35] text-white rounded-2xl font-semibold leading-[1.994rem] mb-8">
+          {category}
+        </button>
 
         {/* Match Score Badge */}
         <div className="flex flex-col items-center shrink-0">
@@ -95,11 +102,6 @@ export default function OpportunityItem({
       <h3 className="text-[1.4rem] font-semibold text-[#1A1D23] mb-4 line-clamp-2">
         {title}
       </h3>
-
-      {/* Description */}
-      <p className="text-[1.2rem] text-[#505662] mb-6 line-clamp-3 flex-1 leading-[1.8rem]">
-        {description}
-      </p>
 
       {/* Details Tags */}
       <div className="flex items-center gap-3 flex-wrap mb-8">
@@ -128,18 +130,16 @@ export default function OpportunityItem({
             <Heart className="w-[1.6rem] h-[1.6rem]" />
           </button>
         </div>
+
+        {/* Action Buttons */}
         <div className="flex gap-4">
-          {/* Ask Ai Button */}
           <Button
             variant="outline"
-            onClick={handleApply}
-            disabled={applyMutation.isPending}
-            className="bg-[#FFFFFF] hover:bg-[#E3E3E3] text-[#505662] rounded-2xl px-8 py-3 text-[1.4rem] font-medium h-[3.2rem] disabled:opacity-50"
+            onClick={handleAskAi}
+            className="bg-white hover:bg-[#E3E3E3] text-[#505662] rounded-2xl px-8 py-3 text-[1.4rem] font-medium h-[3.2rem] disabled:opacity-50"
           >
-            {applyMutation.isPending ? "Asking..." : "Ask Ai"}
+            Ask AI
           </Button>
-
-          {/* Apply Button */}
           <Button
             onClick={handleApply}
             disabled={applyMutation.isPending}

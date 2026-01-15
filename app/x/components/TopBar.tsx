@@ -23,7 +23,6 @@ interface Props {
 export const TopBar = ({
   isAuth,
   user,
-  onFilterChange,
   activeFilter = "recommended",
   filterCounts,
 }: Props) => {
@@ -72,7 +71,11 @@ export const TopBar = ({
               {filters.map((filter) => (
                 <li key={filter.id}>
                   <button
-                    onClick={() => onFilterChange?.(filter.label.toLowerCase())}
+                    onClick={() => {
+                      router.push(
+                        `/x/opportunities?tab=${filter.label.toLowerCase()}`
+                      );
+                    }}
                     className={`py-[0.8rem] px-[1.4rem] flex items-center gap-[5px] border rounded-4xl transition-colors cursor-pointer hover:bg-gray-50 ${
                       activeFilter === filter.label.toLowerCase()
                         ? "bg-background text-foreground"
@@ -136,7 +139,7 @@ export const TopBar = ({
                       }}
                       loading={logoutMutation.isPending}
                       variant="ghost"
-                      className="w-full justify-start px-4 py-2 text-[1.3rem] text-red-600 hover:bg-gray-50 h-auto"
+                      className="w-full text-left! justify-start px-4 py-2 text-[1.3rem] text-red-600 hover:bg-gray-50 h-auto"
                     >
                       Sign Out
                     </Button>

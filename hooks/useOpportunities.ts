@@ -18,7 +18,12 @@ import {
   getOpportunityStats,
   getRecommendations,
 } from "@/actions/opportunities";
-import { OpportunityFilters, RecommendationResult, SavedJobsResponse, LikedJobsResponse } from "@/types/opportunity";
+import {
+  OpportunityFilters,
+  RecommendationResult,
+  SavedJobsResponse,
+  LikedJobsResponse,
+} from "@/types/opportunity";
 import { CreateOpportunityApiData } from "@/validations";
 
 export const opportunityKeys = {
@@ -280,11 +285,10 @@ export function useRecommendations(
     queryKey: [...opportunityKeys.recommendations(), limit],
     queryFn: async (): Promise<RecommendationResult> => {
       const response = await getRecommendations(limit);
+      console.log({ response });
       return (
         response?.data || {
           recommendations: [],
-          userProfile: {},
-          totalFound: 0,
         }
       );
     },
