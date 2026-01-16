@@ -346,3 +346,45 @@ export async function crawlAIDraftDetails(
     throw error;
   }
 }
+
+export interface BulkCrawlResponse {
+  success: boolean;
+  total: number;
+  queued: number;
+  failed: number;
+  results: Array<{
+    draftId: string;
+    status: "queued" | "failed";
+    error?: string;
+  }>;
+}
+
+// Bulk crawl details for multiple AI drafts
+export async function bulkCrawlAIDraftDetails(
+  draftIds: string[],
+  engine?: "SCRAPER_DO" | "CHEERIO" | "PLAYWRIGHT"
+): Promise<ApiResponse<BulkCrawlResponse>> {
+  try {
+    const token = await getAuthToken();
+
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await makeRequest<BulkCrawlResponse>(
+      `/ai-drafts/bulk-crawl`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: { draftIds, engine },
+      }
+    );
+
+    revalidatePath("/x/admin/ai-draft");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

@@ -28,8 +28,6 @@ import { useConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/Modal";
-import { AdminRoute } from "@/components/ProtectedRoute";
-import { AdminTopBar } from "../../../components/AdminTopBar";
 
 export default function ViewAIDraftPage() {
   const params = useParams();
@@ -201,40 +199,31 @@ export default function ViewAIDraftPage() {
 
   if (isLoading) {
     return (
-      <main className="h-full flex flex-col overflow-hidden">
-        <AdminTopBar />
-        <div className="flex items-center justify-center h-full">
-          <Loader2 className="h-8 w-8 animate-spin text-[#007947]" />
-        </div>
-      </main>
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="h-8 w-8 animate-spin text-[#007947]" />
+      </div>
     );
   }
 
   if (!draft) {
     return (
-      <main className="h-full flex flex-col overflow-hidden">
-        <AdminTopBar />
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <h1 className="text-[2.4rem] font-bold mb-4 text-[#0F1729]">
-              AI Draft not found
-            </h1>
-            <Button onClick={() => router.push("/x/admin/ai-draft")}>
-              Back to AI Drafts
-            </Button>
-          </div>
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <h1 className="text-[2.4rem] font-bold mb-4 text-[#0F1729]">
+            AI Draft not found
+          </h1>
+          <Button onClick={() => router.push("/x/admin/ai-draft")}>
+            Back to AI Drafts
+          </Button>
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <AdminRoute>
-      <main className="h-full flex flex-col overflow-hidden">
-        <AdminTopBar />
-        <>
-          {dialog}
-          <div className="h-full  flex flex-col overflow-y-scroll">
+    <>
+      {dialog}
+      <div className="h-full flex flex-col overflow-y-scroll">
             <div className="p-8 pb-20">
               {/* Breadcrumbs */}
               <div className="bg-white border border-[#E3E3E3] rounded-xl px-6 py-4 mb-6">
@@ -576,98 +565,96 @@ export default function ViewAIDraftPage() {
                 </div>
               </div>
             </div>
-          </div>
-          {/* Crawl Engine Selection Modal */}
-          <Modal isOpen={crawlModalOpen} onClose={handleCloseCrawlModal}>
-            <div className="w-[500px] text-[#0F1729]">
-              <h2 className="text-[2.4rem] font-semibold mb-4">
-                Select Crawl Engine
-              </h2>
-              <p className="text-[1.4rem] text-gray-600 mb-6">
-                Choose which crawler engine to use for extracting the details
-                page information.
-              </p>
+      </div>
+      {/* Crawl Engine Selection Modal */}
+        <Modal isOpen={crawlModalOpen} onClose={handleCloseCrawlModal}>
+          <div className="w-[500px] text-[#0F1729]">
+            <h2 className="text-[2.4rem] font-semibold mb-4">
+              Select Crawl Engine
+            </h2>
+            <p className="text-[1.4rem] text-gray-600 mb-6">
+              Choose which crawler engine to use for extracting the details
+              page information.
+            </p>
 
-              <div className="space-y-4 mb-6">
-                <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="crawlEngine"
-                    value="SCRAPER_DO"
-                    checked={selectedEngine === "SCRAPER_DO"}
-                    onChange={() => handleEngineChange("SCRAPER_DO")}
-                    className="w-4 h-4"
-                  />
-                  <div>
-                    <p className="text-[1.6rem] font-medium">Scraper.do</p>
-                    <p className="text-[1.2rem] text-gray-500">
-                      Professional web scraping API with proxy support
-                    </p>
-                  </div>
-                </label>
+            <div className="space-y-4 mb-6">
+              <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <input
+                  type="radio"
+                  name="crawlEngine"
+                  value="SCRAPER_DO"
+                  checked={selectedEngine === "SCRAPER_DO"}
+                  onChange={() => handleEngineChange("SCRAPER_DO")}
+                  className="w-4 h-4"
+                />
+                <div>
+                  <p className="text-[1.6rem] font-medium">Scraper.do</p>
+                  <p className="text-[1.2rem] text-gray-500">
+                    Professional web scraping API with proxy support
+                  </p>
+                </div>
+              </label>
 
-                <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="crawlEngine"
-                    value="CHEERIO"
-                    checked={selectedEngine === "CHEERIO"}
-                    onChange={() => handleEngineChange("CHEERIO")}
-                    className="w-4 h-4"
-                  />
-                  <div>
-                    <p className="text-[1.6rem] font-medium">Cheerio</p>
-                    <p className="text-[1.2rem] text-gray-500">
-                      Fast and lightweight HTML parser
-                    </p>
-                  </div>
-                </label>
+              <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <input
+                  type="radio"
+                  name="crawlEngine"
+                  value="CHEERIO"
+                  checked={selectedEngine === "CHEERIO"}
+                  onChange={() => handleEngineChange("CHEERIO")}
+                  className="w-4 h-4"
+                />
+                <div>
+                  <p className="text-[1.6rem] font-medium">Cheerio</p>
+                  <p className="text-[1.2rem] text-gray-500">
+                    Fast and lightweight HTML parser
+                  </p>
+                </div>
+              </label>
 
-                <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="crawlEngine"
-                    value="PLAYWRIGHT"
-                    checked={selectedEngine === "PLAYWRIGHT"}
-                    onChange={() => handleEngineChange("PLAYWRIGHT")}
-                    className="w-4 h-4"
-                  />
-                  <div>
-                    <p className="text-[1.6rem] font-medium">Playwright</p>
-                    <p className="text-[1.2rem] text-gray-500">
-                      Full browser automation for dynamic content
-                    </p>
-                  </div>
-                </label>
-              </div>
-
-              <div className="flex gap-3 justify-end">
-                <Button
-                  variant="outline"
-                  onClick={handleCloseCrawlModal}
-                  className="text-[1.4rem]"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleCrawlSubmit}
-                  className="text-[1.4rem] bg-[#03624C] hover:bg-[#024d3d]"
-                  disabled={crawlDetailsMutation.isPending}
-                >
-                  {crawlDetailsMutation.isPending ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      Crawling...
-                    </>
-                  ) : (
-                    "Start Crawl"
-                  )}
-                </Button>
-              </div>
+              <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <input
+                  type="radio"
+                  name="crawlEngine"
+                  value="PLAYWRIGHT"
+                  checked={selectedEngine === "PLAYWRIGHT"}
+                  onChange={() => handleEngineChange("PLAYWRIGHT")}
+                  className="w-4 h-4"
+                />
+                <div>
+                  <p className="text-[1.6rem] font-medium">Playwright</p>
+                  <p className="text-[1.2rem] text-gray-500">
+                    Full browser automation for dynamic content
+                  </p>
+                </div>
+              </label>
             </div>
-          </Modal>
-        </>
-      </main>
-    </AdminRoute>
+
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={handleCloseCrawlModal}
+                className="text-[1.4rem]"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCrawlSubmit}
+                className="text-[1.4rem] bg-[#03624C] hover:bg-[#024d3d]"
+                disabled={crawlDetailsMutation.isPending}
+              >
+                {crawlDetailsMutation.isPending ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Crawling...
+                  </>
+                ) : (
+                  "Start Crawl"
+                )}
+              </Button>
+            </div>
+          </div>
+        </Modal>
+    </>
   );
 }

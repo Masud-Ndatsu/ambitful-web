@@ -9,8 +9,6 @@ import { crawlSourceColumns } from "./column";
 import { useCrawlSources, useCreateCrawlSource } from "@/hooks/useCrawlSources";
 import { CreateCrawlSourceData } from "@/actions/crawl-sources";
 import { useToast } from "@/hooks/use-toast";
-import { AdminRoute } from "@/components/ProtectedRoute";
-import { AdminTopBar } from "../../components/AdminTopBar";
 
 export default function AdminSettingsPage() {
   const [showCrawlModal, setShowCrawlModal] = useState<boolean>(false);
@@ -56,11 +54,8 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <AdminRoute>
-      <main className="h-full flex flex-col overflow-hidden">
-        <AdminTopBar />
-        <div className="text-[#0F1729] h-full flex flex-col overflow-y-scroll">
-          <div className="p-8">
+    <div className="text-[#0F1729] h-full flex flex-col overflow-y-scroll">
+      <div className="p-8">
         <header className="flex items-center justify-between bg-white border border-b-0 p-8 border-[#E3E3E3] rounded-t-4xl">
           <div>
             <h1 className="text-[2.134rem] leading-[2.561rem] font-semibold">
@@ -98,8 +93,6 @@ export default function AdminSettingsPage() {
           />
         </Modal>
       </div>
-        </div>
-      </main>
-    </AdminRoute>
+    </div>
   );
 }

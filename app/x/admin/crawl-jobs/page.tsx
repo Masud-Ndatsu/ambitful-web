@@ -24,8 +24,6 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import JobDetailsModal from "./components/JobDetailsModal";
-import { AdminRoute } from "@/components/ProtectedRoute";
-import { AdminTopBar } from "../../components/AdminTopBar";
 
 export default function CrawlJobsPage() {
   const [selectedStatus, setSelectedStatus] = useState<
@@ -135,12 +133,9 @@ export default function CrawlJobsPage() {
       : selectedStatus.charAt(0) + selectedStatus.slice(1).toLowerCase();
 
   return (
-    <AdminRoute>
-      <main className="h-full flex flex-col overflow-hidden">
-        <AdminTopBar />
-        <>
-          {dialog}
-          <div className="h-full flex flex-col overflow-y-scroll">
+    <>
+      {dialog}
+      <div className="h-full flex flex-col overflow-y-scroll">
         <div className="p-8 pb-20 bg-[#F8F9FC] text-[#0F1729]">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -323,9 +318,7 @@ export default function CrawlJobsPage() {
             </Modal>
           )}
         </div>
-          </div>
-        </>
-      </main>
-    </AdminRoute>
+      </div>
+    </>
   );
 }

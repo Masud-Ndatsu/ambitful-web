@@ -21,7 +21,11 @@ const getStatusBadge = (status: string) => {
   };
 
   const config = statusConfig[status] || statusConfig.QUEUED;
-  return <Badge variant={config.variant}>{config.label}</Badge>;
+  return (
+    <Badge className="text-[1rem]" variant={config.variant}>
+      {config.label}
+    </Badge>
+  );
 };
 
 const formatDate = (date: string | null) => {
@@ -63,7 +67,7 @@ export default function JobDetailsModal({
       <div className="p-8">
         <h2 className="text-[2rem] font-semibold mb-4">Job Not Found</h2>
         <p className="text-gray-600">The requested job could not be found.</p>
-        <Button onClick={onClose} className="mt-4">
+        <Button onClick={onClose} className="mt-4 text-[#000000]!">
           Close
         </Button>
       </div>
@@ -71,7 +75,7 @@ export default function JobDetailsModal({
   }
 
   return (
-    <div className="p-8 max-w-[800px]">
+    <div className="p-8 max-w-[800px] text-[#000000]!">
       <div className="flex justify-between items-start mb-6">
         <div>
           <h2 className="text-[2.4rem] font-semibold mb-2">

@@ -10,6 +10,7 @@ import {
   Clock,
   Users,
   CheckCircle2,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -284,6 +285,27 @@ export default function OpportunityDetailsPage() {
                     <p className="text-[1.4rem] font-bold text-[#0F1729] font-degular">
                       {opportunity.duration}
                     </p>
+                  </div>
+                )}
+                {/* Location */}
+                {opportunity.locations && opportunity.locations.length > 0 && (
+                  <div className="bg-white rounded-2xl p-6 border border-[#E3E3E3]">
+                    <div className="flex items-center gap-3 mb-2">
+                      <MapPin className="h-5 w-5 text-[#505662]" />
+                      <span className="text-[1.2rem] text-[#505662] uppercase font-semibold font-degular">
+                        Location{opportunity.locations.length > 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {opportunity.locations.map((location, index) => (
+                        <p
+                          key={index}
+                          className="text-[1.4rem] font-bold text-[#0F1729] font-degular"
+                        >
+                          {location}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 )}
 

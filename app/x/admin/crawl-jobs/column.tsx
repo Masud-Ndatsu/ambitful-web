@@ -18,7 +18,11 @@ const getStatusBadge = (status: CrawlJob["status"]) => {
   };
 
   const config = statusConfig[status] || statusConfig.QUEUED;
-  return <Badge variant={config.variant}>{config.label}</Badge>;
+  return (
+    <Badge className="text-[1rem]" variant={config.variant}>
+      {config.label}
+    </Badge>
+  );
 };
 
 const formatDuration = (duration: number | null) => {

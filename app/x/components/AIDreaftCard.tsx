@@ -1,14 +1,19 @@
 import { Check, Eye, X } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type AIDraftStatus = "Pending" | "Crawling" | "Crawled" | "Approved" | "Rejected" | "Published";
 
 interface AIDraftCardProps {
+  id?: string;
   title: string;
   source: string;
   date: string;
   status: AIDraftStatus;
   isAIDraft?: boolean;
   opportunityId?: string | null;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelectChange?: (id: string, selected: boolean) => void;
   onApprove?: () => void;
   onReject?: () => void;
   onEdit?: () => void;
@@ -25,19 +30,33 @@ const STATUS_STYLES: Record<AIDraftStatus, string> = {
 };
 
 export function AIDraftCard({
+  id,
   title,
   source,
   date,
   status,
   isAIDraft = false,
   opportunityId,
+  selectable = false,
+  selected = false,
+  onSelectChange,
   onApprove,
   onReject,
   onEdit,
   onView,
 }: AIDraftCardProps) {
   return (
-    <div className="border border-[#E5E7EB] text-[#1A1D23]! rounded-[0.9rem] p-8 mt-8 flex items-center justify-between">
+    <div className={`border border-[#E5E7EB] text-[#1A1D23]! rounded-[0.9rem] p-8 mt-8 flex items-center justify-between ${selected ? 'bg-blue-50 border-blue-300' : ''}`}>
+      {/* Checkbox for selection */}
+      {selectable && id && (
+        <div className="mr-4">
+          <Checkbox
+            checked={selected}
+            onCheckedChange={(checked) => onSelectChange?.(id, checked as boolean)}
+            className="h-5 w-5"
+          />
+        </div>
+      )}
       {/* Left */}
       <div className="flex-1 pr-4">
         <h4 className="text-[1.4rem] leading-8 break-words">{title}</h4>
